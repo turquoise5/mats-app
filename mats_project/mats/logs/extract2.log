@@ -1,0 +1,67 @@
+
+==============================================================================
+ACT 0.3 — EXTRACT ACTIVATIONS
+==============================================================================
+[extract] 1018 conversations
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   1%|          | 2/399 [00:00<00:31, 12.52it/s]Loading weights:   7%|▋         | 28/399 [00:00<00:02, 128.85it/s]Loading weights:  15%|█▍        | 59/399 [00:00<00:01, 196.77it/s]Loading weights:  21%|██        | 83/399 [00:00<00:01, 205.07it/s]Loading weights:  28%|██▊       | 112/399 [00:00<00:01, 232.73it/s]Loading weights:  34%|███▍      | 137/399 [00:00<00:01, 233.77it/s]Loading weights:  41%|████      | 162/399 [00:00<00:01, 230.62it/s]Loading weights:  47%|████▋     | 186/399 [00:00<00:00, 229.27it/s]Loading weights:  53%|█████▎    | 210/399 [00:01<00:00, 228.05it/s]Loading weights:  59%|█████▊    | 234/399 [00:01<00:00, 226.46it/s]Loading weights:  65%|██████▍   | 258/399 [00:01<00:00, 222.90it/s]Loading weights:  70%|███████   | 281/399 [00:01<00:00, 216.95it/s]Loading weights:  77%|███████▋  | 307/399 [00:01<00:00, 228.08it/s]Loading weights:  83%|████████▎ | 330/399 [00:01<00:00, 222.45it/s]Loading weights:  90%|████████▉ | 358/399 [00:01<00:00, 233.69it/s]Loading weights:  96%|█████████▌| 384/399 [00:01<00:00, 241.09it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 220.52it/s]
+
+==============================================================================
+ENVIRONMENT
+==============================================================================
+  model_id               Qwen/Qwen3-8B
+  num_hidden_layers      36
+  hidden_size            4096
+  dtype                  torch.bfloat16
+  gpu                    NVIDIA RTX PRO 4500 Blackwell Server Edition
+  vram_free_gb           17.03
+  vram_total_gb          33.69
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+
+[extract] education: 443 samples, label counts [146, 149, 148]
+  [extract] batch0 seq_len=459 last_idx=[76, 458, 219] picked=(3, 37, 4096)
+  [extract] final array shape (3, 37, 4096) dtype float32
+  [extract] batch0 seq_len=77 last_idx=[76] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=459 last_idx=[458] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=220 last_idx=[219] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [verify] batched vs unbatched max abs diff = 4 (rel 3.73e-03)
+  [verify] OK
+[extract] education / natural
+  [extract] batch0 seq_len=508 last_idx=[76, 458, 219, 337, 38, 507, 177, 224] picked=(8, 37, 4096)
+  [extract] final array shape (443, 37, 4096) dtype float32
+[log_run] 0/extract -> /workspace/mats_project/mats/results/runs.jsonl (b3986ac706f1)
+[extract] education / elicited
+  [extract] batch0 seq_len=517 last_idx=[85, 467, 228, 346, 47, 516, 186, 233] picked=(8, 37, 4096)
+  [extract] final array shape (443, 37, 4096) dtype float32
+[log_run] 0/extract -> /workspace/mats_project/mats/results/runs.jsonl (8cf711addbfa)
+
+[extract] age: 575 samples, label counts [138, 146, 144, 147]
+  [extract] batch0 seq_len=125 last_idx=[48, 120, 124] picked=(3, 37, 4096)
+  [extract] final array shape (3, 37, 4096) dtype float32
+  [extract] batch0 seq_len=49 last_idx=[48] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=121 last_idx=[120] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=125 last_idx=[124] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [verify] batched vs unbatched max abs diff = 8 (rel 7.41e-03)
+  [verify] OK
+[extract] age / natural
+  [extract] batch0 seq_len=334 last_idx=[48, 120, 124, 154, 178, 242, 174, 333] picked=(8, 37, 4096)
+  [extract] final array shape (575, 37, 4096) dtype float32
+[log_run] 0/extract -> /workspace/mats_project/mats/results/runs.jsonl (81f137714944)
+[extract] age / elicited
+  [extract] batch0 seq_len=343 last_idx=[57, 129, 133, 163, 187, 251, 183, 342] picked=(8, 37, 4096)
+  [extract] final array shape (575, 37, 4096) dtype float32
+[log_run] 0/extract -> /workspace/mats_project/mats/results/runs.jsonl (f45f5f741121)

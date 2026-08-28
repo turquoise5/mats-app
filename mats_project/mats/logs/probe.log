@@ -1,0 +1,81 @@
+
+==============================================================================
+ACT 0.4 — PER-LAYER PROBES
+==============================================================================
+
+[probe] education/natural
+  [probe] acts (443, 37, 4096)  labels {0: 146, 1: 149, 2: 148}
+  [probe] train 354  val 89
+  best acc 0.966 @ layer 12  | control max 0.337 | chance 0.337
+
+[probe] education/elicited
+  [probe] acts (443, 37, 4096)  labels {0: 146, 1: 149, 2: 148}
+  [probe] train 354  val 89
+  best acc 0.989 @ layer 20  | control max 0.416 | chance 0.337
+
+[probe] age/natural
+  [probe] acts (575, 37, 4096)  labels {0: 138, 1: 146, 2: 144, 3: 147}
+  [probe] train 460  val 115
+  best acc 0.991 @ layer 27  | control max 0.304 | chance 0.252
+
+[probe] age/elicited
+  [probe] acts (575, 37, 4096)  labels {0: 138, 1: 146, 2: 144, 3: 147}
+  [probe] train 460  val 115
+  best acc 1.000 @ layer 27  | control max 0.296 | chance 0.252
+
+==============================================================================
+ACT 0 VERDICT
+==============================================================================
+
+education/natural
+   verdict                  PASS
+   best_acc                 0.9662921348314607
+   best_layer               12
+   chance                   0.33707865168539325
+   control_max              0.33707865168539325
+   leakage_threshold        0.48738434336363456
+   n_val                    89
+   mean_acc_early_third     0.850187265917603
+   mean_acc_later_thirds    0.9451685393258427
+   rises_with_depth         True
+
+education/elicited
+   verdict                  PASS
+   best_acc                 0.9887640449438202
+   best_layer               20
+   chance                   0.33707865168539325
+   control_max              0.4157303370786517
+   leakage_threshold        0.48738434336363456
+   n_val                    89
+   mean_acc_early_third     0.8782771535580526
+   mean_acc_later_thirds    0.9546067415730337
+   rises_with_depth         True
+
+age/natural
+   verdict                  PASS
+   best_acc                 0.991304347826087
+   best_layer               27
+   chance                   0.25217391304347825
+   control_max              0.30434782608695654
+   leakage_threshold        0.3736456571833804
+   n_val                    115
+   mean_acc_early_third     0.8391304347826085
+   mean_acc_later_thirds    0.9711304347826086
+   rises_with_depth         True
+
+age/elicited
+   verdict                  PASS
+   best_acc                 1.0
+   best_layer               27
+   chance                   0.25217391304347825
+   control_max              0.2956521739130435
+   leakage_threshold        0.3736456571833804
+   n_val                    115
+   mean_acc_early_third     0.8347826086956521
+   mean_acc_later_thirds    0.9840000000000001
+   rises_with_depth         True
+
+------------------------------------------------------------------------------
+REPLICATION PASSED (passed on: education/natural, education/elicited, age/natural, age/elicited) — proceed to Act 1.
+------------------------------------------------------------------------------
+[log_run] 0/probe_by_layer -> /workspace/mats_project/mats/results/runs.jsonl (606cb0e83559)

@@ -1,0 +1,36 @@
+
+==============================================================================
+ACT 0.3 — EXTRACT ACTIVATIONS
+==============================================================================
+[extract] 1018 conversations
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files:  20%|██        | 1/5 [00:12<00:48, 12.12s/it]Fetching 5 files:  40%|████      | 2/5 [00:20<00:29,  9.76s/it]Fetching 5 files:  60%|██████    | 3/5 [00:24<00:14,  7.03s/it]Fetching 5 files:  80%|████████  | 4/5 [00:24<00:04,  4.30s/it]Fetching 5 files: 100%|██████████| 5/5 [00:24<00:00,  2.85s/it]Fetching 5 files: 100%|██████████| 5/5 [00:24<00:00,  4.88s/it]
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<00:43,  9.07it/s]Loading weights:   1%|          | 2/399 [00:00<00:46,  8.50it/s]Loading weights:   8%|▊         | 31/399 [00:00<00:02, 124.25it/s]Loading weights:  15%|█▌        | 61/399 [00:00<00:01, 182.14it/s]Loading weights:  23%|██▎       | 92/399 [00:00<00:01, 217.96it/s]Loading weights:  29%|██▉       | 116/399 [00:00<00:01, 223.15it/s]Loading weights:  36%|███▌      | 144/399 [00:00<00:01, 239.24it/s]Loading weights:  42%|████▏     | 169/399 [00:00<00:01, 229.02it/s]Loading weights:  48%|████▊     | 193/399 [00:01<00:00, 213.53it/s]Loading weights:  54%|█████▍    | 215/399 [00:01<00:00, 214.22it/s]Loading weights:  62%|██████▏   | 248/399 [00:01<00:00, 245.26it/s]Loading weights:  72%|███████▏  | 287/399 [00:01<00:00, 285.47it/s]Loading weights:  79%|███████▉  | 317/399 [00:01<00:00, 286.03it/s]Loading weights:  87%|████████▋ | 346/399 [00:01<00:00, 269.00it/s]Loading weights:  95%|█████████▍| 379/399 [00:01<00:00, 280.56it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 231.48it/s]
+
+==============================================================================
+ENVIRONMENT
+==============================================================================
+  model_id               Qwen/Qwen3-8B
+  num_hidden_layers      36
+  hidden_size            4096
+  dtype                  torch.bfloat16
+  gpu                    NVIDIA RTX PRO 4500 Blackwell Server Edition
+  vram_free_gb           17.03
+  vram_total_gb          33.69
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+Traceback (most recent call last):
+  File "/workspace/mats_project/mats/run_act0.py", line 349, in <module>
+    STEPS[which]()
+  File "/workspace/mats_project/mats/run_act0.py", line 52, in step_extract
+    M.assert_template_sane(tok)
+  File "/workspace/mats_project/mats/src/model.py", line 111, in assert_template_sane
+    raise RuntimeError(
+RuntimeError: Rendered template contains <think>. Pass enable_thinking=False, or the read position will land inside a reasoning block. Fix before proceeding.
