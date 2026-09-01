@@ -1,0 +1,12 @@
+
+==============================================================================
+TF-IDF BASELINE vs. LAYER PROBES
+==============================================================================
+education: TF-IDF 0.966  vs probe 0.966  (natural, best layer 12)
+age: TF-IDF 0.896  vs probe 0.991  (natural, best layer 27)
+
+education/natural      layer0 0.3371   majority 0.3371
+education/elicited     layer0 0.3371   majority 0.3371
+age/natural            layer0 0.2522   majority 0.2522
+age/elicited           layer0 0.2522   majority 0.2522
+[log_run] 0/tfidf_baseline -> /workspace/mats_project/mats/results/runs.jsonl (5c2abb1b0783)

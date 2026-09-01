@@ -1,0 +1,119 @@
+
+==============================================================================
+ACT 1.2 — PER-LAYER PROBES, TF-IDF, CONTROL TASKS
+==============================================================================
+[act1_data] stopped parsing at byte 2467874/3888144 (1420270 bytes left unparsed): Expecting value: line 2113 column 1 (char 2467874). See module docstring — this is expected, not a bug to chase, if the row count below matches contrast_v1_stats.json.
+[act1_data] loaded 2112 rows from /workspace/mats_project/mats/data/contrast/contrast_v1.jsonl
+[probe] 1145 unique paired_id, 967 complete pairs, 178 orphans (whole dataset)
+
+[probe] === position=natural ===
+  [probe] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe] train 1354  val 343
+  pooled                     n_train=1354 n_test= 343 best_acc=0.977@L20 majority=0.548 tfidf=0.965 ctrl_max=0.546 justask=0.813 
+[log_run] 1/transfer/natural/pooled -> /workspace/mats_project/mats/results/runs.jsonl (d3a220b633c1)
+  [probe] acts (842, 37, 4096)  labels {0: 372, 1: 470}
+  [probe] train 673  val 169
+  within-expert              n_train= 673 n_test= 169 best_acc=1.000@L19 majority=0.556 tfidf=0.905 ctrl_max=0.562 justask=0.840 
+[log_run] 1/transfer/natural/within-expert -> /workspace/mats_project/mats/results/runs.jsonl (4d52a91d3d20)
+  [probe] acts (855, 37, 4096)  labels {0: 384, 1: 471}
+  [probe] train 684  val 171
+  within-novice              n_train= 684 n_test= 171 best_acc=0.982@L33 majority=0.550 tfidf=0.959 ctrl_max=0.596 justask=0.848 
+[log_run] 1/transfer/natural/within-novice -> /workspace/mats_project/mats/results/runs.jsonl (832e78dceaef)
+  [probe] acts (881, 37, 4096)  labels {0: 438, 1: 443}
+  [probe] train 707  val 174
+  within-stated              n_train= 707 n_test= 174 best_acc=1.000@L10 majority=0.500 tfidf=0.994 ctrl_max=0.601 justask=0.943 
+[log_run] 1/transfer/natural/within-stated -> /workspace/mats_project/mats/results/runs.jsonl (13b9d5368be4)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 842  val 855
+  cross-register             n_train= 842 n_test= 855 best_acc=0.764@L24 majority=0.551 tfidf=0.753 justask=0.853 
+[log_run] 1/transfer/natural/cross-register -> /workspace/mats_project/mats/results/runs.jsonl (5f6d4ec4e429)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 855  val 842
+  cross-register-rev         n_train= 855 n_test= 842 best_acc=0.968@L22 majority=0.558 tfidf=0.765 justask=0.866 
+[log_run] 1/transfer/natural/cross-register-rev -> /workspace/mats_project/mats/results/runs.jsonl (36af8ebf205f)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 881  val 816
+  stated->demonstrated       n_train= 881 n_test= 816 best_acc=0.615@L9  majority=0.610 tfidf=0.462 justask=0.784 
+[log_run] 1/transfer/natural/stated->demonstrated -> /workspace/mats_project/mats/results/runs.jsonl (8442fef9e315)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 816  val 881
+  demonstrated->stated       n_train= 816 n_test= 881 best_acc=0.607@L25 majority=0.503 tfidf=0.504 justask=0.928 
+[log_run] 1/transfer/natural/demonstrated->stated -> /workspace/mats_project/mats/results/runs.jsonl (40bf83dec360)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 419  val 393
+  cross-both                 n_train= 419 n_test= 393 best_acc=0.631@L25 majority=0.598 tfidf=0.397 justask=0.748 
+[log_run] 1/transfer/natural/cross-both -> /workspace/mats_project/mats/results/runs.jsonl (11c86aa503df)
+  [probe] acts (816, 37, 4096)  labels {0: 318, 1: 498}
+  [probe] train 650  val 166
+  within-demonstrated        n_train= 650 n_test= 166 best_acc=0.940@L8  majority=0.608 tfidf=0.916 ctrl_max=0.528 justask=0.765 
+[log_run] 1/transfer/natural/within-demonstrated -> /workspace/mats_project/mats/results/runs.jsonl (fadf01403eec)
+  [probe] acts (816, 37, 4096)  labels {0: 318, 1: 498}
+  [probe] train 637  val 179
+  within-demonstrated-by-eedi n_train= 637 n_test= 179 best_acc=0.899@L19 majority=0.587 tfidf=0.743 ctrl_max=0.582 justask=0.749 
+[log_run] 1/transfer/natural/within-demonstrated-by-eedi -> /workspace/mats_project/mats/results/runs.jsonl (58687489247a)
+  [probe] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe] train 1354  val 343
+  [undisclosed prior] pooled probe @L20: P(predict 'knows') = 0.407 over 415 rows | just-ask yes-rate = 0.5445783132530121
+[log_run] 1/undisclosed_prior/natural -> /workspace/mats_project/mats/results/runs.jsonl (bd652484c4b2)
+
+[probe] === position=elicited ===
+  [probe] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe] train 1354  val 343
+  pooled                     n_train=1354 n_test= 343 best_acc=0.985@L13 majority=0.548 tfidf=0.965 ctrl_max=0.534 justask=0.813 
+[log_run] 1/transfer/elicited/pooled -> /workspace/mats_project/mats/results/runs.jsonl (1361b852d2f6)
+  [probe] acts (842, 37, 4096)  labels {0: 372, 1: 470}
+  [probe] train 673  val 169
+  within-expert              n_train= 673 n_test= 169 best_acc=0.988@L21 majority=0.556 tfidf=0.905 ctrl_max=0.556 justask=0.840 
+[log_run] 1/transfer/elicited/within-expert -> /workspace/mats_project/mats/results/runs.jsonl (67aa592c9623)
+  [probe] acts (855, 37, 4096)  labels {0: 384, 1: 471}
+  [probe] train 684  val 171
+  within-novice              n_train= 684 n_test= 171 best_acc=0.982@L22 majority=0.550 tfidf=0.959 ctrl_max=0.561 justask=0.848 
+[log_run] 1/transfer/elicited/within-novice -> /workspace/mats_project/mats/results/runs.jsonl (a30672541ceb)
+  [probe] acts (881, 37, 4096)  labels {0: 438, 1: 443}
+  [probe] train 707  val 174
+  within-stated              n_train= 707 n_test= 174 best_acc=1.000@L11 majority=0.500 tfidf=0.994 ctrl_max=0.612 justask=0.943 
+[log_run] 1/transfer/elicited/within-stated -> /workspace/mats_project/mats/results/runs.jsonl (3ac53ce44596)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 842  val 855
+  cross-register             n_train= 842 n_test= 855 best_acc=0.814@L26 majority=0.551 tfidf=0.753 justask=0.853 
+[log_run] 1/transfer/elicited/cross-register -> /workspace/mats_project/mats/results/runs.jsonl (fdf46cc6901d)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 855  val 842
+  cross-register-rev         n_train= 855 n_test= 842 best_acc=0.957@L16 majority=0.558 tfidf=0.765 justask=0.866 
+[log_run] 1/transfer/elicited/cross-register-rev -> /workspace/mats_project/mats/results/runs.jsonl (3eef288bd03e)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 881  val 816
+  stated->demonstrated       n_train= 881 n_test= 816 best_acc=0.699@L36 majority=0.610 tfidf=0.462 justask=0.784 
+[log_run] 1/transfer/elicited/stated->demonstrated -> /workspace/mats_project/mats/results/runs.jsonl (ae3070878d77)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 816  val 881
+  demonstrated->stated       n_train= 816 n_test= 881 best_acc=0.543@L2  majority=0.503 tfidf=0.504 justask=0.928 
+[log_run] 1/transfer/elicited/demonstrated->stated -> /workspace/mats_project/mats/results/runs.jsonl (11563f6e40be)
+  [probe_explicit] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe_explicit] train 419  val 393
+  cross-both                 n_train= 419 n_test= 393 best_acc=0.728@L36 majority=0.598 tfidf=0.397 justask=0.748 
+[log_run] 1/transfer/elicited/cross-both -> /workspace/mats_project/mats/results/runs.jsonl (73a7c2ff0857)
+  [probe] acts (816, 37, 4096)  labels {0: 318, 1: 498}
+  [probe] train 650  val 166
+  within-demonstrated        n_train= 650 n_test= 166 best_acc=0.964@L23 majority=0.608 tfidf=0.916 ctrl_max=0.546 justask=0.765 
+[log_run] 1/transfer/elicited/within-demonstrated -> /workspace/mats_project/mats/results/runs.jsonl (f41dd40701f2)
+  [probe] acts (816, 37, 4096)  labels {0: 318, 1: 498}
+  [probe] train 637  val 179
+  within-demonstrated-by-eedi n_train= 637 n_test= 179 best_acc=0.888@L22 majority=0.587 tfidf=0.743 ctrl_max=0.577 justask=0.749 
+[log_run] 1/transfer/elicited/within-demonstrated-by-eedi -> /workspace/mats_project/mats/results/runs.jsonl (3b2b169bc712)
+  [probe] acts (1697, 37, 4096)  labels {0: 756, 1: 941}
+  [probe] train 1354  val 343
+  [undisclosed prior] pooled probe @L13: P(predict 'knows') = 0.335 over 415 rows | just-ask yes-rate = 0.5445783132530121
+[log_run] 1/undisclosed_prior/elicited -> /workspace/mats_project/mats/results/runs.jsonl (7bbec5f33ba7)
+
+==============================================================================
+ACT 1 TASK 1.2 — VERDICT
+==============================================================================
+natural: cross-register=0.764 (tfidf=0.753, n_train=842) | stated->demonstrated=0.615 (tfidf=0.462, n_train=881)
+elicited: cross-register=0.814 (tfidf=0.753, n_train=842) | stated->demonstrated=0.699 (tfidf=0.462, n_train=881)
+
+Best position by min(headline1, headline2): elicited
+VERDICT: NARROW: cross-register holds, stated->demonstrated collapses -- the probe reads self-reports, not demonstrated knowledge
+[log_run] 1/task1.2_verdict -> /workspace/mats_project/mats/results/runs.jsonl (df94003135fb)
+
+[probe] wrote /workspace/mats_project/mats/results/act1_probe_results.json

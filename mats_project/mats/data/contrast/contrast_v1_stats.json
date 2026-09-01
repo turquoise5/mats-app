@@ -1,0 +1,133 @@
+{
+  "status": "VERIFIED -- base 4-concept set + targeted demonstrated/gap rebalance (2.5x oversample of the shortfall, Stage D re-run on the new batch only).",
+  "n_per_cell_target": 60,
+  "curriculum_area": "Solving Equations (linear + quadratic)",
+  "gen_model_strong": "anthropic/claude-sonnet-4.5",
+  "gen_model_cheap": "anthropic/claude-haiku-4.5",
+  "gap_rebalance": {
+    "shortfalls": {
+      "linear_2step_int": 23,
+      "linear_both_int": 48,
+      "quad_formula": 45,
+      "quad_factor_ab": 31
+    },
+    "n_new_specs_requested": 369,
+    "n_new_specs_succeeded": 369,
+    "n_new_renders_succeeded": 738,
+    "stage_d": {
+      "register_check": {
+        "accuracy": 0.986449864498645,
+        "n": 738,
+        "n_correct": 728,
+        "wrong_by_cell": {
+          "linear_both_int/demonstrated/gap/expert": 3,
+          "quad_formula/demonstrated/gap/expert": 2,
+          "quad_factor_ab/demonstrated/gap/expert": 5
+        }
+      },
+      "content_check": {
+        "n_pairs_checked": 369,
+        "n_passed": 101,
+        "n_failed": 268,
+        "n_incomplete": 0
+      },
+      "leakage_check": {
+        "n_checked": 202,
+        "n_passed": 186,
+        "n_failed": 16
+      },
+      "diagnosticity_check": {
+        "n_checked": 186,
+        "n_passed": 126,
+        "n_failed": 60
+      },
+      "per_cell_kept": {
+        "linear_2step_int/demonstrated/gap/novice": 14,
+        "linear_2step_int/demonstrated/gap/expert": 21,
+        "linear_both_int/demonstrated/gap/novice": 18,
+        "linear_both_int/demonstrated/gap/expert": 15,
+        "quad_formula/demonstrated/gap/novice": 18,
+        "quad_formula/demonstrated/gap/expert": 18,
+        "quad_factor_ab/demonstrated/gap/novice": 10,
+        "quad_factor_ab/demonstrated/gap/expert": 12
+      }
+    }
+  },
+  "dedupe": {
+    "n_in": 2116,
+    "n_out": 2112,
+    "n_dup": 4
+  },
+  "final_n": 2112,
+  "final_per_cell_counts": {
+    "linear_2step_int/stated/knows/novice": 58,
+    "linear_2step_int/stated/knows/expert": 43,
+    "linear_2step_int/stated/gap/novice": 57,
+    "linear_2step_int/stated/gap/expert": 51,
+    "linear_2step_int/none/undisclosed/novice": 60,
+    "linear_2step_int/none/undisclosed/expert": 43,
+    "linear_both_int/stated/knows/expert": 58,
+    "linear_both_int/stated/knows/novice": 58,
+    "linear_both_int/stated/gap/novice": 59,
+    "linear_both_int/stated/gap/expert": 54,
+    "linear_both_int/none/undisclosed/novice": 60,
+    "linear_both_int/none/undisclosed/expert": 33,
+    "quad_formula/stated/knows/novice": 61,
+    "quad_formula/stated/knows/expert": 60,
+    "quad_formula/stated/gap/novice": 53,
+    "quad_formula/stated/gap/expert": 51,
+    "quad_formula/none/undisclosed/novice": 60,
+    "quad_formula/none/undisclosed/expert": 45,
+    "quad_factor_ab/stated/knows/novice": 59,
+    "quad_factor_ab/stated/knows/expert": 46,
+    "quad_factor_ab/stated/gap/novice": 57,
+    "quad_factor_ab/stated/gap/expert": 56,
+    "quad_factor_ab/none/undisclosed/novice": 60,
+    "quad_factor_ab/none/undisclosed/expert": 54,
+    "linear_2step_int/demonstrated/knows/novice": 54,
+    "linear_2step_int/demonstrated/knows/expert": 59,
+    "linear_both_int/demonstrated/knows/novice": 61,
+    "linear_both_int/demonstrated/knows/expert": 69,
+    "quad_formula/demonstrated/knows/novice": 59,
+    "quad_formula/demonstrated/knows/expert": 67,
+    "quad_factor_ab/demonstrated/knows/novice": 61,
+    "quad_factor_ab/demonstrated/knows/expert": 68,
+    "linear_2step_int/demonstrated/gap/novice": 52,
+    "linear_2step_int/demonstrated/gap/expert": 54,
+    "linear_both_int/demonstrated/gap/expert": 29,
+    "linear_both_int/demonstrated/gap/novice": 30,
+    "quad_formula/demonstrated/gap/novice": 37,
+    "quad_formula/demonstrated/gap/expert": 33,
+    "quad_factor_ab/demonstrated/gap/novice": 39,
+    "quad_factor_ab/demonstrated/gap/expert": 44
+  },
+  "stage_f": {
+    "harness_check_within_stated": {
+      "accuracy": 0.9810606060606061,
+      "majority_baseline": 0.5,
+      "n_train": 617,
+      "n_test": 264
+    },
+    "within_demonstrated_transfer": {
+      "accuracy": 0.8833333333333333,
+      "majority_baseline": 0.6375,
+      "n_train": 576,
+      "n_test": 240
+    },
+    "cross_register": {
+      "accuracy": 0.6654970760233918,
+      "error_rate": 0.3345029239766082,
+      "majority_baseline": 0.5508771929824562,
+      "n_train": 842,
+      "n_test": 855
+    },
+    "stated_to_demonstrated": {
+      "accuracy": 0.46568627450980393,
+      "error_rate": 0.5343137254901961,
+      "majority_baseline": 0.6102941176470589,
+      "n_train": 881,
+      "n_test": 816
+    },
+    "verdict": "FLAG -- report the numbers; do not decide unilaterally."
+  }
+}

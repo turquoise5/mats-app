@@ -188,6 +188,44 @@ def last_token_hidden(
 
 
 @torch.no_grad()
+def greedy_generate(
+    model, tok, texts: list[str], max_new_tokens: int = 12, batch_size: int = 8,
+    max_length: int = 1024,
+) -> list[str]:
+    """Greedy-decode a short continuation for each prompt. Returns the newly generated
+    text only (prompt stripped), one string per input.
+
+    Batched generation needs LEFT padding: `generate` always appends the next token at
+    the end of the sequence, so with RIGHT padding a shorter sequence's new token would
+    land after its pad tokens rather than after its real last token, corrupting the
+    continuation for every sample shorter than the batch max. Extraction elsewhere in
+    this module needs RIGHT padding (see module docstring) — so this flips
+    `padding_side` for the duration of the call and restores it before returning,
+    rather than leaving the tokenizer in the wrong state for the next extraction call.
+    """
+    device = next(model.parameters()).device
+    original_side = tok.padding_side
+    tok.padding_side = "left"
+    try:
+        outs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i : i + batch_size]
+            enc = tok(
+                batch, return_tensors="pt", padding=True, truncation=True,
+                max_length=max_length, add_special_tokens=False,
+            ).to(device)
+            gen = model.generate(
+                **enc, max_new_tokens=max_new_tokens, do_sample=False,
+                pad_token_id=tok.pad_token_id,
+            )
+            new_tokens = gen[:, enc["input_ids"].shape[1]:]
+            outs.extend(tok.batch_decode(new_tokens, skip_special_tokens=True))
+        return outs
+    finally:
+        tok.padding_side = original_side
+
+
+@torch.no_grad()
 def verify_last_token_indexing(model, tok, texts: list[str], n_check: int = 3) -> None:
     """Cross-check batched extraction against unbatched, one sample at a time.
 

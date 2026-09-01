@@ -63,6 +63,18 @@ READ_POSITIONS = ("natural", "elicited")
 
 
 # --------------------------------------------------------------------------------------
+# Act 1 — knowledge-of-concept elicitation (contrast_v1.jsonl)
+# --------------------------------------------------------------------------------------
+
+CONTRAST_FILE = CONTRAST / "contrast_v1.jsonl"
+
+# No Act 0 attribute fits the knowledge target -- it needs its own elicit prefix,
+# formatted per concept (contrast_v1.jsonl rows carry the concept description in
+# `concept`). act1_handover_probing.md §5 requires recording the exact string used.
+ACT1_ELICIT_PREFIX = "I think this user's understanding of {concept} is"
+
+
+# --------------------------------------------------------------------------------------
 # Run logging (append-only)
 # --------------------------------------------------------------------------------------
 

@@ -90,6 +90,49 @@ def test_control_task_labels_not_correlated_with_truth():
 
 
 # ---------------------------------------------------------------------------------
+# Explicit-split probes (Act 1 transfer conditions)
+# ---------------------------------------------------------------------------------
+
+def test_fit_layer_probes_explicit_matches_manual_split():
+    """With train/test passed explicitly, results must equal fitting fit_layer_probes
+    on that same split by hand -- same probe, same per-layer loop."""
+    acts, y, _ = synthetic()
+    tr, te = P.split_indices(y, seed=0)
+    explicit = P.fit_layer_probes_explicit(acts, y, tr, te, seed=0)
+    manual_accs = []
+    for layer in range(acts.shape[1]):
+        p = P.make_probe(0)
+        p.fit(acts[tr, layer, :], y[tr])
+        manual_accs.append(p.score(acts[te, layer, :], y[te]))
+    assert np.allclose(explicit["val_acc"], manual_accs)
+    assert np.array_equal(explicit["train_idx"], tr)
+    assert np.array_equal(explicit["val_idx"], te)
+
+
+def test_fit_layer_probes_explicit_recovers_planted_signal():
+    """Sanity check on a real transfer-style split: two disjoint index blocks, signal
+    still present in both, accuracy should climb with depth as with the internal split."""
+    acts, y, _ = synthetic()
+    half = N // 2
+    train_idx, test_idx = np.arange(half), np.arange(half, N)
+    res = P.fit_layer_probes_explicit(acts, y, train_idx, test_idx, seed=0)
+    assert res["val_acc"].shape == (L,)
+    assert res["best_acc"] > 0.6
+    assert res["best_layer"] >= 4
+
+
+def test_fit_layer_probes_explicit_does_not_leak_via_split_indices():
+    """Regression guard for the handover's warning: explicit train/test must be used
+    as given, never re-derived by shuffling labels through split_indices."""
+    acts, y, _ = synthetic()
+    train_idx, test_idx = np.arange(0, 50), np.arange(50, 100)
+    res = P.fit_layer_probes_explicit(acts, y, train_idx, test_idx, seed=0)
+    assert set(res["train_idx"].tolist()) == set(train_idx.tolist())
+    assert set(res["val_idx"].tolist()) == set(test_idx.tolist())
+    assert len(set(res["train_idx"].tolist()) & set(res["val_idx"].tolist())) == 0
+
+
+# ---------------------------------------------------------------------------------
 # Splits
 # ---------------------------------------------------------------------------------
 

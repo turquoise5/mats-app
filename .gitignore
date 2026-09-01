@@ -1,0 +1,24 @@
+# Environment / tooling caches
+.cache/
+.ipynb_checkpoints/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Scratch
+Untitled*.ipynb
+mats_project.zip
+
+# Large activation caches -- regenerate with `python run_act1.py extract`.
+# These are 1.2 GB each and exceed GitHub's 100 MB per-file limit.
+mats_project/mats/cache/act1_all_*.npy
+
+# Act 0 activation caches -- 256-332 MB each, over GitHub's 100 MB limit.
+# Kept on the persistent /workspace volume; regenerate with `python run_act0.py`.
+mats_project/mats/cache/act0_age_natural.npy
+mats_project/mats/cache/act0_age_elicited.npy
+mats_project/mats/cache/act0_education_natural.npy
+mats_project/mats/cache/act0_education_elicited.npy
+
+# Local recovery artifacts
+.git-backup/

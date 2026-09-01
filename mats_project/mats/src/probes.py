@@ -48,19 +48,17 @@ def split_indices(labels, groups=None, test_size: float = 0.2, seed: int = 0):
     return tr, te
 
 
-def fit_layer_probes(acts, labels, groups=None, test_size=0.2, seed=0, verbose=True):
-    """acts: (n, n_layers+1, d). Returns per-layer val accuracy and fitted probes."""
+def _fit_on_split(acts, labels, tr, te, seed, verbose, log_prefix="probe"):
+    """Shared per-layer fit/score loop for a fixed (train_idx, test_idx) pair."""
     acts = np.asarray(acts)
     labels = np.asarray(labels)
     n, n_layers_plus1, d = acts.shape
 
     if verbose:
         vals, counts = np.unique(labels, return_counts=True)
-        print(f"  [probe] acts {acts.shape}  labels {dict(zip(vals.tolist(), counts.tolist()))}")
-
-    tr, te = split_indices(labels, groups, test_size, seed)
-    if verbose:
-        print(f"  [probe] train {len(tr)}  val {len(te)}")
+        print(f"  [{log_prefix}] acts {acts.shape}  "
+              f"labels {dict(zip(vals.tolist(), counts.tolist()))}")
+        print(f"  [{log_prefix}] train {len(tr)}  val {len(te)}")
 
     accs, probes = [], []
     for layer in range(n_layers_plus1):
@@ -73,11 +71,27 @@ def fit_layer_probes(acts, labels, groups=None, test_size=0.2, seed=0, verbose=T
     return {
         "val_acc": np.array(accs),
         "probes": probes,
-        "train_idx": tr,
-        "val_idx": te,
+        "train_idx": np.asarray(tr),
+        "val_idx": np.asarray(te),
         "best_layer": int(np.argmax(accs)),
         "best_acc": float(np.max(accs)),
     }
+
+
+def fit_layer_probes(acts, labels, groups=None, test_size=0.2, seed=0, verbose=True):
+    """acts: (n, n_layers+1, d). Splits internally (see `split_indices`). Returns
+    per-layer val accuracy and fitted probes."""
+    tr, te = split_indices(labels, groups, test_size, seed)
+    return _fit_on_split(acts, labels, tr, te, seed, verbose)
+
+
+def fit_layer_probes_explicit(acts, labels, train_idx, test_idx, seed=0, verbose=True):
+    """Like `fit_layer_probes`, but train/test are given explicitly rather than split
+    internally. Use this whenever train and test are defined by the data -- a transfer
+    condition (Act 1: cross-register, stated->demonstrated, ...) -- not by a random
+    split. Do not fake this by shuffling labels into `split_indices`; that leaks."""
+    return _fit_on_split(acts, labels, train_idx, test_idx, seed, verbose,
+                          log_prefix="probe_explicit")
 
 
 def control_task(acts, labels, content_keys=None, groups=None, test_size=0.2, seed=0):

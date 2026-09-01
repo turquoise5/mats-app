@@ -1,0 +1,27 @@
+
+==============================================================================
+ACT 1.2 — "JUST ASK" BASELINE (local Qwen3-8B, no OpenRouter)
+==============================================================================
+[act1_data] stopped parsing at byte 2467874/3888144 (1420270 bytes left unparsed): Expecting value: line 2113 column 1 (char 2467874). See module docstring — this is expected, not a bug to chase, if the row count below matches contrast_v1_stats.json.
+[act1_data] loaded 2112 rows from /workspace/mats_project/mats/data/contrast/contrast_v1.jsonl
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<00:44,  8.90it/s]Loading weights:   1%|          | 2/399 [00:00<00:48,  8.14it/s]Loading weights:   5%|▌         | 21/399 [00:00<00:04, 81.68it/s]Loading weights:  11%|█         | 43/399 [00:00<00:02, 130.12it/s]Loading weights:  16%|█▌        | 63/399 [00:00<00:02, 153.79it/s]Loading weights:  22%|██▏       | 87/399 [00:00<00:01, 181.18it/s]Loading weights:  29%|██▊       | 114/399 [00:00<00:01, 208.98it/s]Loading weights:  35%|███▍      | 138/399 [00:00<00:01, 213.22it/s]Loading weights:  41%|████      | 164/399 [00:00<00:01, 227.30it/s]Loading weights:  48%|████▊     | 193/399 [00:01<00:00, 241.33it/s]Loading weights:  56%|█████▋    | 225/399 [00:01<00:00, 257.71it/s]Loading weights:  63%|██████▎   | 251/399 [00:01<00:00, 243.32it/s]Loading weights:  69%|██████▉   | 276/399 [00:01<00:00, 240.95it/s]Loading weights:  75%|███████▌  | 301/399 [00:01<00:00, 235.85it/s]Loading weights:  81%|████████▏ | 325/399 [00:01<00:00, 224.10it/s]Loading weights:  87%|████████▋ | 348/399 [00:01<00:00, 223.88it/s]Loading weights:  93%|█████████▎| 371/399 [00:01<00:00, 222.85it/s]Loading weights:  99%|█████████▉| 397/399 [00:01<00:00, 233.11it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 205.38it/s]
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+[justask] generating for 2112 conversations (max_new_tokens=12, batch_size=8)
+
+[justask] 3 sample generations, for eyeballing:
+  linear_2step_int__stated__knows__1__novice: concept=linear_2step_int knowledge_state='knows' -> 'Yes.'
+  linear_2step_int__stated__knows__1__expert: concept=linear_2step_int knowledge_state='knows' -> 'Yes.'
+  linear_2step_int__stated__knows__0__novice: concept=linear_2step_int knowledge_state='knows' -> 'No.'
+
+[justask] 0/2112 generations were not parseable as yes/no (neither predicted nor guessed).
+[log_run] 1/justask_generate -> /workspace/mats_project/mats/results/runs.jsonl (9bbd610b3acf)
+[justask] wrote /workspace/mats_project/mats/cache/act1_justask.json
