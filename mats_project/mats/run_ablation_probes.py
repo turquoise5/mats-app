@@ -35,6 +35,8 @@ VARIANTS = ["orig", "A", "B", "AB", "CTRL"]
 RESULTS_PATH = C.RESULTS / "ablation_probe_results.json"
 STATS_PATH = C.CONTRAST / "ablation_stats.json"
 FIG_PATH = C.FIGS / "act1_ablations.png"
+GROUPS_PATH = C.CONTRAST / "ablation_groups.json"
+ORIG_MERGED_RESULTS_PATH = C.RESULTS / "orig_merged_probe_vs_tfidf.json"
 
 # Act 1's reference numbers for `within-demonstrated-by-eedi` (notes.md), which this run
 # must reproduce under the *same* pipeline (probes.make_probe, plain accuracy) before any
@@ -337,6 +339,277 @@ def step_probe():
 
 
 # --------------------------------------------------------------------------------------
+# orig_merged: probe vs. TF-IDF on the *identical* held-out rows, paired bootstrap CI
+# --------------------------------------------------------------------------------------
+
+def row_text(row: dict) -> str:
+    """All turns joined -- matches run_ablations.py's `row_text` exactly (every turn in
+    this dataset is role='user', so this equals act1_data.full_user_text)."""
+    return " ".join(t["content"] for t in row["turns"])
+
+
+def _paired_bootstrap_balanced_acc_diff(y_true, pred_a, pred_b, n_boot=10000, seed=0,
+                                         alpha=0.05):
+    """Bootstrap CI on balanced_accuracy(a) - balanced_accuracy(b), resampling the fixed
+    test rows (paired: each bootstrap draw applies to both models' predictions and the
+    same true labels). Vectorised over (n_boot, n) rather than looping sklearn calls.
+    Bootstrap draws that lose one class entirely (undefined balanced accuracy) are
+    dropped."""
+    y_true = np.asarray(y_true)
+    pred_a = np.asarray(pred_a)
+    pred_b = np.asarray(pred_b)
+    n = len(y_true)
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, n, size=(n_boot, n))
+
+    yb = y_true[idx]
+    mask1, mask0 = (yb == 1), (yb == 0)
+    n1, n0 = mask1.sum(1), mask0.sum(1)
+    valid = (n1 > 0) & (n0 > 0)
+
+    def bal_acc(pred):
+        pb = pred[idx]
+        correct = (pb == yb)
+        recall1 = np.divide((correct & mask1).sum(1), n1, out=np.full(n_boot, np.nan), where=n1 > 0)
+        recall0 = np.divide((correct & mask0).sum(1), n0, out=np.full(n_boot, np.nan), where=n0 > 0)
+        return 0.5 * (recall1 + recall0)
+
+    diffs = (bal_acc(pred_a) - bal_acc(pred_b))[valid]
+    lo, hi = np.percentile(diffs, [100 * alpha / 2, 100 * (1 - alpha / 2)])
+    return {
+        "n_boot_valid": int(valid.sum()), "n_boot_requested": n_boot, "seed": seed,
+        "mean_diff": float(diffs.mean()), "ci_lo": float(lo), "ci_hi": float(hi),
+        "ci_level": 1 - alpha,
+        "p_diff_le_0": float(np.mean(diffs <= 0)),
+    }
+
+
+def step_orig_merged():
+    """`orig` only, both positions. Split: merged (content-corrected) groups from
+    `data/contrast/ablation_groups.json`, via the identical GroupShuffleSplit(test_size=
+    0.3, seed=0) the CPU agent used -- reproduces its n_train=521/n_test=295 exactly.
+    Probe: StandardScaler + LogisticRegression(class_weight='balanced'), balanced
+    accuracy, all 37 layers. TF-IDF: refit on the *same* 295 test rows (bigrams,
+    max_features=5000, class_weight='balanced') -- not the CPU agent's own split, so this
+    is a like-for-like comparison, unlike the qid-grouped table above. Paired bootstrap CI
+    on the probe-minus-TF-IDF balanced-accuracy difference, resampling the fixed test
+    rows."""
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import balanced_accuracy_score
+    from sklearn.model_selection import GroupShuffleSplit
+
+    C.banner("ORIG ONLY, MERGED-GROUP SPLIT -- PROBE vs TF-IDF, PAIRED BOOTSTRAP")
+
+    orig_rows = load_variant_rows("orig")
+    labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
+    texts = np.array([row_text(r) for r in orig_rows])
+
+    with open(GROUPS_PATH) as f:
+        groups_json = json.load(f)
+    group_of_row_id = groups_json["group_of_row_id"]
+    merged_groups = np.array([group_of_row_id[r["id"]] for r in orig_rows])
+
+    gss = GroupShuffleSplit(n_splits=1, test_size=0.3, random_state=C.SEED)
+    tr, te = next(gss.split(np.zeros(len(orig_rows)), labels, merged_groups))
+    print(f"[orig_merged] split: n_train={len(tr)} n_test={len(te)} "
+          f"(merged groups, GroupShuffleSplit test_size=0.3, seed={C.SEED})")
+    if len(te) != 295:
+        print(f"  *** WARNING: n_test={len(te)} != 295 -- split does not match the CPU "
+              f"agent's reference run. Proceeding, but flag this. ***")
+    majority = P.majority_baseline(labels, val_idx=te)
+    print(f"[orig_merged] labels: gap={int((labels==0).sum())} knows={int((labels==1).sum())} "
+          f"majority_baseline(test)={majority:.3f}")
+
+    # TF-IDF, refit on the identical split -- position-independent (text only).
+    vec = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+    Xtr = vec.fit_transform(texts[tr])
+    Xte = vec.transform(texts[te])
+    clf = LogisticRegression(max_iter=3000, class_weight="balanced", random_state=C.SEED)
+    clf.fit(Xtr, labels[tr])
+    tfidf_pred = clf.predict(Xte)
+    tfidf_bal_acc = balanced_accuracy_score(labels[te], tfidf_pred)
+    print(f"[orig_merged] TF-IDF (bigrams, balanced), refit on identical test rows: "
+          f"balanced_acc={tfidf_bal_acc:.4f}")
+
+    out = {
+        "split": {"n_train": len(tr), "n_test": len(te), "grouped_by": "merged (ablation_groups.json)",
+                  "method": "GroupShuffleSplit(n_splits=1, test_size=0.3, seed=0)",
+                  "majority_baseline": majority},
+        "tfidf": {"config": "TfidfVectorizer(max_features=5000, ngram_range=(1,2)) + "
+                             "LogisticRegression(max_iter=3000, class_weight='balanced')",
+                  "balanced_acc": float(tfidf_bal_acc)},
+        "positions": {},
+    }
+
+    print(f"\n{'position':10s} {'probe_bal_acc':>13s} {'@layer':>7s} {'tfidf_bal_acc':>13s} "
+          f"{'diff':>7s} {'95% CI':>18s} {'p(diff<=0)':>11s}")
+    for position in C.READ_POSITIONS:
+        acts = np.load(C.CACHE / f"{CACHE_PREFIX}_orig_{position}.npy")
+        print(f"  [orig_merged] position={position} acts={acts.shape}")
+        res = fit_layer_probes_balanced(acts, labels, tr, te, seed=C.SEED)
+        best_layer = res["best_layer"]
+
+        # Refit the best-layer probe alone to get its per-row test predictions (the
+        # 37-layer sweep above only kept accuracies, not per-layer prediction arrays).
+        X = acts[:, best_layer, :]
+        probe = _balanced_probe(C.SEED)
+        probe.fit(X[tr], labels[tr])
+        probe_pred = probe.predict(X[te])
+        probe_bal_acc = balanced_accuracy_score(labels[te], probe_pred)
+        assert abs(probe_bal_acc - res["best_acc"]) < 1e-9, "best-layer refit mismatch"
+
+        boot = _paired_bootstrap_balanced_acc_diff(labels[te], probe_pred, tfidf_pred,
+                                                     n_boot=10000, seed=C.SEED)
+
+        out["positions"][position] = {
+            "val_acc": res["val_acc"].tolist(), "best_layer": best_layer,
+            "probe_bal_acc": float(probe_bal_acc), "bootstrap": boot,
+        }
+        print(f"  {position:10s} {probe_bal_acc:13.4f} {best_layer:7d} {tfidf_bal_acc:13.4f} "
+              f"{probe_bal_acc - tfidf_bal_acc:+7.4f} "
+              f"[{boot['ci_lo']:+.4f}, {boot['ci_hi']:+.4f}] {boot['p_diff_le_0']:11.4f}")
+
+        C.log_run(
+            act="1", experiment=f"orig_merged_probe_vs_tfidf/{position}",
+            config={"split": out["split"], "tfidf_config": out["tfidf"]["config"],
+                    "n_boot": boot["n_boot_valid"], "seed": C.SEED},
+            metrics={"probe_bal_acc": float(probe_bal_acc), "best_layer": best_layer,
+                     "tfidf_bal_acc": float(tfidf_bal_acc),
+                     "diff": float(probe_bal_acc - tfidf_bal_acc),
+                     "ci_lo": boot["ci_lo"], "ci_hi": boot["ci_hi"],
+                     "p_diff_le_0": boot["p_diff_le_0"], "majority_baseline": majority},
+        )
+
+    with open(ORIG_MERGED_RESULTS_PATH, "w") as f:
+        json.dump(out, f, indent=2)
+    print(f"\n[orig_merged] wrote {ORIG_MERGED_RESULTS_PATH}")
+    return out
+
+
+# --------------------------------------------------------------------------------------
+# ablation_merged: B and CTRL refit on the merged (non-leaky) split, McNemar not deltas
+# --------------------------------------------------------------------------------------
+
+def _mcnemar(correct_a, correct_b):
+    """Exact McNemar (binomial test on discordant pairs) + classic chi2-with-continuity-
+    correction, on the same paired test items. `correct_a`/`correct_b` are item-aligned
+    boolean arrays (True = that model got that item right)."""
+    from scipy.stats import binomtest, chi2
+
+    correct_a = np.asarray(correct_a, dtype=bool)
+    correct_b = np.asarray(correct_b, dtype=bool)
+    both_right = int((correct_a & correct_b).sum())
+    both_wrong = int((~correct_a & ~correct_b).sum())
+    a_right_b_wrong = int((correct_a & ~correct_b).sum())
+    a_wrong_b_right = int((~correct_a & correct_b).sum())
+    b, c = a_right_b_wrong, a_wrong_b_right
+    n_disc = b + c
+
+    if n_disc:
+        exact_p = float(binomtest(min(b, c), n_disc, 0.5, alternative="two-sided").pvalue)
+        chi2_stat = (abs(b - c) - 1) ** 2 / n_disc
+        chi2_p = float(chi2.sf(chi2_stat, df=1))
+    else:
+        exact_p, chi2_stat, chi2_p = 1.0, 0.0, 1.0
+
+    return {
+        "both_right": both_right, "both_wrong": both_wrong,
+        "a_right_b_wrong": a_right_b_wrong, "a_wrong_b_right": a_wrong_b_right,
+        "n_discordant": n_disc, "exact_p": exact_p,
+        "chi2_stat": float(chi2_stat), "chi2_p": chi2_p,
+    }
+
+
+def step_ablation_merged():
+    """B and CTRL (plus orig, for reference), refit on the merged (content-corrected)
+    group split from `ablation_groups.json` -- the earlier `probe` step's Δ-vs-CTRL table
+    (see notes.md) was built on a raw `eedi_question_id` split that src/grouping.py
+    documents as leaky: content-colliding questions (e.g. 1158/552) can straddle
+    train/test under that grouping. This reuses the same GroupShuffleSplit(test_size=0.3,
+    seed=0) on merged groups as `orig_merged` (n_test=295), and replaces the earlier
+    point-estimate Δ comparison with McNemar's test on the shared, paired test items --
+    the right tool for "do these two classifiers disagree systematically on the same
+    items", which a difference of accuracies cannot answer on its own."""
+    from sklearn.metrics import balanced_accuracy_score
+    from sklearn.model_selection import GroupShuffleSplit
+
+    C.banner("B / CTRL REFIT ON MERGED GROUPS -- MCNEMAR ON SHARED TEST ITEMS")
+
+    orig_rows = load_variant_rows("orig")
+    labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
+
+    with open(GROUPS_PATH) as f:
+        groups_json = json.load(f)
+    group_of_row_id = groups_json["group_of_row_id"]
+    merged_groups = np.array([group_of_row_id[r["id"]] for r in orig_rows])
+
+    gss = GroupShuffleSplit(n_splits=1, test_size=0.3, random_state=C.SEED)
+    tr, te = next(gss.split(np.zeros(len(orig_rows)), labels, merged_groups))
+    print(f"[ablation_merged] split: n_train={len(tr)} n_test={len(te)} "
+          f"(merged groups, GroupShuffleSplit test_size=0.3, seed={C.SEED} -- same split "
+          f"as orig_merged)")
+    if len(te) != 295:
+        print(f"  *** WARNING: n_test={len(te)} != 295 -- does not match the reference "
+              f"run. Proceeding, but flag this. ***")
+    majority = P.majority_baseline(labels, val_idx=te)
+    print(f"[ablation_merged] labels: gap={int((labels==0).sum())} "
+          f"knows={int((labels==1).sum())} majority_baseline(test)={majority:.3f}")
+
+    variants = ["orig", "B", "CTRL"]
+    out = {
+        "split": {"n_train": len(tr), "n_test": len(te), "grouped_by": "merged (ablation_groups.json)",
+                  "method": "GroupShuffleSplit(n_splits=1, test_size=0.3, seed=0)",
+                  "majority_baseline": majority},
+        "positions": {},
+    }
+
+    for position in C.READ_POSITIONS:
+        print(f"\n[ablation_merged] === position={position} ===")
+        preds, bal_accs, layers = {}, {}, {}
+        for v in variants:
+            acts = np.load(C.CACHE / f"{CACHE_PREFIX}_{v}_{position}.npy")
+            res = fit_layer_probes_balanced(acts, labels, tr, te, seed=C.SEED)
+            layer = res["best_layer"]
+            X = acts[:, layer, :]
+            probe = _balanced_probe(C.SEED)
+            probe.fit(X[tr], labels[tr])
+            pred = probe.predict(X[te])
+            bal_acc = balanced_accuracy_score(labels[te], pred)
+            assert abs(bal_acc - res["best_acc"]) < 1e-9, "best-layer refit mismatch"
+            preds[v], bal_accs[v], layers[v] = pred, float(bal_acc), layer
+            print(f"  {v:5s} acts={acts.shape} balanced_acc={bal_acc:.4f} @L{layer}")
+
+        correct = {v: (preds[v] == labels[te]) for v in variants}
+        pairs = [("B", "CTRL"), ("B", "orig"), ("CTRL", "orig")]
+        mcnemar_results = {}
+        print(f"\n  {'pair':14s} {'both_right':>10s} {'both_wrong':>10s} {'a_only':>7s} "
+              f"{'b_only':>7s} {'exact_p':>9s} {'chi2_p':>9s}")
+        for a, b in pairs:
+            res_mc = _mcnemar(correct[a], correct[b])
+            mcnemar_results[f"{a}_vs_{b}"] = res_mc
+            print(f"  {a + '_vs_' + b:14s} {res_mc['both_right']:10d} {res_mc['both_wrong']:10d} "
+                  f"{res_mc['a_right_b_wrong']:7d} {res_mc['a_wrong_b_right']:7d} "
+                  f"{res_mc['exact_p']:9.4f} {res_mc['chi2_p']:9.4f}")
+
+        out["positions"][position] = {
+            "balanced_acc": bal_accs, "best_layer": layers, "mcnemar": mcnemar_results,
+        }
+
+        C.log_run(
+            act="1", experiment=f"ablation_merged_mcnemar/{position}",
+            config={"split": out["split"], "seed": C.SEED, "variants": variants},
+            metrics={"balanced_acc": bal_accs, "best_layer": layers, "mcnemar": mcnemar_results},
+        )
+
+    path = C.RESULTS / "ablation_merged_mcnemar.json"
+    with open(path, "w") as f:
+        json.dump(out, f, indent=2)
+    print(f"\n[ablation_merged] wrote {path}")
+    return out
+
+
+# --------------------------------------------------------------------------------------
 # plot
 # --------------------------------------------------------------------------------------
 
@@ -384,7 +657,8 @@ def step_plot():
 
 # --------------------------------------------------------------------------------------
 
-STEPS = {"extract": step_extract, "probe": step_probe, "plot": step_plot}
+STEPS = {"extract": step_extract, "probe": step_probe, "plot": step_plot,
+         "orig_merged": step_orig_merged, "ablation_merged": step_ablation_merged}
 
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"

@@ -1,0 +1,30 @@
+
+==============================================================================
+B / CTRL REFIT ON MERGED GROUPS -- MCNEMAR ON SHARED TEST ITEMS
+==============================================================================
+[ablation_merged] split: n_train=521 n_test=295 (merged groups, GroupShuffleSplit test_size=0.3, seed=0 -- same split as orig_merged)
+[ablation_merged] labels: gap=318 knows=498 majority_baseline(test)=0.631
+
+[ablation_merged] === position=natural ===
+  orig  acts=(816, 37, 4096) balanced_acc=0.9298 @L20
+  B     acts=(816, 37, 4096) balanced_acc=0.8093 @L3
+  CTRL  acts=(816, 37, 4096) balanced_acc=0.8751 @L21
+
+  pair           both_right both_wrong  a_only  b_only   exact_p    chi2_p
+  B_vs_CTRL             216         13      25      41    0.0640    0.0648
+  B_vs_orig             228         11      13      43    0.0001    0.0001
+  CTRL_vs_orig          253         20       4      18    0.0043    0.0056
+[log_run] 1/ablation_merged_mcnemar/natural -> /workspace/mats_project/mats/results/runs.jsonl (3d843effed13)
+
+[ablation_merged] === position=elicited ===
+  orig  acts=(816, 37, 4096) balanced_acc=0.9114 @L23
+  B     acts=(816, 37, 4096) balanced_acc=0.8036 @L4
+  CTRL  acts=(816, 37, 4096) balanced_acc=0.8412 @L29
+
+  pair           both_right both_wrong  a_only  b_only   exact_p    chi2_p
+  B_vs_CTRL             206         17      35      37    0.9063    0.9062
+  B_vs_orig             225         12      16      42    0.0009    0.0010
+  CTRL_vs_orig          238         23       5      29    0.0000    0.0001
+[log_run] 1/ablation_merged_mcnemar/elicited -> /workspace/mats_project/mats/results/runs.jsonl (3d843effed13)
+
+[ablation_merged] wrote /workspace/mats_project/mats/results/ablation_merged_mcnemar.json

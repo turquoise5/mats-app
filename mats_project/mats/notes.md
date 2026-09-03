@@ -288,3 +288,110 @@ before this is treated as settled. Nothing here overturns Act 1's narrowed headl
 - 5 entries in `results/runs.jsonl` (`ablation_probe/{orig,A,B,AB,CTRL}`), plus 10
   `ablation_extract` entries
 - Logs: `logs/ablation_extract.log`, `logs/ablation_probe.log`, `logs/ablation_plot.log`
+
+### orig only, merged-group split — probe vs. TF-IDF, like-for-like
+
+The `Δ vs CTRL` table above borrowed its TF-IDF numbers from a *different* split
+(`GroupShuffleSplit`, `eedi_question_id`-grouped) than the probe's own (`sklearn`'s
+grouped stratified split). This run fixes that: `orig` only, both positions, split on
+the CPU agent's **merged** (content-corrected) groups from `ablation_groups.json`, using
+the exact `GroupShuffleSplit(n_splits=1, test_size=0.3, seed=0)` that produced the CPU
+agent's own merged-grouping number — reproduces `n_train=521`/`n_test=295` exactly. TF-IDF
+(`TfidfVectorizer(max_features=5000, ngram_range=(1,2))` + `LogisticRegression(
+class_weight="balanced")`) is **refit on the identical 295 test rows** rather than reused
+from a different split — it lands at `balanced_acc=0.799916`, matching the CPU agent's
+merged-grouping figure (0.799916148761961) to the last digit, which cross-checks that the
+groups file, row order, and split mechanics are all identical to the CPU run.
+
+Probe: `StandardScaler` + `LogisticRegression(class_weight="balanced")`, all 37 layers,
+best layer reported. Paired bootstrap (10,000 resamples of the fixed 295 test rows, seed
+0) on `balanced_acc(probe) − balanced_acc(TF-IDF)`:
+
+| position | probe (best layer) | TF-IDF | diff | 95% CI | p(diff ≤ 0) |
+|---|---|---|---|---|---|
+| natural | 0.930 @L20 | 0.800 | **+0.130** | [+0.076, +0.185] | 0.0000 |
+| elicited | 0.911 @L23 | 0.800 | **+0.112** | [+0.054, +0.169] | 0.0000 |
+
+On this harder, content-corrected split — with TF-IDF given a strong bigram config and
+evaluated on the exact same held-out rows as the probe — **the probe beats TF-IDF by
+11–13 points, and the bootstrap CI excludes zero by a wide margin** (0/10,000 resamples
+favoured TF-IDF or tied). This is a different question from the ablation-drop analysis
+above (which asked *what the probe's signal is made of*): this one asks *whether the
+probe carries more than bag-of-words does at all*, and on this split the answer is
+unambiguously yes.
+
+Artifacts: `results/orig_merged_probe_vs_tfidf.json` (full per-layer curves, split,
+TF-IDF config, bootstrap detail); 2 entries in `runs.jsonl`
+(`orig_merged_probe_vs_tfidf/{natural,elicited}`); `logs/orig_merged.log`.
+
+### B and CTRL refit on merged groups — McNemar, not point estimates (correction)
+
+**The "Δ vs CTRL" table further up this section was measured on a leaky split.** It used
+`within-demonstrated` grouped by raw `eedi_question_id`, which `src/grouping.py` documents
+as letting content-colliding questions (e.g. 1158/552, byte-identical stems) straddle
+train/test. This section refits B and CTRL (plus `orig`, for reference) on the same
+merged-group split as `orig_merged` above (`n_train=521`, `n_test=295`, identical items),
+and replaces the earlier Δ-of-point-estimates comparison with **McNemar's exact test on
+the shared, paired test items** — the right tool for "do these two classifiers disagree
+systematically on the same rows," which a bare accuracy difference cannot answer (two
+models can have identical accuracy while disagreeing on every single item, or identical
+accuracy while agreeing on all but a handful — a Δ of zero is compatible with either).
+
+**Balanced accuracy, best layer, merged split** (majority baseline on this test set: 0.631):
+
+| variant | natural | elicited |
+|---|---|---|
+| orig | 0.930 @L20 | 0.911 @L23 |
+| B | 0.809 @L3 | 0.804 @L4 |
+| CTRL | 0.875 @L21 | 0.841 @L29 |
+
+B's best layer is early (L3/L4) both positions, not a single-point noise spike -- its
+full 37-layer curve is genuinely U-shaped (checked directly: 0.80 at L2-4, dips to ~0.70
+mid-stack, climbs back to ~0.80 by L20-27, natural position). Worth remembering when
+reading "best layer" here as anything other than an argmax over 37 correlated,
+noisy-at-n=295 estimates — that caveat applies to `orig` and `CTRL` too, not just `B`.
+
+**McNemar (exact, paired, 295 shared items) — contingency `both_right / both_wrong /
+a_only_right / b_only_right`:**
+
+| pair | position | both right | both wrong | a-only | b-only | exact p | chi2 p |
+|---|---|---|---|---|---|---|---|
+| B vs CTRL | natural | 216 | 13 | 25 (B) | 41 (CTRL) | **0.064** | 0.065 |
+| B vs CTRL | elicited | 206 | 17 | 35 (B) | 37 (CTRL) | **0.906** | 0.906 |
+| B vs orig | natural | 228 | 11 | 13 (B) | 43 (orig) | 0.0001 | 0.0001 |
+| B vs orig | elicited | 225 | 12 | 16 (B) | 42 (orig) | 0.0009 | 0.0010 |
+| CTRL vs orig | natural | 253 | 20 | 4 (CTRL) | 18 (orig) | 0.0043 | 0.0056 |
+| CTRL vs orig | elicited | 238 | 23 | 5 (CTRL) | 29 (orig) | 0.0000 | 0.0001 |
+
+### What changes vs. the leaky-split verdict
+
+**Both B and CTRL lose to `orig` at both positions, decisively** (all four `*_vs_orig`
+rows p ≤ 0.005) — any text removal, targeted or random, costs the probe real,
+McNemar-significant information. That part of the earlier picture holds up.
+
+**The `B vs CTRL` comparison — the one that actually tests whether the targeted
+metacognitive-cue removal costs more than an equivalent random deletion — is genuinely
+split by position, and differs from the earlier point-estimate read:**
+
+- **elicited: still no difference** (p = 0.906, 35 vs 37 discordant pairs — as
+  symmetric as a paired comparison gets). This matches the earlier `Δ vs CTRL ≈ 0`
+  finding and survives the corrected split cleanly.
+- **natural: trends toward B being worse than CTRL, but does not reach significance**
+  (p = 0.064, 25 vs 41 discordant pairs — CTRL wins the disagreement roughly 1.6:1). The
+  earlier leaky-split table reported `Δ vs CTRL = +0.004` at natural — effectively zero.
+  The corrected split does **not** reproduce that null; it shows a real-looking trend in
+  the opposite direction (B costing *more* than CTRL) that a properly-powered version of
+  this test might well confirm. **Do not report natural-position "no drop beyond CTRL"
+  as established — it is not, on the non-leaky split.** At n=295 with 66 discordant
+  pairs, this test is underpowered to fully resolve a moderate effect; call it
+  unresolved, not null.
+
+**Net effect on the earlier verdict:** the elicited-position "no/no" reading (§2 table)
+stands, refit and correctly tested. The natural-position "no" leg of that reading was an
+artifact of the leaky split and should be retracted — natural-position B vs CTRL is an
+open question, trending toward "B does cost something beyond length," not resolved either
+way at this sample size.
+
+Artifacts: `results/ablation_merged_mcnemar.json` (balanced accuracy, best layer, full
+contingency tables and both McNemar p-values, per pair per position); 2 entries in
+`runs.jsonl` (`ablation_merged_mcnemar/{natural,elicited}`); `logs/ablation_merged.log`.

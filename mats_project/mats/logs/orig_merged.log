@@ -1,0 +1,17 @@
+
+==============================================================================
+ORIG ONLY, MERGED-GROUP SPLIT -- PROBE vs TF-IDF, PAIRED BOOTSTRAP
+==============================================================================
+[orig_merged] split: n_train=521 n_test=295 (merged groups, GroupShuffleSplit test_size=0.3, seed=0)
+[orig_merged] labels: gap=318 knows=498 majority_baseline(test)=0.631
+[orig_merged] TF-IDF (bigrams, balanced), refit on identical test rows: balanced_acc=0.7999
+
+position   probe_bal_acc  @layer tfidf_bal_acc    diff             95% CI  p(diff<=0)
+  [orig_merged] position=natural acts=(816, 37, 4096)
+  natural           0.9298      20        0.7999 +0.1299 [+0.0756, +0.1853]      0.0000
+[log_run] 1/orig_merged_probe_vs_tfidf/natural -> /workspace/mats_project/mats/results/runs.jsonl (64d089b5c52e)
+  [orig_merged] position=elicited acts=(816, 37, 4096)
+  elicited          0.9114      23        0.7999 +0.1115 [+0.0540, +0.1687]      0.0000
+[log_run] 1/orig_merged_probe_vs_tfidf/elicited -> /workspace/mats_project/mats/results/runs.jsonl (64d089b5c52e)
+
+[orig_merged] wrote /workspace/mats_project/mats/results/orig_merged_probe_vs_tfidf.json
