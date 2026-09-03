@@ -1,0 +1,30 @@
+
+==============================================================================
+PERSIST -- NEUTRAL FILLER TURNS PUSH THE ERROR SEVERAL TURNS BACK
+==============================================================================
+[persist] split: n_train=521 n_test=295 (merged groups, same split as orig_merged / ablation_merged)
+[persist] majority_baseline(test)=0.631
+
+[persist] === position=natural ===
+  D0: acts=(816, 37, 4096) (abl_orig_natural.npy)
+  D1: acts=(816, 37, 4096) (abl_orig_D1_natural.npy)
+  D3: acts=(816, 37, 4096) (abl_orig_D3_natural.npy)
+  [persist] D0 best layer (the frozen probe) = L20, balanced_acc=0.9298
+  [persist] TRANSFER (strict, frozen L20, no refit): D0=0.9298 | D1=0.8934 | D3=0.8619
+  [persist] McNemar D0_vs_D1 (transfer): D0-only=18 D1-only=8 exact_p=0.0755
+  [persist] McNemar D0_vs_D3 (transfer): D0-only=29 D3-only=8 exact_p=0.0008
+  [persist] REFIT (permissive, fresh 37-layer sweep): D0=0.9298@L20 | D1=0.9295@L21 | D3=0.9268@L22
+[log_run] 1/persist/natural -> /workspace/mats_project/mats/results/runs.jsonl (91392f06fbe0)
+
+[persist] === position=elicited ===
+  D0: acts=(816, 37, 4096) (abl_orig_elicited.npy)
+  D1: acts=(816, 37, 4096) (abl_orig_D1_elicited.npy)
+  D3: acts=(816, 37, 4096) (abl_orig_D3_elicited.npy)
+  [persist] D0 best layer (the frozen probe) = L23, balanced_acc=0.9114
+  [persist] TRANSFER (strict, frozen L23, no refit): D0=0.9114 | D1=0.8641 | D3=0.8668
+  [persist] McNemar D0_vs_D1 (transfer): D0-only=15 D1-only=8 exact_p=0.2100
+  [persist] McNemar D0_vs_D3 (transfer): D0-only=15 D3-only=9 exact_p=0.3075
+  [persist] REFIT (permissive, fresh 37-layer sweep): D0=0.9114@L23 | D1=0.9076@L31 | D3=0.8993@L18
+[log_run] 1/persist/elicited -> /workspace/mats_project/mats/results/runs.jsonl (bb7bbecd73a3)
+
+[persist] wrote /workspace/mats_project/mats/results/persist_results.json

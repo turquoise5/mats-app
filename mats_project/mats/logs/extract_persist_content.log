@@ -1,0 +1,74 @@
+
+==============================================================================
+EXTRACT_PERSIST_CONTENT -- INTERVENING TURNS, ERROR PUSHED BACK (C1, C3)
+==============================================================================
+[extract_persist_content] 816 demonstrated rows, levels={'C1': 1, 'C3': 3}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:02<14:08,  2.13s/it]Loading weights:   1%|          | 2/399 [00:04<15:51,  2.40s/it]Loading weights:   1%|          | 4/399 [00:05<06:46,  1.03s/it]Loading weights:   2%|▏         | 6/399 [00:05<03:53,  1.68it/s]Loading weights:   3%|▎         | 12/399 [00:05<01:23,  4.62it/s]Loading weights:   4%|▍         | 15/399 [00:05<01:12,  5.32it/s]Loading weights:   4%|▍         | 17/399 [00:06<01:12,  5.29it/s]Loading weights:   5%|▌         | 21/399 [00:06<00:47,  7.99it/s]Loading weights:   6%|▌         | 24/399 [00:06<00:36, 10.22it/s]Loading weights:   7%|▋         | 27/399 [00:06<00:39,  9.37it/s]Loading weights:   7%|▋         | 29/399 [00:07<00:40,  9.10it/s]Loading weights:   8%|▊         | 32/399 [00:07<00:31, 11.62it/s]Loading weights:   9%|▉         | 37/399 [00:07<00:31, 11.62it/s]Loading weights:  10%|▉         | 39/399 [00:08<00:37,  9.48it/s]Loading weights:  11%|█         | 43/399 [00:08<00:27, 12.74it/s]Loading weights:  11%|█▏        | 45/399 [00:08<00:25, 13.76it/s]Loading weights:  12%|█▏        | 48/399 [00:08<00:26, 13.28it/s]Loading weights:  13%|█▎        | 50/399 [00:08<00:37,  9.43it/s]Loading weights:  14%|█▍        | 56/399 [00:09<00:22, 14.95it/s]Loading weights:  15%|█▍        | 59/399 [00:09<00:27, 12.39it/s]Loading weights:  15%|█▌        | 61/399 [00:09<00:35,  9.61it/s]Loading weights:  16%|█▋        | 65/399 [00:09<00:25, 12.91it/s]Loading weights:  17%|█▋        | 68/399 [00:10<00:21, 15.26it/s]Loading weights:  18%|█▊        | 71/399 [00:10<00:30, 10.90it/s]Loading weights:  18%|█▊        | 73/399 [00:10<00:30, 10.62it/s]Loading weights:  19%|█▉        | 76/399 [00:10<00:24, 13.04it/s]Loading weights:  20%|█▉        | 79/399 [00:11<00:20, 15.32it/s]Loading weights:  21%|██        | 82/399 [00:11<00:27, 11.42it/s]Loading weights:  21%|██        | 84/399 [00:11<00:30, 10.42it/s]Loading weights:  22%|██▏       | 87/399 [00:11<00:24, 12.83it/s]Loading weights:  22%|██▏       | 89/399 [00:11<00:24, 12.90it/s]Loading weights:  23%|██▎       | 92/399 [00:12<00:27, 11.19it/s]Loading weights:  24%|██▎       | 94/399 [00:12<00:34,  8.74it/s]Loading weights:  25%|██▍       | 98/399 [00:12<00:23, 12.70it/s]Loading weights:  26%|██▌       | 103/399 [00:13<00:22, 13.20it/s]Loading weights:  26%|██▋       | 105/399 [00:13<00:29, 10.06it/s]Loading weights:  27%|██▋       | 109/399 [00:13<00:21, 13.38it/s]Loading weights:  28%|██▊       | 112/399 [00:13<00:18, 15.78it/s]Loading weights:  29%|██▉       | 115/399 [00:14<00:32,  8.76it/s]Loading weights:  30%|███       | 120/399 [00:14<00:24, 11.59it/s]Loading weights:  31%|███▏      | 125/399 [00:15<00:22, 12.36it/s]Loading weights:  32%|███▏      | 127/399 [00:15<00:27,  9.90it/s]Loading weights:  33%|███▎      | 131/399 [00:15<00:21, 12.41it/s]Loading weights:  33%|███▎      | 133/399 [00:15<00:20, 12.71it/s]Loading weights:  34%|███▍      | 136/399 [00:16<00:23, 11.27it/s]Loading weights:  35%|███▍      | 138/399 [00:16<00:31,  8.28it/s]Loading weights:  36%|███▌      | 144/399 [00:16<00:19, 13.05it/s]Loading weights:  37%|███▋      | 147/399 [00:16<00:19, 12.84it/s]Loading weights:  37%|███▋      | 149/399 [00:17<00:23, 10.49it/s]Loading weights:  38%|███▊      | 153/399 [00:17<00:18, 13.44it/s]Loading weights:  39%|███▉      | 155/399 [00:17<00:18, 13.35it/s]Loading weights:  40%|███▉      | 158/399 [00:17<00:18, 13.15it/s]Loading weights:  40%|████      | 160/399 [00:18<00:23, 10.01it/s]Loading weights:  41%|████      | 164/399 [00:18<00:17, 13.08it/s]Loading weights:  42%|████▏     | 166/399 [00:18<00:17, 13.25it/s]Loading weights:  42%|████▏     | 169/399 [00:19<00:29,  7.81it/s]Loading weights:  43%|████▎     | 171/399 [00:19<00:28,  8.01it/s]Loading weights:  44%|████▍     | 175/399 [00:19<00:19, 11.63it/s]Loading weights:  45%|████▌     | 180/399 [00:19<00:17, 12.70it/s]Loading weights:  46%|████▌     | 182/399 [00:20<00:20, 10.54it/s]Loading weights:  47%|████▋     | 186/399 [00:20<00:15, 13.79it/s]Loading weights:  47%|████▋     | 189/399 [00:20<00:13, 15.65it/s]Loading weights:  48%|████▊     | 192/399 [00:20<00:17, 11.65it/s]Loading weights:  49%|████▊     | 194/399 [00:21<00:18, 11.02it/s]Loading weights:  49%|████▉     | 197/399 [00:21<00:14, 13.52it/s]Loading weights:  50%|█████     | 200/399 [00:21<00:12, 16.01it/s]Loading weights:  51%|█████     | 203/399 [00:21<00:15, 12.40it/s]Loading weights:  51%|█████▏    | 205/399 [00:22<00:22,  8.47it/s]Loading weights:  52%|█████▏    | 207/399 [00:22<00:20,  9.26it/s]Loading weights:  53%|█████▎    | 210/399 [00:22<00:15, 11.91it/s]Loading weights:  53%|█████▎    | 213/399 [00:22<00:15, 11.74it/s]Loading weights:  54%|█████▍    | 215/399 [00:23<00:20,  8.89it/s]Loading weights:  55%|█████▍    | 218/399 [00:23<00:16, 10.76it/s]Loading weights:  56%|█████▌    | 222/399 [00:23<00:11, 14.90it/s]Loading weights:  56%|█████▋    | 225/399 [00:23<00:15, 11.14it/s]Loading weights:  57%|█████▋    | 227/399 [00:24<00:15, 10.76it/s]Loading weights:  58%|█████▊    | 230/399 [00:24<00:12, 13.54it/s]Loading weights:  58%|█████▊    | 233/399 [00:24<00:10, 15.97it/s]Loading weights:  59%|█████▉    | 236/399 [00:24<00:13, 11.68it/s]Loading weights:  60%|█████▉    | 238/399 [00:24<00:14, 10.90it/s]Loading weights:  60%|██████    | 241/399 [00:25<00:11, 13.63it/s]Loading weights:  61%|██████    | 244/399 [00:25<00:09, 15.98it/s]Loading weights:  62%|██████▏   | 247/399 [00:25<00:14, 10.43it/s]Loading weights:  62%|██████▏   | 249/399 [00:25<00:14, 10.36it/s]Loading weights:  63%|██████▎   | 252/399 [00:25<00:11, 13.21it/s]Loading weights:  64%|██████▍   | 255/399 [00:26<00:09, 15.75it/s]Loading weights:  65%|██████▍   | 258/399 [00:26<00:12, 11.27it/s]Loading weights:  65%|██████▌   | 260/399 [00:26<00:13, 10.31it/s]Loading weights:  66%|██████▋   | 265/399 [00:26<00:09, 13.55it/s]Loading weights:  67%|██████▋   | 268/399 [00:27<00:11, 11.56it/s]Loading weights:  68%|██████▊   | 270/399 [00:27<00:14,  9.12it/s]Loading weights:  69%|██████▉   | 275/399 [00:27<00:09, 13.34it/s]Loading weights:  70%|██████▉   | 279/399 [00:28<00:08, 14.73it/s]Loading weights:  70%|███████   | 281/399 [00:28<00:14,  8.35it/s]Loading weights:  71%|███████▏  | 285/399 [00:28<00:10, 11.02it/s]Loading weights:  72%|███████▏  | 288/399 [00:29<00:08, 12.81it/s]Loading weights:  73%|███████▎  | 290/399 [00:29<00:09, 12.06it/s]Loading weights:  73%|███████▎  | 292/399 [00:29<00:13,  8.16it/s]Loading weights:  74%|███████▍  | 296/399 [00:29<00:09, 11.06it/s]Loading weights:  75%|███████▌  | 301/399 [00:30<00:07, 13.39it/s]Loading weights:  76%|███████▌  | 303/399 [00:30<00:09, 10.05it/s]Loading weights:  77%|███████▋  | 309/399 [00:30<00:05, 15.04it/s]Loading weights:  78%|███████▊  | 312/399 [00:31<00:06, 13.61it/s]Loading weights:  79%|███████▊  | 314/399 [00:31<00:08, 10.20it/s]Loading weights:  80%|███████▉  | 318/399 [00:31<00:05, 13.56it/s]Loading weights:  80%|████████  | 321/399 [00:31<00:05, 15.41it/s]Loading weights:  81%|████████  | 324/399 [00:32<00:06, 10.78it/s]Loading weights:  82%|████████▏ | 326/399 [00:32<00:06, 10.79it/s]Loading weights:  82%|████████▏ | 329/399 [00:32<00:05, 13.05it/s]Loading weights:  83%|████████▎ | 331/399 [00:32<00:04, 13.65it/s]Loading weights:  84%|████████▎ | 334/399 [00:32<00:04, 13.71it/s]Loading weights:  84%|████████▍ | 336/399 [00:33<00:06,  9.57it/s]Loading weights:  85%|████████▌ | 340/399 [00:33<00:04, 13.77it/s]Loading weights:  86%|████████▌ | 343/399 [00:33<00:03, 15.54it/s]Loading weights:  87%|████████▋ | 346/399 [00:33<00:04, 11.08it/s]Loading weights:  87%|████████▋ | 348/399 [00:34<00:05,  9.74it/s]Loading weights:  88%|████████▊ | 351/399 [00:34<00:04, 11.52it/s]Loading weights:  89%|████████▊ | 354/399 [00:34<00:03, 13.90it/s]Loading weights:  89%|████████▉ | 356/399 [00:34<00:03, 12.66it/s]Loading weights:  90%|████████▉ | 358/399 [00:35<00:04,  9.14it/s]Loading weights:  90%|█████████ | 361/399 [00:35<00:03, 10.83it/s]Loading weights:  91%|█████████ | 364/399 [00:35<00:02, 12.93it/s]Loading weights:  92%|█████████▏| 367/399 [00:35<00:02, 13.10it/s]Loading weights:  92%|█████████▏| 369/399 [00:36<00:03,  8.97it/s]Loading weights:  93%|█████████▎| 373/399 [00:36<00:02, 11.98it/s]Loading weights:  94%|█████████▍| 375/399 [00:36<00:02, 11.26it/s]Loading weights:  95%|█████████▍| 378/399 [00:36<00:01, 11.13it/s]Loading weights:  95%|█████████▌| 380/399 [00:37<00:02,  8.59it/s]Loading weights:  96%|█████████▌| 384/399 [00:37<00:01, 11.26it/s]Loading weights:  97%|█████████▋| 386/399 [00:37<00:01, 10.97it/s]Loading weights:  97%|█████████▋| 388/399 [00:37<00:01,  8.74it/s]Loading weights:  98%|█████████▊| 390/399 [00:38<00:01,  7.90it/s]Loading weights:  98%|█████████▊| 391/399 [00:38<00:01,  7.53it/s]Loading weights:  99%|█████████▉| 397/399 [00:38<00:00, 12.33it/s]Loading weights: 100%|██████████| 399/399 [00:38<00:00, 10.30it/s]
+
+==============================================================================
+ENVIRONMENT
+==============================================================================
+  model_id               Qwen/Qwen3-8B
+  num_hidden_layers      36
+  hidden_size            4096
+  dtype                  torch.bfloat16
+  gpu                    NVIDIA RTX PRO 4500 Blackwell Server Edition
+  vram_free_gb           17.03
+  vram_total_gb          33.69
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+  [extract] batch0 seq_len=198 last_idx=[184, 181, 197] picked=(3, 37, 4096)
+  [extract] final array shape (3, 37, 4096) dtype float32
+  [extract] batch0 seq_len=185 last_idx=[184] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=182 last_idx=[181] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=198 last_idx=[197] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [verify] batched vs unbatched max abs diff = 8 (rel 7.81e-03)
+  [verify] OK
+
+[extract_persist_content] level=C1 (+1 pair) position=natural n=816
+  [extract] batch0 seq_len=277 last_idx=[184, 181, 197, 177, 234, 193, 200, 276] picked=(8, 37, 4096)
+  [extract] final array shape (816, 37, 4096) dtype float32
+  [extract_persist_content] wrote /workspace/mats_project/mats/cache/abl_orig_C1_natural.npy shape=(816, 37, 4096) dtype=float32
+[log_run] 1/extract_persist_content -> /workspace/mats_project/mats/results/runs.jsonl (44aa32370baa)
+
+[extract_persist_content] level=C1 (+1 pair) position=elicited n=816
+  [extract] batch0 seq_len=302 last_idx=[209, 206, 222, 202, 259, 218, 225, 301] picked=(8, 37, 4096)
+  [extract] final array shape (816, 37, 4096) dtype float32
+  [extract_persist_content] wrote /workspace/mats_project/mats/cache/abl_orig_C1_elicited.npy shape=(816, 37, 4096) dtype=float32
+[log_run] 1/extract_persist_content -> /workspace/mats_project/mats/results/runs.jsonl (b606f4422004)
+  [extract] batch0 seq_len=331 last_idx=[317, 314, 330] picked=(3, 37, 4096)
+  [extract] final array shape (3, 37, 4096) dtype float32
+  [extract] batch0 seq_len=318 last_idx=[317] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=315 last_idx=[314] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [extract] batch0 seq_len=331 last_idx=[330] picked=(1, 37, 4096)
+  [extract] final array shape (1, 37, 4096) dtype float32
+  [verify] batched vs unbatched max abs diff = 8 (rel 7.94e-03)
+  [verify] OK
+
+[extract_persist_content] level=C3 (+3 pairs) position=natural n=816
+  [extract] batch0 seq_len=410 last_idx=[317, 314, 330, 310, 367, 326, 333, 409] picked=(8, 37, 4096)
+  [extract] final array shape (816, 37, 4096) dtype float32
+  [extract_persist_content] wrote /workspace/mats_project/mats/cache/abl_orig_C3_natural.npy shape=(816, 37, 4096) dtype=float32
+[log_run] 1/extract_persist_content -> /workspace/mats_project/mats/results/runs.jsonl (5be1cb6e2f32)
+
+[extract_persist_content] level=C3 (+3 pairs) position=elicited n=816
+  [extract] batch0 seq_len=435 last_idx=[342, 339, 355, 335, 392, 351, 358, 434] picked=(8, 37, 4096)
+  [extract] final array shape (816, 37, 4096) dtype float32
+  [extract_persist_content] wrote /workspace/mats_project/mats/cache/abl_orig_C3_elicited.npy shape=(816, 37, 4096) dtype=float32
+[log_run] 1/extract_persist_content -> /workspace/mats_project/mats/results/runs.jsonl (620fd9dcd380)
+
+[extract_persist_content] wrote /workspace/mats_project/mats/results/persist_content_samples.txt
+[extract_persist_content] done.

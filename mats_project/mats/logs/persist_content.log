@@ -1,0 +1,42 @@
+
+==============================================================================
+PERSIST_CONTENT -- INTERVENING TURNS PUSH THE ERROR SEVERAL TURNS BACK
+==============================================================================
+[persist_content] split: n_train=521 n_test=295 (merged groups, same split as orig_merged / ablation_merged)
+[persist_content] majority_baseline(test)=0.631
+
+[persist_content] === position=natural ===
+  D0: acts=(816, 37, 4096) (abl_orig_natural.npy)
+  C1: acts=(816, 37, 4096) (abl_orig_C1_natural.npy)
+  C3: acts=(816, 37, 4096) (abl_orig_C3_natural.npy)
+  [persist_content] D0 best layer (the frozen probe) = L20, balanced_acc=0.9298
+  [persist_content] TRANSFER (strict, frozen L20, no refit): D0=0.9298 | C1=0.5183 | C3=0.5707
+  [persist_content] McNemar D0_vs_C1 (transfer): D0-only=102 C1-only=21 exact_p=0.0000
+  [persist_content] McNemar D0_vs_C3 (transfer): D0-only=90 C3-only=20 exact_p=0.0000
+  [persist_content] REFIT (permissive, fresh 37-layer sweep): D0=0.9298@L20 | C1=0.9171@L23 | C3=0.9276@L23
+[log_run] 1/persist_content/natural -> /workspace/mats_project/mats/results/runs.jsonl (1d00d175e1e2)
+
+[persist_content] === position=elicited ===
+  D0: acts=(816, 37, 4096) (abl_orig_elicited.npy)
+  C1: acts=(816, 37, 4096) (abl_orig_C1_elicited.npy)
+  C3: acts=(816, 37, 4096) (abl_orig_C3_elicited.npy)
+  [persist_content] D0 best layer (the frozen probe) = L23, balanced_acc=0.9114
+  [persist_content] TRANSFER (strict, frozen L23, no refit): D0=0.9114 | C1=0.6139 | C3=0.6903
+  [persist_content] McNemar D0_vs_C1 (transfer): D0-only=76 C1-only=19 exact_p=0.0000
+  [persist_content] McNemar D0_vs_C3 (transfer): D0-only=57 C3-only=15 exact_p=0.0000
+  [persist_content] REFIT (permissive, fresh 37-layer sweep): D0=0.9114@L23 | C1=0.8880@L29 | C3=0.9114@L24
+[log_run] 1/persist_content/elicited -> /workspace/mats_project/mats/results/runs.jsonl (22ae3388ed8b)
+
+[persist_content] wrote /workspace/mats_project/mats/results/persist_content_results.json
+
+==============================================================================
+PERSIST_CONTENT vs PERSIST -- SAME FROZEN PROBE, CONTENT vs NEUTRAL FILLER
+==============================================================================
+  [natural] C1(content)=0.5183 vs D1(neutral)=0.8934  McNemar: content-only-right=26 neutral-only-right=97 exact_p=0.0000
+  [natural] C3(content)=0.5707 vs D3(neutral)=0.8619  McNemar: content-only-right=35 neutral-only-right=84 exact_p=0.0000
+[log_run] 1/persist_content_vs_persist/natural -> /workspace/mats_project/mats/results/runs.jsonl (e28df41656c5)
+  [elicited] C1(content)=0.6139 vs D1(neutral)=0.8641  McNemar: content-only-right=11 neutral-only-right=61 exact_p=0.0000
+  [elicited] C3(content)=0.6903 vs D3(neutral)=0.8668  McNemar: content-only-right=6 neutral-only-right=42 exact_p=0.0000
+[log_run] 1/persist_content_vs_persist/elicited -> /workspace/mats_project/mats/results/runs.jsonl (c8e9e77d0b67)
+
+[persist_content] wrote /workspace/mats_project/mats/results/persist_content_results.json (includes content-vs-neutral comparison)

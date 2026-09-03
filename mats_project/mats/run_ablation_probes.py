@@ -2,10 +2,14 @@
 """GPU Agent driver for `handover_gpu_ablation_probes.md`: probe refits on the five
 Act 1 text-ablation variants (orig, A, B, AB, CTRL), demonstrated subset only.
 
-    python run_ablation_probes.py extract   # GPU -- cache activations, 5 variants x 2 positions
-    python run_ablation_probes.py probe     # CPU -- per-layer probes, control tasks, reference check
-    python run_ablation_probes.py plot      # CPU -- results/figs/act1_ablations.png
-    python run_ablation_probes.py all       # extract -> probe -> plot
+    python run_ablation_probes.py extract           # GPU -- cache activations, 5 variants x 2 positions
+    python run_ablation_probes.py probe             # CPU -- per-layer probes, control tasks, reference check
+    python run_ablation_probes.py plot              # CPU -- results/figs/act1_ablations.png
+    python run_ablation_probes.py all               # extract -> probe -> plot
+    python run_ablation_probes.py orig_merged       # CPU -- orig probe vs TF-IDF, identical merged-group split, paired bootstrap CI
+    python run_ablation_probes.py ablation_merged   # CPU -- B/CTRL refit on merged split, McNemar vs point estimates
+    python run_ablation_probes.py extract_persist   # GPU -- cache D1/D3 activations (neutral filler turns appended)
+    python run_ablation_probes.py persist           # CPU -- frozen-probe transfer vs fresh-probe refit across D0/D1/D3
 
 Reuses src/model.py unchanged for extraction. Reads data/contrast/contrast_v1.jsonl and
 data/contrast/contrast_v1_abl{A,B,AB,CTRL}.jsonl read-only; never writes to any of them.
@@ -71,6 +75,26 @@ def normalise_text(rows: list[dict]) -> list[str]:
     return [re.sub(r"\s+", " ", r["turns"][0]["content"].lower().strip()) for r in rows]
 
 
+def merged_split(orig_rows: list[dict], labels: np.ndarray):
+    """The merged (content-corrected) group split from `ablation_groups.json`, via the
+    identical `GroupShuffleSplit(n_splits=1, test_size=0.3, seed=0)` the CPU agent used --
+    reproduces its n_train=521/n_test=295. Shared by every step that needs a non-leaky
+    split (orig_merged, ablation_merged, persist)."""
+    from sklearn.model_selection import GroupShuffleSplit
+
+    with open(GROUPS_PATH) as f:
+        groups_json = json.load(f)
+    group_of_row_id = groups_json["group_of_row_id"]
+    merged_groups = np.array([group_of_row_id[r["id"]] for r in orig_rows])
+
+    gss = GroupShuffleSplit(n_splits=1, test_size=0.3, random_state=C.SEED)
+    tr, te = next(gss.split(np.zeros(len(orig_rows)), labels, merged_groups))
+    if len(te) != 295:
+        print(f"  *** WARNING: n_test={len(te)} != 295 -- does not match the reference "
+              f"run. Proceeding, but flag this. ***")
+    return tr, te
+
+
 # --------------------------------------------------------------------------------------
 # extract
 # --------------------------------------------------------------------------------------
@@ -131,6 +155,130 @@ def step_extract(batch_size: int = 8):
 
     print("\n[extract] done. Cached: "
           f"{[f'{CACHE_PREFIX}_{v}_{p}.npy' for v in VARIANTS for p in C.READ_POSITIONS]}")
+
+
+# --------------------------------------------------------------------------------------
+# extract_persist: append intervening turns, push the error several turns back
+# --------------------------------------------------------------------------------------
+
+# Content-free -- no mention of correctness, the concept, or the user's work. Each entry
+# is one assistant/user pair; appending k of them pushes whatever the user said (right or
+# wrong) k turns further back from the read position without adding any new information
+# about the user's competence.
+NEUTRAL_PAIRS = [
+    [{"role": "assistant", "content": "Got it — give me a moment to look at that."},
+     {"role": "user", "content": "Sure, no rush."}],
+    [{"role": "assistant", "content": "Thanks for waiting."},
+     {"role": "user", "content": "No problem."}],
+    [{"role": "assistant", "content": "Almost there."},
+     {"role": "user", "content": "Okay."}],
+]
+
+# Content-bearing counterpart to NEUTRAL_PAIRS -- same shape (3 assistant/user pairs, same
+# rough length), but each pair carries a genuine, unrelated fact (a small table/plotted
+# points) with a question and an answer, so the model has something concrete to actually
+# process and track in between, not just empty tokens. Still says nothing about the
+# concept, the user's work, or correctness -- the "something else" is orthogonal, not a
+# second copy of the same signal.
+CONTENT_PAIRS = [
+    [{"role": "assistant",
+      "content": "Before I finish looking at that — separate thing: I've got a small "
+                 "table of measurements, Site A: 14, Site B: 31, Site C: 22. Which site "
+                 "has the highest reading?"},
+     {"role": "user", "content": "Site B, at 31."}],
+    [{"role": "assistant",
+      "content": "Thanks. One more, unrelated: plotting three points on a chart -- "
+                 "(2, 9), (4, 17), (6, 11). Which point sits highest on the y-axis?"},
+     {"role": "user", "content": "The point (4, 17), since 17 is the largest y-value."}],
+    [{"role": "assistant",
+      "content": "Last one, also unrelated: a small results table -- Week 1: 40, Week 2: "
+                 "55, Week 3: 38. Which week had the lowest total?"},
+     {"role": "user", "content": "Week 3, with 38."}],
+]
+
+PERSIST_LEVELS = {"D1": 1, "D3": 3}          # neutral filler: label -> pairs appended
+PERSIST_LEVELS_CONTENT = {"C1": 1, "C3": 3}  # content-bearing: label -> pairs appended
+
+
+def extend_turns(turns: list[dict], pairs: list, n_pairs: int) -> list[dict]:
+    extra = []
+    for pair in pairs[:n_pairs]:
+        extra.extend(pair)
+    return turns + extra
+
+
+def _extract_persist(pairs: list, levels: dict, tag: str, batch_size: int = 8):
+    """Shared extraction for both the neutral-filler (`persist`, tag="persist") and
+    content-bearing (`persist_content`, tag="persist_content") intervening-turns
+    experiments. `levels`: label -> n_pairs appended from `pairs`. Cache files:
+    abl_orig_{label}_{position}.npy. D0 itself (`orig`, 0 pairs appended) is already
+    cached, never re-extracted here."""
+    import torch  # noqa: F401
+
+    from src import model as M
+
+    log_tag = f"extract_{tag}"
+    C.banner(f"{log_tag.upper()} -- INTERVENING TURNS, ERROR PUSHED BACK ({', '.join(levels)})")
+    orig_rows = load_variant_rows("orig")
+    print(f"[{log_tag}] {len(orig_rows)} demonstrated rows, levels={levels}")
+
+    mdl, tok = M.load()
+    env = M.print_env(mdl, tok)
+    M.assert_template_sane(tok)
+
+    for label, n_pairs in levels.items():
+        rows = [{**r, "turns": extend_turns(r["turns"], pairs, n_pairs)} for r in orig_rows]
+        for position in C.READ_POSITIONS:
+            if position == "elicited":
+                texts = [
+                    M.render_chat(tok, r["turns"],
+                                  C.ACT1_ELICIT_PREFIX.format(concept=r["concept"]))
+                    for r in rows
+                ]
+            else:
+                texts = [M.render_chat(tok, r["turns"]) for r in rows]
+                M.verify_last_token_indexing(mdl, tok, texts)
+
+            print(f"\n[{log_tag}] level={label} (+{n_pairs} pair"
+                  f"{'s' if n_pairs != 1 else ''}) position={position} n={len(texts)}")
+            acts = M.last_token_hidden(mdl, tok, texts, batch_size=batch_size)
+            if acts.shape[1] != 37:
+                raise RuntimeError(f"level={label} position={position}: expected 37 read "
+                                    f"points, got {acts.shape[1]}.")
+
+            out_path = C.CACHE / f"{CACHE_PREFIX}_orig_{label}_{position}.npy"
+            np.save(out_path, acts.astype(np.float32))
+            print(f"  [{log_tag}] wrote {out_path} shape={acts.shape} dtype=float32")
+
+            C.log_run(
+                act="1", experiment=log_tag,
+                config={"level": label, "n_pairs": n_pairs, "position": position,
+                        "batch_size": batch_size, "elicit_prefix_template": C.ACT1_ELICIT_PREFIX,
+                        "pairs": pairs[:n_pairs], **env},
+                metrics={"shape": list(acts.shape), "n_rows": len(rows)},
+            )
+
+    # A few full renders for eyeballing that the appended turns actually land where
+    # intended (after the user's real content, before the read position).
+    sample_path = C.RESULTS / f"{tag}_samples.txt"
+    with open(sample_path, "w", encoding="utf-8") as f:
+        for label, n_pairs in levels.items():
+            for r in orig_rows[:2]:
+                rendered = M.render_chat(tok, extend_turns(r["turns"], pairs, n_pairs))
+                f.write(f"--- {label} {r['id']} ---\n{rendered}\n\n")
+    print(f"\n[{log_tag}] wrote {sample_path}")
+    print(f"[{log_tag}] done.")
+
+
+def step_extract_persist(batch_size: int = 8):
+    """D1/D3: orig demonstrated rows with 1 or 3 neutral filler pairs appended."""
+    _extract_persist(NEUTRAL_PAIRS, PERSIST_LEVELS, "persist", batch_size)
+
+
+def step_extract_persist_content(batch_size: int = 8):
+    """C1/C3: orig demonstrated rows with 1 or 3 content-bearing (unrelated table/plot
+    Q&A) pairs appended -- "something else to track", not empty filler."""
+    _extract_persist(CONTENT_PAIRS, PERSIST_LEVELS_CONTENT, "persist_content", batch_size)
 
 
 # --------------------------------------------------------------------------------------
@@ -397,7 +545,6 @@ def step_orig_merged():
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import balanced_accuracy_score
-    from sklearn.model_selection import GroupShuffleSplit
 
     C.banner("ORIG ONLY, MERGED-GROUP SPLIT -- PROBE vs TF-IDF, PAIRED BOOTSTRAP")
 
@@ -405,18 +552,9 @@ def step_orig_merged():
     labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
     texts = np.array([row_text(r) for r in orig_rows])
 
-    with open(GROUPS_PATH) as f:
-        groups_json = json.load(f)
-    group_of_row_id = groups_json["group_of_row_id"]
-    merged_groups = np.array([group_of_row_id[r["id"]] for r in orig_rows])
-
-    gss = GroupShuffleSplit(n_splits=1, test_size=0.3, random_state=C.SEED)
-    tr, te = next(gss.split(np.zeros(len(orig_rows)), labels, merged_groups))
+    tr, te = merged_split(orig_rows, labels)
     print(f"[orig_merged] split: n_train={len(tr)} n_test={len(te)} "
           f"(merged groups, GroupShuffleSplit test_size=0.3, seed={C.SEED})")
-    if len(te) != 295:
-        print(f"  *** WARNING: n_test={len(te)} != 295 -- split does not match the CPU "
-              f"agent's reference run. Proceeding, but flag this. ***")
     majority = P.majority_baseline(labels, val_idx=te)
     print(f"[orig_merged] labels: gap={int((labels==0).sum())} knows={int((labels==1).sum())} "
           f"majority_baseline(test)={majority:.3f}")
@@ -532,26 +670,16 @@ def step_ablation_merged():
     the right tool for "do these two classifiers disagree systematically on the same
     items", which a difference of accuracies cannot answer on its own."""
     from sklearn.metrics import balanced_accuracy_score
-    from sklearn.model_selection import GroupShuffleSplit
 
     C.banner("B / CTRL REFIT ON MERGED GROUPS -- MCNEMAR ON SHARED TEST ITEMS")
 
     orig_rows = load_variant_rows("orig")
     labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
 
-    with open(GROUPS_PATH) as f:
-        groups_json = json.load(f)
-    group_of_row_id = groups_json["group_of_row_id"]
-    merged_groups = np.array([group_of_row_id[r["id"]] for r in orig_rows])
-
-    gss = GroupShuffleSplit(n_splits=1, test_size=0.3, random_state=C.SEED)
-    tr, te = next(gss.split(np.zeros(len(orig_rows)), labels, merged_groups))
+    tr, te = merged_split(orig_rows, labels)
     print(f"[ablation_merged] split: n_train={len(tr)} n_test={len(te)} "
           f"(merged groups, GroupShuffleSplit test_size=0.3, seed={C.SEED} -- same split "
           f"as orig_merged)")
-    if len(te) != 295:
-        print(f"  *** WARNING: n_test={len(te)} != 295 -- does not match the reference "
-              f"run. Proceeding, but flag this. ***")
     majority = P.majority_baseline(labels, val_idx=te)
     print(f"[ablation_merged] labels: gap={int((labels==0).sum())} "
           f"knows={int((labels==1).sum())} majority_baseline(test)={majority:.3f}")
@@ -610,6 +738,194 @@ def step_ablation_merged():
 
 
 # --------------------------------------------------------------------------------------
+# persist: does the knowledge-state direction survive intervening turns, or evaporate?
+# --------------------------------------------------------------------------------------
+
+def _persist_analysis(levels: dict, tag: str):
+    """Shared implementation for `persist` (neutral filler, `levels=PERSIST_LEVELS`) and
+    `persist_content` (content-bearing, `levels=PERSIST_LEVELS_CONTENT`). D0 (orig) vs
+    each level in `levels` -- same rows, same merged split, only `turns` differs (extra
+    pairs appended after the user's real content, before the read position). Two tests:
+
+    Transfer (strict): freeze the probe fit on D0 at D0's own merged-split best layer --
+    no refitting -- and apply it to each level at that same layer. Survives -> the
+    direction the probe found is a maintained representation of the user, still legible
+    turns later ("tracks who it's talking to"). Evaporates toward the majority baseline
+    -> whatever separated gap/knows was tied to the immediate context around the user's
+    work, not a persisted user model ("checks arithmetic").
+
+    Refit (permissive): fit a fresh probe on each level (same split, full 37-layer
+    sweep). Weaker question -- is the information present *at all*, in *any* linear
+    form, even at a different layer/direction than D0's. Refit surviving where transfer
+    does not means the information moved, not that it vanished.
+
+    Returns (out_dict, transfer_correct_by_position) -- the latter lets a caller (e.g.
+    `step_persist_content`) reuse these exact frozen-probe predictions for a further
+    cross-experiment comparison without refitting anything."""
+    from sklearn.metrics import balanced_accuracy_score
+
+    C.banner(f"{tag.upper()} -- INTERVENING TURNS PUSH THE ERROR SEVERAL TURNS BACK")
+
+    orig_rows = load_variant_rows("orig")
+    labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
+    tr, te = merged_split(orig_rows, labels)
+    majority = P.majority_baseline(labels, val_idx=te)
+    print(f"[{tag}] split: n_train={len(tr)} n_test={len(te)} "
+          f"(merged groups, same split as orig_merged / ablation_merged)")
+    print(f"[{tag}] majority_baseline(test)={majority:.3f}")
+
+    level_names = ["D0"] + list(levels.keys())
+    out = {
+        "split": {"n_train": len(tr), "n_test": len(te), "grouped_by": "merged (ablation_groups.json)",
+                  "majority_baseline": majority},
+        "pairs_appended": {"D0": 0, **levels},
+        "positions": {},
+    }
+    transfer_correct_by_position = {}
+
+    for position in C.READ_POSITIONS:
+        print(f"\n[{tag}] === position={position} ===")
+
+        acts_by_level = {}
+        for level in level_names:
+            suffix = "orig" if level == "D0" else f"orig_{level}"
+            path = C.CACHE / f"{CACHE_PREFIX}_{suffix}_{position}.npy"
+            acts_by_level[level] = np.load(path)
+            print(f"  {level}: acts={acts_by_level[level].shape} ({path.name})")
+
+        # D0's own best layer on this split -- this *is* "the probe fitted on D0 at
+        # layer 20/23"; derived, not hard-coded, so it stays correct if the split or
+        # cache ever changes.
+        d0_sweep = fit_layer_probes_balanced(acts_by_level["D0"], labels, tr, te, seed=C.SEED)
+        frozen_layer = d0_sweep["best_layer"]
+        print(f"  [{tag}] D0 best layer (the frozen probe) = L{frozen_layer}, "
+              f"balanced_acc={d0_sweep['best_acc']:.4f}")
+
+        X0 = acts_by_level["D0"][:, frozen_layer, :]
+        frozen_probe = _balanced_probe(C.SEED)
+        frozen_probe.fit(X0[tr], labels[tr])
+
+        transfer, transfer_correct = {}, {}
+        for level in level_names:
+            X = acts_by_level[level][:, frozen_layer, :]
+            pred = frozen_probe.predict(X[te])
+            acc = balanced_accuracy_score(labels[te], pred)
+            transfer[level] = {"balanced_acc": float(acc), "layer": frozen_layer}
+            transfer_correct[level] = (pred == labels[te])
+        assert abs(transfer["D0"]["balanced_acc"] - d0_sweep["best_acc"]) < 1e-9, \
+            "D0 self-transfer should equal the D0 sweep's own best_acc"
+        print(f"  [{tag}] TRANSFER (strict, frozen L{frozen_layer}, no refit): " +
+              " | ".join(f"{lv}={transfer[lv]['balanced_acc']:.4f}" for lv in level_names))
+
+        # Paired McNemar on the *same 295 items*, frozen-probe correctness only -- is the
+        # transfer degradation (if any) real, or noise at this sample size?
+        transfer_mcnemar = {
+            f"D0_vs_{lv}": _mcnemar(transfer_correct["D0"], transfer_correct[lv])
+            for lv in levels
+        }
+        for pair, m in transfer_mcnemar.items():
+            print(f"  [{tag}] McNemar {pair} (transfer): D0-only={m['a_right_b_wrong']} "
+                  f"{pair.split('_vs_')[1]}-only={m['a_wrong_b_right']} exact_p={m['exact_p']:.4f}")
+
+        refit = {}
+        for level in level_names:
+            res = fit_layer_probes_balanced(acts_by_level[level], labels, tr, te, seed=C.SEED)
+            refit[level] = {"balanced_acc": res["best_acc"], "best_layer": res["best_layer"],
+                             "val_acc": res["val_acc"].tolist()}
+        print(f"  [{tag}] REFIT (permissive, fresh 37-layer sweep): " +
+              " | ".join(f"{lv}={refit[lv]['balanced_acc']:.4f}@L{refit[lv]['best_layer']}"
+                         for lv in level_names))
+
+        out["positions"][position] = {
+            "frozen_layer": frozen_layer, "transfer": transfer,
+            "transfer_mcnemar": transfer_mcnemar, "refit": refit,
+        }
+        transfer_correct_by_position[position] = transfer_correct
+
+        C.log_run(
+            act="1", experiment=f"{tag}/{position}",
+            config={"split": out["split"], "frozen_layer": frozen_layer, "levels": level_names,
+                     "pairs_appended": out["pairs_appended"], "seed": C.SEED},
+            metrics={
+                "transfer": transfer,
+                "transfer_mcnemar": transfer_mcnemar,
+                "refit": {lv: {"balanced_acc": refit[lv]["balanced_acc"],
+                                "best_layer": refit[lv]["best_layer"]} for lv in level_names},
+                "majority_baseline": majority,
+            },
+        )
+
+    path = C.RESULTS / f"{tag}_results.json"
+    with open(path, "w") as f:
+        json.dump(out, f, indent=2)
+    print(f"\n[{tag}] wrote {path}")
+    return out, transfer_correct_by_position
+
+
+def step_persist():
+    """D0 vs D1 vs D3: neutral filler turns appended (no content, "give me a moment" /
+    "sure, no rush"). See `_persist_analysis` for the transfer/refit design."""
+    out, _ = _persist_analysis(PERSIST_LEVELS, "persist")
+    return out
+
+
+def step_persist_content():
+    """D0 vs C1 vs C3: content-bearing intervening turns (an unrelated small table or
+    set of plotted points, with a question and answer -- "something else to track")
+    instead of neutral filler. Runs the same transfer/refit analysis, then adds a direct
+    cross-experiment comparison at matched turn-count against the already-cached neutral
+    run (D1 vs C1, D3 vs C3), reusing the *identical* frozen D0 probe for both: does
+    giving the model something real to process cost the frozen direction more than an
+    equal number of empty filler turns?"""
+    from sklearn.metrics import balanced_accuracy_score
+
+    out, transfer_correct = _persist_analysis(PERSIST_LEVELS_CONTENT, "persist_content")
+
+    C.banner("PERSIST_CONTENT vs PERSIST -- SAME FROZEN PROBE, CONTENT vs NEUTRAL FILLER")
+    orig_rows = load_variant_rows("orig")
+    labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
+    tr, te = merged_split(orig_rows, labels)
+
+    pair_map = {"C1": "D1", "C3": "D3"}  # matched turn-count: content level -> neutral level
+    compare = {}
+    for position in C.READ_POSITIONS:
+        frozen_layer = out["positions"][position]["frozen_layer"]
+        acts_d0 = np.load(C.CACHE / f"{CACHE_PREFIX}_orig_{position}.npy")
+        X0 = acts_d0[:, frozen_layer, :]
+        frozen_probe = _balanced_probe(C.SEED)
+        frozen_probe.fit(X0[tr], labels[tr])
+
+        pos_compare = {}
+        for c_level, d_level in pair_map.items():
+            acts_d = np.load(C.CACHE / f"{CACHE_PREFIX}_orig_{d_level}_{position}.npy")
+            X_d = acts_d[:, frozen_layer, :]
+            pred_d = frozen_probe.predict(X_d[te])
+            correct_d = (pred_d == labels[te])
+            acc_d = float(balanced_accuracy_score(labels[te], pred_d))
+            acc_c = out["positions"][position]["transfer"][c_level]["balanced_acc"]
+
+            m = _mcnemar(transfer_correct[position][c_level], correct_d)
+            pos_compare[f"{c_level}_vs_{d_level}"] = {**m, "content_bal_acc": acc_c, "neutral_bal_acc": acc_d}
+            print(f"  [{position}] {c_level}(content)={acc_c:.4f} vs {d_level}(neutral)={acc_d:.4f}  "
+                  f"McNemar: content-only-right={m['a_right_b_wrong']} "
+                  f"neutral-only-right={m['a_wrong_b_right']} exact_p={m['exact_p']:.4f}")
+        compare[position] = pos_compare
+
+        C.log_run(
+            act="1", experiment=f"persist_content_vs_persist/{position}",
+            config={"frozen_layer": frozen_layer, "pair_map": pair_map, "seed": C.SEED},
+            metrics=pos_compare,
+        )
+
+    out["content_vs_neutral_mcnemar"] = compare
+    path = C.RESULTS / "persist_content_results.json"
+    with open(path, "w") as f:
+        json.dump(out, f, indent=2)
+    print(f"\n[persist_content] wrote {path} (includes content-vs-neutral comparison)")
+    return out
+
+
+# --------------------------------------------------------------------------------------
 # plot
 # --------------------------------------------------------------------------------------
 
@@ -658,7 +974,10 @@ def step_plot():
 # --------------------------------------------------------------------------------------
 
 STEPS = {"extract": step_extract, "probe": step_probe, "plot": step_plot,
-         "orig_merged": step_orig_merged, "ablation_merged": step_ablation_merged}
+         "orig_merged": step_orig_merged, "ablation_merged": step_ablation_merged,
+         "extract_persist": step_extract_persist, "persist": step_persist,
+         "extract_persist_content": step_extract_persist_content,
+         "persist_content": step_persist_content}
 
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"

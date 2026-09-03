@@ -395,3 +395,139 @@ way at this sample size.
 Artifacts: `results/ablation_merged_mcnemar.json` (balanced accuracy, best layer, full
 contingency tables and both McNemar p-values, per pair per position); 2 entries in
 `runs.jsonl` (`ablation_merged_mcnemar/{natural,elicited}`); `logs/ablation_merged.log`.
+
+### Persistence: does the direction survive neutral filler turns, or evaporate?
+
+A different axis from everything above: not *what the probe's signal is made of*, but
+*whether it is a maintained representation of the user or a transient read of the last
+thing said*. Three neutral, content-free assistant/user pairs (no mention of correctness,
+the concept, or the user's work — e.g. `"Got it — give me a moment to look at that." /
+"Sure, no rush."`) are appended after each demonstrated row's real turns, pushing the
+user's actual work (right or wrong) 1 turn back (`D1`) or 3 turns back (`D3`) from the
+read position. `D0` = `orig`, unmodified. Same 816 rows, same ids, same merged split
+(`n_test=295`) throughout — only `turns` grows.
+
+**Transfer (strict):** freeze the probe fit on `D0` at `D0`'s own merged-split best layer
+(derived, not hard-coded: L20 natural, L23 elicited — matches the `orig_merged` numbers
+above), apply it *unchanged* to `D1`/`D3` at that same layer. Tests whether it's the same
+direction, still readable later.
+
+**Refit (permissive):** fit a fresh probe on `D1`/`D3` (same split, full 37-layer sweep).
+Tests whether the information is present *at all*, in *any* linear form, even at a
+different layer.
+
+| | D0 (frozen L) | D1 | D3 | McNemar D0 vs D1 | McNemar D0 vs D3 |
+|---|---|---|---|---|---|
+| **natural, transfer** | 0.930 | 0.893 | 0.862 | 18/8 disc., p=0.076 | 29/8 disc., **p=0.0008** |
+| **elicited, transfer** | 0.911 | 0.864 | 0.867 | 15/8 disc., p=0.210 | 15/9 disc., p=0.308 |
+| **natural, refit** | 0.930 @L20 | 0.930 @L21 | 0.927 @L22 | — | — |
+| **elicited, refit** | 0.911 @L23 | 0.908 @L31 | 0.899 @L18 | — | — |
+
+(majority baseline on this test set: 0.631; McNemar counts are `D0-only-right /
+{D1,D3}-only-right` discordant pairs, exact test, out of 295 paired items)
+
+**Neither of the two named outcomes is what happened. It's a third thing.** Refit is
+essentially flat — 0.3 to 3 points off `D0`, nowhere near the 0.631 floor, at both
+positions through `D3`. The information about the user's demonstrated competence is not
+lost by three neutral turns later; a fresh linear probe recovers almost all of it. That
+rules out "evaporates" in the strong sense the §2-style table implies.
+
+But the frozen direction is not fully stable either. At **natural**, transfer degrades
+monotonically and the `D0` vs `D3` drop is McNemar-significant (p=0.0008, 29 vs 8
+discordant pairs) — by three neutral turns, the *specific direction* found at the base
+conversation is measurably worse at reading out the label, even though a same-layer-
+adjacent direction (refit drifts L20→L21→L22, one layer per added pair) recovers the
+signal almost completely. At **elicited**, the same drop is present in magnitude
+(0.911→0.867) but is *not* significant (p=0.21, p=0.31 at n=295) — could be noise at
+this sample size, could be a smaller true effect; not resolved either way.
+
+**Reading:** the balance of evidence favors "maintained user model" over "local
+correctness judgment," but not in the clean, single-frozen-direction form the question
+posed. What appears to persist is the *information*, recoverable by a fresh probe at
+nearly full strength three turns later; what does *not* fully persist, at least at the
+natural read position, is the *exact geometric encoding* the base-conversation probe
+found — it drifts by about one layer per added neutral pair, and that drift costs the
+frozen probe real, statistically detectable accuracy. A purely transient, re-derived-
+each-token judgment would predict refit collapsing toward chance by `D3`; it does not.
+A perfectly static, maintained-forever direction would predict transfer holding flat;
+at natural position it does not, significantly.
+
+Artifacts: `cache/abl_orig_{D1,D3}_{natural,elicited}.npy` (4 files, 816×37×4096 each);
+`results/persist_results.json` (full per-layer refit curves, transfer accuracies, McNemar
+contingency + both p-values, per position); `results/persist_samples.txt` (rendered
+before/after examples for eyeballing where the neutral turns land); 2 entries in
+`runs.jsonl` (`persist/{natural,elicited}`), plus 4 `extract_persist` entries; logs:
+`logs/extract_persist.log`, `logs/persist.log`.
+
+### Persistence, take two: intervening turns with real content, not empty filler
+
+The neutral filler above ("Got it, give me a moment" / "Sure, no rush") gives the model
+nothing to actually process — it tests persistence across *turns*, not across
+*competing content*. This repeats the identical design (same rows, same merged split,
+same frozen-D0-probe / fresh-refit pair of tests) but swaps in three self-contained,
+unrelated table/plot Q&A exchanges as the intervening pairs instead — each one a small
+made-up fact requiring a real answer (`"Site A: 14, Site B: 31, Site C: 22 — which site
+has the highest reading?" / "Site B, at 31."`), so the model has something concrete to
+track in between, not just tokens. `C1`/`C3` = 1/3 such pairs appended; `D1`/`D3` (from
+the run above) are the matched-turn-count neutral-filler baseline for direct comparison.
+
+| | D0 (frozen L) | +1 pair | +3 pairs | McNemar D0 vs +3 |
+|---|---|---|---|---|
+| **natural, transfer, content (C)** | 0.930 | 0.518 | 0.571 | 90/20 disc., **p<0.0001** |
+| **natural, transfer, neutral (D)** | 0.930 | 0.893 | 0.862 | 29/8 disc., p=0.0008 |
+| **elicited, transfer, content (C)** | 0.911 | 0.614 | 0.690 | 57/15 disc., **p<0.0001** |
+| **elicited, transfer, neutral (D)** | 0.911 | 0.864 | 0.867 | 15/9 disc., p=0.308 |
+| **natural, refit, content (C)** | 0.930 @L20 | 0.917 @L23 | 0.928 @L23 | — |
+| **elicited, refit, content (C)** | 0.911 @L23 | 0.888 @L29 | 0.911 @L24 | — |
+
+**Content vs. neutral, matched turn-count, identical frozen probe, McNemar on the same
+295 items:**
+
+| pair | content bal. acc | neutral bal. acc | discordant (content-only / neutral-only) | exact p |
+|---|---|---|---|---|
+| natural, +1 pair (C1 vs D1) | 0.518 | 0.893 | 26 / 97 | **<0.0001** |
+| natural, +3 pairs (C3 vs D3) | 0.571 | 0.862 | 35 / 84 | **<0.0001** |
+| elicited, +1 pair (C1 vs D1) | 0.614 | 0.864 | 11 / 61 | **<0.0001** |
+| elicited, +3 pairs (C3 vs D3) | 0.690 | 0.867 | 6 / 42 | **<0.0001** |
+
+(majority baseline: 0.631 — natural/C1's 0.518 is *below* majority; every other content
+transfer number sits at or just above it)
+
+**This is a much sharper result than the neutral-filler version, and it changes the
+picture.** Where neutral filler produced a modest (natural: significant only by +3
+turns; elicited: not significant) decline, real intervening content **collapses the
+frozen probe almost immediately** — one content-bearing pair costs as much as or more
+than three neutral ones, at both read positions, decisively (all four `content vs
+neutral` comparisons p < 0.0001, huge and lopsided discordant-pair counts). At natural
+position with one content pair, the frozen probe is not just degraded, it is **worse
+than the majority baseline** (0.518 < 0.631) — actively anti-informative, not merely
+uninformative.
+
+**Refit tells a completely different story: it barely moves.** 0.930→0.917→0.928
+(natural), 0.911→0.888→0.911 (elicited) — a fresh probe recovers the label almost
+exactly as well after three unrelated table Q&As as it does at `D0`, same as in the
+neutral-filler run. **The information about the user's demonstrated competence is not
+erased by processing something else — it is not where the frozen direction is looking
+for it anymore.**
+
+**Reading:** taken together with the neutral-filler run, this rules out both of the
+originally posed outcomes more decisively than before. It is not "evaporates" — refit
+recovery stays near-total under real cognitive load, which a genuinely transient,
+overwritten-by-the-next-thing signal would not do. But it is *emphatically* not a single
+"maintained direction" either — that story predicts transfer holding roughly flat
+regardless of what happens in between, and instead one turn of real unrelated content
+does more damage than three turns of silence. The honest description: the model
+continues to carry *recoverable* information about who it's talking to, but the specific
+linear feature exposing it at the read position is **actively reallocated by whatever
+the model is currently doing** — it is far more disrupted by being asked to track
+something else than by the mere passage of turns. A "maintained user model" in the sense
+of a stable, dedicated, persistently-read-out direction is not supported by this data;
+a "maintained but currently-not-foregrounded" representation, recoverable on demand but
+crowded out of its usual read-out slot by competing processing, is.
+
+Artifacts: `cache/abl_orig_{C1,C3}_{natural,elicited}.npy` (4 files); `results/
+persist_content_results.json` (transfer/refit curves, D0-vs-C McNemar, and the C-vs-D
+content-vs-neutral McNemar comparison, all per position); `results/
+persist_content_samples.txt`; `runs.jsonl` entries `persist_content/{natural,elicited}`
+and `persist_content_vs_persist/{natural,elicited}`, plus 4 `extract_persist_content`
+entries; logs: `logs/extract_persist_content.log`, `logs/persist_content.log`.
