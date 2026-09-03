@@ -1,0 +1,255 @@
+==============================================================================
+VARIANT A -- 6 rows, before and after
+==============================================================================
+
+--- linear_2step_int__demonstrated__gap__140__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. Neither is correct. Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. [ANS]. Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__177__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__15__expert  [gap] qid=382 register=expert
+  BEFORE turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: Only Step 2 is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+  AFTER  turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: [ANS] is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+
+--- quad_formula__demonstrated__knows__52__expert  [knows] qid=1463 register=expert
+  BEFORE turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. The discriminant calculation: b² - 4ac = (-3)² - 4(5)(-2) = 9 + 40 = 49. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+  AFTER  turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. The discriminant calculation: b² - 4ac = (-3)² - 4(5)(-2) = [ANS] + 40 = 49. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+
+--- quad_factor_ab__demonstrated__knows__79__novice  [knows] qid=552 register=novice
+  BEFORE turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+  AFTER  turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+
+--- linear_both_int__demonstrated__knows__57__expert  [knows] qid=1287 register=expert
+  BEFORE turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+  AFTER  turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+
+==============================================================================
+VARIANT B -- 6 rows, before and after
+==============================================================================
+
+--- linear_2step_int__demonstrated__gap__140__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. Neither is correct. Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. Neither is correct. Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__177__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__15__expert  [gap] qid=382 register=expert
+  BEFORE turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: Only Step 2 is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+  AFTER  turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: Only Step 2 is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+
+--- quad_formula__demonstrated__knows__52__expert  [knows] qid=1463 register=expert
+  BEFORE turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. The discriminant calculation: b² - 4ac = (-3)² - 4(5)(-2) = 9 + 40 = 49. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+  AFTER  turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+
+--- quad_factor_ab__demonstrated__knows__79__novice  [knows] qid=552 register=novice
+  BEFORE turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+  AFTER  turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+
+--- linear_both_int__demonstrated__knows__57__expert  [knows] qid=1287 register=expert
+  BEFORE turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+  AFTER  turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+
+==============================================================================
+VARIANT AB -- 6 rows, before and after
+==============================================================================
+
+--- linear_2step_int__demonstrated__gap__140__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. Neither is correct. Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. [ANS]. Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__177__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__15__expert  [gap] qid=382 register=expert
+  BEFORE turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: Only Step 2 is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+  AFTER  turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: [ANS] is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+
+--- quad_formula__demonstrated__knows__52__expert  [knows] qid=1463 register=expert
+  BEFORE turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. The discriminant calculation: b² - 4ac = (-3)² - 4(5)(-2) = 9 + 40 = 49. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+  AFTER  turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+
+--- quad_factor_ab__demonstrated__knows__79__novice  [knows] qid=552 register=novice
+  BEFORE turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+  AFTER  turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+
+--- linear_both_int__demonstrated__knows__57__expert  [knows] qid=1287 register=expert
+  BEFORE turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+  AFTER  turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+
+==============================================================================
+VARIANT CTRL -- 6 rows, before and after
+==============================================================================
+
+--- linear_2step_int__demonstrated__gap__140__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. Neither is correct. Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24. The equation becomes 6m + 24 = 24. Jo wrote m+4=4, which omits the expansion step. Paul wrote 6m=20, which also omits the expansion step. Neither is correct. Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__177__expert  [gap] qid=1633 register=expert
+  BEFORE turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+  AFTER  turn0: Expanding the brackets: 6(m+4) = 6m + 24.
+
+The equation becomes 6m + 24 = 24.
+
+Jo's answer m + 4 = 4 represents dividing both sides by 6 without expanding first. Paul's answer 6m = 20 represents subtracting 24 from the left side only, without expanding first.
+
+Both answers are incorrect because bracket expansion must precede all other operations.
+
+Is this reasoning sound?
+
+--- linear_2step_int__demonstrated__gap__15__expert  [gap] qid=382 register=expert
+  BEFORE turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: Only Step 2 is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+  AFTER  turn0: Analyzing Isaac's work on 27 = 9(1 + k):
+
+Step 1: Isaac wrote 3 = 1 + k. This is incorrect. The proper approach requires expanding first to obtain 27 = 9 + 9k before isolating the variable.
+
+Step 2: Isaac wrote 2 = k. This step is correct given the derivation 3 - 1 = 2, so the subtraction is valid from the previous equation.
+
+Conclusion: Only Step 2 is correct.
+
+Which algebraic properties govern the transition from the expanded form to isolating k?
+
+--- quad_formula__demonstrated__knows__52__expert  [knows] qid=1463 register=expert
+  BEFORE turn0: From 5h² - 3h - 2 = 0, the coefficients are a = 5, b = -3, c = -2. The discriminant calculation: b² - 4ac = (-3)² - 4(5)(-2) = 9 + 40 = 49. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+  AFTER  turn0: The discriminant calculation: b² - 4ac = (-3)² - 4(5)(-2) = 9 + 40 = 49. In the quadratic formula, h = (3 ± √49) / ?, what value replaces the question mark in the denominator?
+
+--- quad_factor_ab__demonstrated__knows__79__novice  [knows] qid=552 register=novice
+  BEFORE turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+  AFTER  turn0: so i tried breaking down these equations to see what happens. like, x² + 6x + 9 = 0 splits into (x + 3)(x + 3) = 0, which gives x = -3. then x² + 5x + 6 = 0 breaks into (x + 2)(x + 3) = 0, so x = -2 or x = -3. and x² - 7x + 12 = 0 becomes (x - 3)(x - 4) = 0, meaning x = 3 or x = 4.
+
+the first one's a bit different though, since both the brackets are the same. it looks like it should give two answers but... maybe it's just one? i'm not totally sure what to call it when the factors are the same like that. is there like a specific way people talk about that?
+
+--- linear_both_int__demonstrated__knows__57__expert  [knows] qid=1287 register=expert
+  BEFORE turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?
+  AFTER  turn0: Step 1: 1 cup + 4 counters = 2 cups + 2 counters. Step 2: Subtract 1 cup from both sides to obtain 4 counters = 1 cup + 2 counters. Step 3: Subtract 2 counters from both sides to obtain 2 counters = 1 cup. Which diagram represents this sequence?

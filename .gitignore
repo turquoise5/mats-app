@@ -20,5 +20,9 @@ mats_project/mats/cache/act0_age_elicited.npy
 mats_project/mats/cache/act0_education_natural.npy
 mats_project/mats/cache/act0_education_elicited.npy
 
+# Act 1 ablation activation caches -- ~472 MB each, over GitHub's 100 MB limit.
+# Kept on the persistent /workspace volume; regenerate with `python run_ablation_probes.py extract`.
+mats_project/mats/cache/abl_*.npy
+
 # Local recovery artifacts
 .git-backup/

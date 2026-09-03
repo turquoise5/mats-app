@@ -173,3 +173,118 @@ each fit ~11x slower (25.0s vs 2.1s at identical `n_iter`). Re-run with
 `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1`; full run then took ~19 min.
 **No code, hyperparameters, solver, or seed were changed** — `C=1.0`, `max_iter=3000` as in
 Act 0, so results stay comparable. Aborted log kept at `logs/act1_probe_ABORTED_threadthrash.log`.
+
+---
+
+## Ablation probe refits — GPU Agent (`handover_gpu_ablation_probes.md`)
+
+**Run date:** 2026-09-03 · same model/seed as above. **Scope:** demonstrated subset only
+(816 rows: 318 gap / 498 knows), `within-demonstrated` condition, grouped by
+`eedi_question_id`, `test_size=0.2` (`n_train=637`, `n_test=179`), split built once from
+`orig` and reused unchanged for A/B/AB/CTRL (row order aligned, asserted before every run).
+Pipeline: `StandardScaler` + `LogisticRegression(C=1.0, max_iter=3000,
+class_weight="balanced", random_state=0)`, scored by balanced accuracy, all 37 read
+points, both `natural` and `elicited`. This deliberately differs from Act 1's own
+`within-demonstrated-by-eedi` pipeline (no `class_weight`, plain accuracy) — that pipeline
+is reserved for the reference check below, where matching Act 1 exactly is the point.
+
+**Reference check (handover §4.3): PASSED exactly.** Reusing Act 1's own pipeline
+(`probes.fit_layer_probes_explicit`, unbalanced, plain accuracy) on `orig` against this
+split reproduces **0.899 @L19 natural / 0.888 @L22 elicited** — the identical numbers
+reported for `within-demonstrated-by-eedi` in the verdict above, to three decimals. Split,
+prefix, and preprocessing all match Act 1.
+
+**Control tasks: all 10 clean** (5 variants × 2 positions), well under the leakage
+threshold (0.697 at this `n_test`/layer count) in every case — max observed control was
+0.620 (CTRL, elicited).
+
+### Results (balanced accuracy, best layer; TF-IDF is the handover-specified pipeline —
+`TfidfVectorizer(1,2)` + `LogReg(balanced)`, `GroupShuffleSplit` by `eedi_question_id` —
+from `data/contrast/ablation_stats.json`, computed by the CPU agent on a different split
+mechanism than the probe's, so read it as an independent baseline, not a like-for-like
+delta)
+
+| variant | natural | elicited | TF-IDF (qid) | Δ nat vs orig | Δ eli vs orig | Δ nat vs CTRL | Δ eli vs CTRL |
+|---|---|---|---|---|---|---|---|
+| orig | 0.910 | 0.897 | 0.885 | — | — | +0.062 | +0.035 |
+| A | 0.904 | 0.871 | 0.823 | −0.007 | −0.026 | +0.055 | +0.010 |
+| B | 0.852 | 0.847 | 0.833 | −0.058 | −0.050 | +0.004 | −0.015 |
+| AB | 0.866 | 0.835 | 0.784 | −0.045 | −0.062 | +0.018 | −0.026 |
+| CTRL | 0.848 | 0.861 | 0.834 | −0.062 | −0.035 | +0.000 | +0.000 |
+
+### Reading the table against §2
+
+Against raw `orig`, every variant drops (5–6 pts). But **CTRL — random text deletion,
+length-matched to B, containing no targeted content — drops almost as much as B does**
+(−0.062/−0.035 vs B's −0.058/−0.050). That makes the `Δ vs CTRL` columns the ones that
+answer the actual question, and against CTRL:
+
+- **A**: **no drop** — +0.055 natural, +0.010 elicited (A tracks orig almost exactly; see
+  `results/figs/act1_ablations.png`, blue curve sits on the black curve at nearly every
+  layer).
+- **B**: **no drop at natural** (+0.004, a wash), a **small drop at elicited** (−0.015).
+- **AB**: small positive at natural (+0.018), small negative at elicited (−0.026) —
+  consistent with "B accounts for what little AB shows; A adds nothing on top."
+
+By the §2 table this lands closest to the **no/no row**: *"something distributed that
+neither ablation removes — the interesting case."* Neither answer-masking nor
+metacognitive-cue removal costs the probe anything beyond what an equal-sized random
+deletion already costs it. Whatever the probe reads from demonstrated text is not
+concentrated in the final numeric answer, nor in the small set of verification/hedging
+sentences TF-IDF flagged — it is spread across the rest of the text (working steps,
+phrasing throughout, structure), or the probe is substantially reading generic
+text-presence/length rather than either targeted signal.
+
+**This does not fully resolve correctness vs. style** — it rules out the two most
+legible single-cause stories (a literal answer token, an explicit metacognitive register
+marker) without saying what the surviving signal actually is.
+
+### Caveats that qualify this reading — report plainly, do not round off
+
+1. **Ablation A's own gate failed.** `ablation_stats.json` reports
+   `answer_match_rate_A = 0.567` against an 80% pass bar the CPU handover set in advance —
+   under 57% of demonstrated rows actually had an answer string found and replaced by
+   `[ANS]`. A's near-zero probe drop is therefore **not strong evidence the probe ignores
+   the answer** — it is equally consistent with the ablation mostly failing to remove it.
+   TF-IDF's ~6pt drop under A (0.885→0.823, similar in size to B's and CTRL's) is a
+   soft second data point that some real content did leave the text under A, but the
+   match-rate failure means this ablation cannot carry a "no" verdict on its own.
+2. **CTRL's per-row length target (±15% of B) was hit for only 64.5%** of rows
+   (`ctrl_rows_within_15pct` in `ablation_stats.json`) — CTRL is length-matched on
+   aggregate, not row-by-row exactly, so the `Δ vs CTRL` comparison is a reasonable but
+   imperfect length control.
+3. B removes a larger share of `gap` text than `knows` text (38.4% vs 35.3%, per
+   `ablation_stats.json`'s `b_pct_removed_by_class`) — a ~3pp gap-vs-knows imbalance, a
+   small residual length confound in B's own right, on top of what CTRL already controls
+   for.
+4. The TF-IDF column in the table above comes from a **different split mechanism**
+   (`GroupShuffleSplit`, `test_size=0.3`) than the probe's (`sklearn`'s grouped
+   stratified split at `test_size=0.2`) — both grouped by `eedi_question_id`, but not the
+   same train/test partition. Read TF-IDF as an independent sanity baseline, not a
+   row-for-row comparison point.
+
+### Verdict
+
+**The data lands on the §2 "no / no" row.** Against the length-matched CTRL control,
+neither removing the user's final answer (A) nor removing metacognitive/verification
+sentences (B) costs the `within-demonstrated` probe anything beyond what an equal-sized
+random deletion already costs (Δ vs CTRL: A +0.055/+0.010, B +0.004/−0.015, both ≈0 or
+positive). This weighs against either single-cause story from §1 — the probe's signal is
+not sitting in the literal answer token or in the explicit verification-language TF-IDF
+flagged — but Ablation A's 56.7% match-rate failure means the answer-removal result is
+weak evidence, not a clean negative, and should be re-run with a better answer-matcher
+before this is treated as settled. Nothing here overturns Act 1's narrowed headline
+(cross-register holds, stated→demonstrated collapses); it only says that whatever the
+`within-demonstrated` probe is reading is not the two most obvious surface routes.
+
+### Artifacts
+
+- `cache/abl_{orig,A,B,AB,CTRL}_{natural,elicited}.npy` — (816, 37, 4096) float32, 10 files
+- `results/ablation_probe_results.json` — full per-layer curves, reference check, split,
+  summary table
+- `results/abl_acc_{variant}_{position}.npy`, `results/abl_ctrl_{variant}_{position}.npy`
+  — 10 + 10 files
+- `results/figs/act1_ablations.png`
+- 5 entries in `results/runs.jsonl` (`ablation_probe/{orig,A,B,AB,CTRL}`), plus 10
+  `ablation_extract` entries
+- Logs: `logs/ablation_extract.log`, `logs/ablation_probe.log`, `logs/ablation_plot.log`

@@ -1,0 +1,2173 @@
+{
+  "seed": 0,
+  "source": "contrast_v1.jsonl",
+  "scope": "demonstrated rows only; stated/undisclosed omitted from every variant",
+  "n_rows": 816,
+  "n_gap": 318,
+  "n_knows": 498,
+  "id_alignment_asserted": true,
+  "tfidf_pipeline": {
+    "specified": "TfidfVectorizer(max_features=5000, ngram_range=(1,2)) + LogisticRegression(max_iter=3000, class_weight='balanced') + GroupShuffleSplit(n_splits=1, test_size=0.3, random_state=0)",
+    "reference": "TfidfVectorizer(max_features=5000) + LogisticRegression(max_iter=1000) + GroupKFold(5), mean over folds",
+    "groupings": {
+      "qid": "raw eedi_question_id",
+      "merged": "eedi_question_id with content-colliding ids merged; see `grouping` below and data/contrast/ablation_groups.json"
+    }
+  },
+  "grouping": {
+    "why": "eedi_question_id is only a proxy for row content. Questions whose content lives in the answer options (e.g. 'One of these equations has exactly one solution. Which is it?') were generated from the stem alone, so the generator invented its own option set. Questions 1158 and 552 have byte-identical stems and their rows converge on the same equations, which lets content straddle a question-grouped split.",
+    "method": "merge question ids whose demonstrated rows share >= 5 normalised equations (variable-, spacing-, paren- and side-insensitive); union-find over the resulting links",
+    "min_shared_equations": 5,
+    "n_question_ids": 35,
+    "n_merged_groups": 31,
+    "linked_pairs": [
+      {
+        "a": "1158",
+        "b": "552",
+        "n_shared_equations": 19,
+        "examples": [
+          "-1=v",
+          "-2=v",
+          "-3=v",
+          "-4=v",
+          "-5=v"
+        ]
+      },
+      {
+        "a": "1463",
+        "b": "296",
+        "n_shared_equations": 8,
+        "examples": [
+          "-2=v",
+          "-3=v",
+          "-3^2-45-2=9+40",
+          "-3^2-45-2=9--40",
+          "0=5v^2-3v-2"
+        ]
+      },
+      {
+        "a": "1463",
+        "b": "634",
+        "n_shared_equations": 6,
+        "examples": [
+          "-2=v",
+          "-3=v",
+          "-3^2-45-2=9+40",
+          "0=5v^2-3v-2",
+          "3±√49/10=v"
+        ]
+      },
+      {
+        "a": "296",
+        "b": "634",
+        "n_shared_equations": 9,
+        "examples": [
+          "-2/5=v",
+          "-2=v",
+          "-3=v",
+          "-3^2-45-2=9+40",
+          "0=5v^2-3v-2"
+        ]
+      },
+      {
+        "a": "925",
+        "b": "966",
+        "n_shared_equations": 6,
+        "examples": [
+          "-10=v",
+          "-v±√v^2-4=v",
+          "0=3v^2-10v+4",
+          "100-48=52",
+          "10±√52/6=v"
+        ]
+      }
+    ],
+    "group_of_qid": {
+      "1008": "1008",
+      "1115": "1115",
+      "1158": "552+1158",
+      "552": "552+1158",
+      "1191": "1191",
+      "1245": "1245",
+      "1287": "1287",
+      "1447": "1447",
+      "1463": "296+634+1463",
+      "296": "296+634+1463",
+      "634": "296+634+1463",
+      "1506": "1506",
+      "1541": "1541",
+      "159": "159",
+      "160": "160",
+      "1607": "1607",
+      "1633": "1633",
+      "318": "318",
+      "332": "332",
+      "369": "369",
+      "382": "382",
+      "452": "452",
+      "462": "462",
+      "507": "507",
+      "509": "509",
+      "513": "513",
+      "715": "715",
+      "778": "778",
+      "787": "787",
+      "840": "840",
+      "859": "859",
+      "925": "925+966",
+      "966": "925+966",
+      "96": "96",
+      "986": "986"
+    },
+    "cost_on_orig_specified_pipeline": -0.08541378610068406,
+    "cost_on_orig_reference_pipeline": 0.02621036085518036
+  },
+  "reference_check": {
+    "expected_orig_balanced_accuracy": 0.743,
+    "observed_orig_specified_qid_grouped": 0.8853299348626451,
+    "observed_orig_specified_merged_grouped": 0.799916148761961,
+    "observed_orig_reference_qid_grouped": 0.7409429888135997,
+    "observed_orig_reference_merged_grouped": 0.76715334966878,
+    "passes": false,
+    "note": "Handover rule 5 gate. The pipeline the handover specifies does not reproduce its own quoted 0.743 anchor on this data; the unigram / default-LogReg / GroupKFold(5) config does (to within 0.002). No artifact in this working copy records where 0.743 came from."
+  },
+  "ablation_A": {
+    "method": "correct answer + all labelled distractors for the row's eedi_question_id, canonicalised out of LaTeX, matched whitespace/glyph-tolerantly, replaced with [ANS]",
+    "answer_match_rate": 0.5674019607843137,
+    "answer_match_rate_by_class": {
+      "gap": 0.7295597484276729,
+      "knows": 0.463855421686747
+    },
+    "n_rows_matched": 463,
+    "n_substitutions": 1550,
+    "n_rows_variable_agnostic_fallback": 11,
+    "net_chars_delta_by_class": {
+      "gap": 534,
+      "knows": 2021
+    },
+    "net_chars_delta_note": "positive because the 5-character [ANS] token is usually longer than the answer string it replaces; A removes answer identity, not length",
+    "unmatched_by_question_id": {
+      "452": 37,
+      "1506": 29,
+      "462": 25,
+      "318": 25,
+      "1633": 23,
+      "1115": 22,
+      "1541": 21,
+      "552": 21,
+      "778": 16,
+      "96": 16,
+      "787": 15,
+      "986": 14,
+      "840": 14,
+      "1607": 11,
+      "1158": 10,
+      "382": 9,
+      "369": 7,
+      "1008": 7,
+      "715": 7,
+      "507": 7,
+      "332": 6,
+      "1287": 6,
+      "513": 3,
+      "1191": 2
+    },
+    "match_rate_by_answer_kind": {
+      "numeric": {
+        "n_rows": 525,
+        "n_matched": 364,
+        "rate": 0.6933333333333334
+      },
+      "verdict": {
+        "n_rows": 291,
+        "n_matched": 99,
+        "rate": 0.3402061855670103
+      }
+    },
+    "answer_kind_by_question_id": {
+      "1287": "numeric",
+      "859": "numeric",
+      "1607": "verdict",
+      "159": "numeric",
+      "382": "verdict",
+      "452": "verdict",
+      "369": "verdict",
+      "1008": "verdict",
+      "1463": "numeric",
+      "1115": "numeric",
+      "715": "verdict",
+      "509": "numeric",
+      "840": "verdict",
+      "160": "numeric",
+      "1506": "numeric",
+      "986": "verdict",
+      "513": "verdict",
+      "552": "numeric",
+      "1158": "numeric",
+      "787": "verdict",
+      "778": "verdict",
+      "925": "verdict",
+      "296": "numeric",
+      "332": "verdict",
+      "1633": "verdict",
+      "634": "numeric",
+      "966": "numeric",
+      "462": "numeric",
+      "1245": "numeric",
+      "318": "numeric",
+      "1447": "numeric",
+      "507": "verdict",
+      "1191": "numeric",
+      "1541": "numeric",
+      "96": "verdict"
+    },
+    "passes_80pct_gate": false,
+    "class_imbalance_note": "A matches 0.730 of gap rows but only 0.464 of knows rows, so the presence of the [ANS] token is itself weakly class-informative. TF-IDF picks 'ans' up as a gap-side feature in variant A. This is a confound A introduces, not a property of the original data.",
+    "limitations": [
+      "Intermediate working that coincidentally contains an answer value is also replaced. Documented and not disambiguated, per the handover.",
+      "Question 452's answer cells are the bare letters A-D; single-letter candidates are skipped as far too generic, so its 37 rows never match.",
+      "Many demonstrated rows paraphrase rather than quote the Eedi answer cell ('no solution' vs 'This equation is impossible to solve'), or work an analogous problem in a different variable. Those rows cannot be matched by string lookup against the Eedi source, which is the method the handover specifies."
+    ]
+  },
+  "ablation_B": {
+    "method": "whole sentences containing a cue term dropped; sentences split on [.!?] + whitespace and on newlines",
+    "n_cue_terms": 77,
+    "lexicon_seed_knows": [
+      "verification",
+      "verify",
+      "verified",
+      "verifying",
+      "discriminant",
+      "factoring",
+      "factorise",
+      "factorize",
+      "factored",
+      "yields",
+      "substitute",
+      "substituting",
+      "substituted",
+      "plug back",
+      "plugging back",
+      "check",
+      "checked",
+      "checking",
+      "confirm",
+      "confirms",
+      "original equation",
+      "sanity"
+    ],
+    "lexicon_seed_gap": [
+      "circled",
+      "circle",
+      "option",
+      "options",
+      "picked",
+      "chose",
+      "my answer",
+      "i wrote",
+      "the answer is",
+      "so the answer"
+    ],
+    "lexicon_added": [
+      "verifies",
+      "discriminants",
+      "factorisation",
+      "factorization",
+      "factorising",
+      "factorizing",
+      "factorised",
+      "factorized",
+      "yield",
+      "yielding",
+      "substitution",
+      "substitutes",
+      "plug it back",
+      "plugging it back",
+      "plug in",
+      "plugged",
+      "checks",
+      "check back",
+      "double check",
+      "double-check",
+      "recheck",
+      "re-check",
+      "cross-check",
+      "cross check",
+      "confirmed",
+      "confirming",
+      "confirmation",
+      "sanity check",
+      "original problem",
+      "into the original",
+      "i put",
+      "circling",
+      "circles",
+      "i picked",
+      "i chose",
+      "choosing",
+      "selected",
+      "i selected",
+      "ticked",
+      "tick",
+      "my final answer",
+      "i answered",
+      "wrote down",
+      "the answer was",
+      "i went with"
+    ],
+    "lexicon_added_knows": [
+      "verifies",
+      "discriminants",
+      "factorisation",
+      "factorization",
+      "factorising",
+      "factorizing",
+      "factorised",
+      "factorized",
+      "yield",
+      "yielding",
+      "substitution",
+      "substitutes",
+      "plug it back",
+      "plugging it back",
+      "plug in",
+      "plugged",
+      "checks",
+      "check back",
+      "double check",
+      "double-check",
+      "recheck",
+      "re-check",
+      "cross-check",
+      "cross check",
+      "confirmed",
+      "confirming",
+      "confirmation",
+      "sanity check",
+      "original problem",
+      "into the original",
+      "i put"
+    ],
+    "lexicon_added_gap": [
+      "circling",
+      "circles",
+      "i picked",
+      "i chose",
+      "choosing",
+      "selected",
+      "i selected",
+      "ticked",
+      "tick",
+      "my final answer",
+      "i answered",
+      "wrote down",
+      "the answer was",
+      "i went with"
+    ],
+    "chars_removed_by_class": {
+      "gap": 39492,
+      "knows": 61840
+    },
+    "chars_total_by_class": {
+      "gap": 102824,
+      "knows": 175041
+    },
+    "pct_removed_by_class": {
+      "gap": 38.40737570995098,
+      "knows": 35.32886580858199
+    },
+    "pct_removed_knows_minus_gap": -3.078509901368996,
+    "sentences_dropped_by_class": {
+      "gap": 495,
+      "knows": 810
+    },
+    "n_rows_emptied": 4,
+    "rows_emptied": [
+      "linear_2step_int__demonstrated__knows__17__expert",
+      "quad_formula__demonstrated__knows__46__expert",
+      "linear_both_int__demonstrated__knows__72__expert",
+      "quad_formula__demonstrated__gap__46__novice"
+    ],
+    "seed_lexicon_only_pct_removed": {
+      "gap": 27.834941258850073,
+      "knows": 30.076382104764026
+    },
+    "seed_lexicon_only_knows_minus_gap": 2.241440845913953,
+    "added_term_contribution": {
+      "discriminants": {
+        "sentences": 8,
+        "chars": 722,
+        "gap": 1,
+        "knows": 7
+      },
+      "factorisation": {
+        "sentences": 18,
+        "chars": 1479,
+        "gap": 13,
+        "knows": 5
+      },
+      "factorization": {
+        "sentences": 4,
+        "chars": 215,
+        "gap": 1,
+        "knows": 3
+      },
+      "factorising": {
+        "sentences": 6,
+        "chars": 501,
+        "gap": 4,
+        "knows": 2
+      },
+      "factorised": {
+        "sentences": 33,
+        "chars": 3168,
+        "gap": 20,
+        "knows": 13
+      },
+      "yield": {
+        "sentences": 10,
+        "chars": 746,
+        "gap": 8,
+        "knows": 2
+      },
+      "yielding": {
+        "sentences": 64,
+        "chars": 5153,
+        "gap": 36,
+        "knows": 28
+      },
+      "substitution": {
+        "sentences": 7,
+        "chars": 287,
+        "gap": 7,
+        "knows": 0
+      },
+      "checks": {
+        "sentences": 5,
+        "chars": 378,
+        "gap": 0,
+        "knows": 5
+      },
+      "original problem": {
+        "sentences": 5,
+        "chars": 529,
+        "gap": 0,
+        "knows": 5
+      },
+      "into the original": {
+        "sentences": 2,
+        "chars": 174,
+        "gap": 0,
+        "knows": 2
+      },
+      "i put": {
+        "sentences": 52,
+        "chars": 4289,
+        "gap": 25,
+        "knows": 27
+      },
+      "circles": {
+        "sentences": 3,
+        "chars": 270,
+        "gap": 1,
+        "knows": 2
+      },
+      "selected": {
+        "sentences": 10,
+        "chars": 543,
+        "gap": 9,
+        "knows": 1
+      },
+      "i selected": {
+        "sentences": 9,
+        "chars": 525,
+        "gap": 8,
+        "knows": 1
+      },
+      "my final answer": {
+        "sentences": 17,
+        "chars": 759,
+        "gap": 16,
+        "knows": 1
+      },
+      "wrote down": {
+        "sentences": 2,
+        "chars": 318,
+        "gap": 2,
+        "knows": 0
+      }
+    },
+    "length_confound_note": "B removes 35.33% of knows text and 38.41% of gap text, a -3.08 pp difference. Residual length is therefore itself weakly class-informative in B; any B result must be read against CTRL, which reproduces the same per-row length change."
+  },
+  "ablation_AB": {
+    "method": "A applied first, then B; B drops the same sentences as in B alone (cue terms are unaffected by [ANS] substitution)",
+    "chars_removed_by_class": {
+      "gap": 39329,
+      "knows": 60471
+    },
+    "n_rows_emptied": 4
+  },
+  "ablation_CTRL": {
+    "method": "random whole sentences deleted from the original text, per row, length-matched to B's per-row character removal; cue sentences are excluded from the eligible pool so CTRL always removes different text",
+    "tolerance": 0.15,
+    "rows_within_tolerance": 526,
+    "rows_within_tolerance_rate": 0.6446078431372549,
+    "n_rows_with_zero_target": 129,
+    "n_rows_no_match_constructible": 219,
+    "rows_no_match_constructible": [
+      "linear_2step_int__demonstrated__knows__17__novice",
+      "linear_2step_int__demonstrated__knows__17__expert",
+      "linear_2step_int__demonstrated__knows__10__expert",
+      "linear_2step_int__demonstrated__knows__15__expert",
+      "linear_2step_int__demonstrated__knows__41__expert",
+      "linear_2step_int__demonstrated__knows__57__expert",
+      "linear_2step_int__demonstrated__knows__58__expert",
+      "linear_both_int__demonstrated__knows__4__expert",
+      "linear_both_int__demonstrated__knows__2__expert",
+      "linear_both_int__demonstrated__knows__5__expert",
+      "linear_both_int__demonstrated__knows__18__expert",
+      "linear_both_int__demonstrated__knows__19__expert",
+      "quad_formula__demonstrated__knows__2__expert",
+      "quad_formula__demonstrated__knows__3__expert",
+      "quad_formula__demonstrated__knows__3__novice",
+      "quad_formula__demonstrated__knows__30__expert",
+      "quad_formula__demonstrated__knows__19__novice",
+      "quad_formula__demonstrated__knows__55__novice",
+      "quad_formula__demonstrated__knows__34__novice",
+      "quad_formula__demonstrated__knows__34__expert",
+      "quad_formula__demonstrated__knows__38__expert",
+      "quad_factor_ab__demonstrated__knows__19__novice",
+      "quad_factor_ab__demonstrated__knows__16__novice",
+      "quad_factor_ab__demonstrated__knows__16__expert",
+      "quad_factor_ab__demonstrated__knows__10__expert",
+      "quad_factor_ab__demonstrated__knows__9__expert",
+      "quad_factor_ab__demonstrated__knows__12__expert",
+      "quad_factor_ab__demonstrated__knows__4__expert",
+      "quad_factor_ab__demonstrated__knows__15__expert",
+      "quad_factor_ab__demonstrated__knows__17__expert",
+      "quad_factor_ab__demonstrated__knows__6__novice",
+      "quad_factor_ab__demonstrated__knows__27__expert",
+      "quad_factor_ab__demonstrated__knows__36__novice",
+      "quad_factor_ab__demonstrated__knows__36__expert",
+      "quad_factor_ab__demonstrated__knows__34__expert",
+      "quad_factor_ab__demonstrated__knows__38__expert",
+      "quad_factor_ab__demonstrated__knows__21__novice",
+      "quad_factor_ab__demonstrated__knows__21__expert",
+      "quad_factor_ab__demonstrated__knows__42__expert",
+      "quad_factor_ab__demonstrated__knows__57__expert",
+      "linear_both_int__demonstrated__knows__21__expert",
+      "linear_both_int__demonstrated__knows__23__expert",
+      "linear_both_int__demonstrated__knows__24__expert",
+      "linear_both_int__demonstrated__knows__30__novice",
+      "linear_both_int__demonstrated__knows__30__expert",
+      "linear_both_int__demonstrated__knows__33__expert",
+      "linear_both_int__demonstrated__knows__38__expert",
+      "linear_both_int__demonstrated__knows__43__expert",
+      "linear_both_int__demonstrated__knows__44__expert",
+      "linear_both_int__demonstrated__knows__49__expert",
+      "linear_both_int__demonstrated__knows__52__expert",
+      "linear_both_int__demonstrated__knows__56__novice",
+      "linear_both_int__demonstrated__knows__56__expert",
+      "quad_formula__demonstrated__knows__13__expert",
+      "quad_formula__demonstrated__knows__14__expert",
+      "quad_formula__demonstrated__knows__18__novice",
+      "quad_formula__demonstrated__knows__23__novice",
+      "quad_formula__demonstrated__knows__23__expert",
+      "quad_formula__demonstrated__knows__39__expert",
+      "quad_formula__demonstrated__knows__48__novice",
+      "quad_formula__demonstrated__knows__48__expert",
+      "quad_formula__demonstrated__knows__46__novice",
+      "quad_formula__demonstrated__knows__46__expert",
+      "quad_factor_ab__demonstrated__knows__30__expert",
+      "quad_factor_ab__demonstrated__knows__33__expert",
+      "quad_factor_ab__demonstrated__knows__41__expert",
+      "quad_factor_ab__demonstrated__knows__43__expert",
+      "quad_factor_ab__demonstrated__knows__44__novice",
+      "quad_factor_ab__demonstrated__knows__47__expert",
+      "quad_factor_ab__demonstrated__knows__50__expert",
+      "linear_2step_int__demonstrated__knows__74__expert",
+      "linear_both_int__demonstrated__knows__60__expert",
+      "linear_both_int__demonstrated__knows__63__novice",
+      "linear_both_int__demonstrated__knows__63__expert",
+      "linear_both_int__demonstrated__knows__69__expert",
+      "linear_both_int__demonstrated__knows__72__expert",
+      "linear_both_int__demonstrated__knows__74__expert",
+      "linear_both_int__demonstrated__knows__77__novice",
+      "linear_both_int__demonstrated__knows__77__expert",
+      "linear_both_int__demonstrated__knows__79__novice",
+      "linear_both_int__demonstrated__knows__79__expert",
+      "linear_both_int__demonstrated__knows__81__expert",
+      "linear_both_int__demonstrated__knows__80__expert",
+      "linear_both_int__demonstrated__knows__82__novice",
+      "linear_both_int__demonstrated__knows__82__expert",
+      "linear_both_int__demonstrated__knows__84__expert",
+      "linear_both_int__demonstrated__knows__84__novice",
+      "quad_formula__demonstrated__knows__61__expert",
+      "quad_formula__demonstrated__knows__66__expert",
+      "quad_formula__demonstrated__knows__69__novice",
+      "quad_formula__demonstrated__knows__69__expert",
+      "quad_formula__demonstrated__knows__70__expert",
+      "quad_formula__demonstrated__knows__67__expert",
+      "quad_formula__demonstrated__knows__72__expert",
+      "quad_formula__demonstrated__knows__73__novice",
+      "quad_formula__demonstrated__knows__73__expert",
+      "quad_formula__demonstrated__knows__74__expert",
+      "quad_formula__demonstrated__knows__79__novice",
+      "quad_formula__demonstrated__knows__79__expert",
+      "quad_factor_ab__demonstrated__knows__62__novice",
+      "quad_factor_ab__demonstrated__knows__62__expert",
+      "quad_factor_ab__demonstrated__knows__63__novice",
+      "quad_factor_ab__demonstrated__knows__63__expert",
+      "quad_factor_ab__demonstrated__knows__65__novice",
+      "quad_factor_ab__demonstrated__knows__64__expert",
+      "quad_factor_ab__demonstrated__knows__67__expert",
+      "quad_factor_ab__demonstrated__knows__69__novice",
+      "quad_factor_ab__demonstrated__knows__69__expert",
+      "quad_factor_ab__demonstrated__knows__72__expert",
+      "quad_factor_ab__demonstrated__knows__75__novice",
+      "quad_factor_ab__demonstrated__knows__73__novice",
+      "linear_2step_int__demonstrated__knows__78__expert",
+      "linear_both_int__demonstrated__knows__89__expert",
+      "linear_both_int__demonstrated__knows__92__expert",
+      "linear_both_int__demonstrated__knows__93__novice",
+      "linear_both_int__demonstrated__knows__93__expert",
+      "linear_both_int__demonstrated__knows__95__expert",
+      "linear_both_int__demonstrated__knows__96__expert",
+      "quad_formula__demonstrated__knows__94__expert",
+      "quad_formula__demonstrated__knows__95__novice",
+      "quad_formula__demonstrated__knows__95__expert",
+      "quad_formula__demonstrated__knows__96__expert",
+      "quad_factor_ab__demonstrated__knows__77__expert",
+      "quad_factor_ab__demonstrated__knows__79__expert",
+      "quad_factor_ab__demonstrated__knows__80__expert",
+      "linear_2step_int__demonstrated__gap__10__expert",
+      "linear_2step_int__demonstrated__gap__20__expert",
+      "linear_2step_int__demonstrated__gap__23__expert",
+      "linear_2step_int__demonstrated__gap__22__expert",
+      "linear_2step_int__demonstrated__gap__26__novice",
+      "quad_formula__demonstrated__gap__7__novice",
+      "quad_formula__demonstrated__gap__13__novice",
+      "quad_formula__demonstrated__gap__33__expert",
+      "quad_formula__demonstrated__gap__46__novice",
+      "quad_formula__demonstrated__gap__48__novice",
+      "quad_formula__demonstrated__gap__48__expert",
+      "quad_formula__demonstrated__gap__50__novice",
+      "quad_formula__demonstrated__gap__50__expert",
+      "quad_factor_ab__demonstrated__gap__17__novice",
+      "quad_factor_ab__demonstrated__gap__17__expert",
+      "quad_factor_ab__demonstrated__gap__20__novice",
+      "quad_factor_ab__demonstrated__gap__20__expert",
+      "quad_factor_ab__demonstrated__gap__29__expert",
+      "quad_factor_ab__demonstrated__gap__47__expert",
+      "quad_factor_ab__demonstrated__gap__50__expert",
+      "quad_factor_ab__demonstrated__gap__58__novice",
+      "quad_factor_ab__demonstrated__gap__58__expert",
+      "linear_2step_int__demonstrated__gap__67__novice",
+      "linear_2step_int__demonstrated__gap__79__novice",
+      "linear_2step_int__demonstrated__gap__79__expert",
+      "linear_2step_int__demonstrated__gap__87__expert",
+      "linear_2step_int__demonstrated__gap__89__expert",
+      "linear_2step_int__demonstrated__gap__91__expert",
+      "linear_both_int__demonstrated__gap__86__expert",
+      "quad_formula__demonstrated__gap__81__novice",
+      "quad_formula__demonstrated__gap__85__novice",
+      "quad_formula__demonstrated__gap__92__novice",
+      "quad_formula__demonstrated__gap__102__novice",
+      "quad_factor_ab__demonstrated__gap__65__expert",
+      "quad_factor_ab__demonstrated__gap__66__novice",
+      "quad_factor_ab__demonstrated__gap__66__expert",
+      "quad_factor_ab__demonstrated__gap__69__novice",
+      "quad_factor_ab__demonstrated__gap__69__expert",
+      "quad_factor_ab__demonstrated__gap__72__novice",
+      "quad_factor_ab__demonstrated__gap__72__expert",
+      "quad_factor_ab__demonstrated__gap__73__expert",
+      "quad_factor_ab__demonstrated__gap__71__expert",
+      "quad_factor_ab__demonstrated__gap__83__expert",
+      "quad_factor_ab__demonstrated__gap__95__novice",
+      "linear_2step_int__demonstrated__gap__102__novice",
+      "linear_2step_int__demonstrated__gap__104__expert",
+      "linear_both_int__demonstrated__gap__122__expert",
+      "quad_formula__demonstrated__gap__114__novice",
+      "quad_factor_ab__demonstrated__gap__118__novice",
+      "quad_factor_ab__demonstrated__gap__116__expert",
+      "quad_factor_ab__demonstrated__gap__118__expert",
+      "quad_factor_ab__demonstrated__gap__132__expert",
+      "quad_factor_ab__demonstrated__gap__132__novice",
+      "quad_factor_ab__demonstrated__gap__133__expert",
+      "quad_factor_ab__demonstrated__gap__134__expert",
+      "quad_factor_ab__demonstrated__gap__147__novice",
+      "quad_factor_ab__demonstrated__gap__147__expert",
+      "quad_factor_ab__demonstrated__gap__148__novice",
+      "quad_factor_ab__demonstrated__gap__148__expert",
+      "linear_2step_int__demonstrated__gap__166__expert",
+      "linear_2step_int__demonstrated__gap__178__novice",
+      "linear_2step_int__demonstrated__gap__183__novice",
+      "linear_2step_int__demonstrated__gap__193__expert",
+      "linear_both_int__demonstrated__gap__166__expert",
+      "linear_both_int__demonstrated__gap__187__expert",
+      "linear_both_int__demonstrated__gap__215__expert",
+      "linear_both_int__demonstrated__gap__201__novice",
+      "linear_both_int__demonstrated__gap__201__expert",
+      "linear_both_int__demonstrated__gap__231__novice",
+      "linear_both_int__demonstrated__gap__248__novice",
+      "linear_both_int__demonstrated__gap__248__expert",
+      "quad_formula__demonstrated__gap__155__novice",
+      "quad_formula__demonstrated__gap__162__novice",
+      "quad_formula__demonstrated__gap__163__novice",
+      "quad_formula__demonstrated__gap__171__novice",
+      "quad_formula__demonstrated__gap__192__novice",
+      "quad_formula__demonstrated__gap__194__novice",
+      "quad_formula__demonstrated__gap__202__novice",
+      "quad_formula__demonstrated__gap__202__expert",
+      "quad_formula__demonstrated__gap__223__expert",
+      "quad_formula__demonstrated__gap__234__expert",
+      "quad_formula__demonstrated__gap__245__expert",
+      "quad_formula__demonstrated__gap__255__novice",
+      "quad_factor_ab__demonstrated__gap__167__expert",
+      "quad_factor_ab__demonstrated__gap__167__novice",
+      "quad_factor_ab__demonstrated__gap__168__novice",
+      "quad_factor_ab__demonstrated__gap__168__expert",
+      "quad_factor_ab__demonstrated__gap__189__expert",
+      "quad_factor_ab__demonstrated__gap__190__novice",
+      "quad_factor_ab__demonstrated__gap__183__expert",
+      "quad_factor_ab__demonstrated__gap__193__novice",
+      "quad_factor_ab__demonstrated__gap__214__expert",
+      "quad_factor_ab__demonstrated__gap__225__novice",
+      "quad_factor_ab__demonstrated__gap__225__expert"
+    ],
+    "chars_removed_by_class": {
+      "gap": 25135,
+      "knows": 45881
+    },
+    "sentences_dropped_by_class": {
+      "gap": 512,
+      "knows": 884
+    },
+    "total_chars_removed_B": 101332,
+    "total_chars_removed_CTRL": 71016,
+    "n_rows_emptied": 0,
+    "rng": "random.Random(f'{seed}:{row_id}') per row"
+  },
+  "variants": {
+    "orig": {
+      "file": "contrast_v1.jsonl",
+      "n_rows": 816,
+      "tfidf_specified_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.8853299348626451,
+          "accuracy": 0.9007352941176471,
+          "majority_baseline": 0.6066176470588235,
+          "n_train": 544,
+          "n_test": 272,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "3a",
+              -1.7525795463132112
+            ],
+            [
+              "wrote",
+              -1.5337565340371808
+            ],
+            [
+              "does this",
+              -1.3289007930532601
+            ],
+            [
+              "3x",
+              -1.140440349767737
+            ],
+            [
+              "is that",
+              -1.0871200788852253
+            ],
+            [
+              "2x",
+              -1.0572991359547075
+            ],
+            [
+              "correct",
+              -0.9939588030757688
+            ],
+            [
+              "40",
+              -0.9813472698408288
+            ],
+            [
+              "this",
+              -0.9719390133031144
+            ],
+            [
+              "as",
+              -0.8715754994457783
+            ],
+            [
+              "that",
+              -0.8100612542897424
+            ],
+            [
+              "wrote down",
+              -0.7748795222743722
+            ],
+            [
+              "brackets",
+              -0.7323580216120765
+            ],
+            [
+              "right",
+              -0.7173874190302222
+            ],
+            [
+              "circled",
+              -0.6975576290574467
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.7044075424815006
+            ],
+            [
+              "52",
+              1.2990208724048127
+            ],
+            [
+              "yields",
+              1.0463161729024129
+            ],
+            [
+              "you",
+              1.0320156577774213
+            ],
+            [
+              "into",
+              0.9482325921072687
+            ],
+            [
+              "12",
+              0.8794032122428822
+            ],
+            [
+              "discriminant",
+              0.8030252430605553
+            ],
+            [
+              "verification",
+              0.7937748054376202
+            ],
+            [
+              "into the",
+              0.7925130023325854
+            ],
+            [
+              "it",
+              0.7597006991692175
+            ],
+            [
+              "should",
+              0.7554188184499672
+            ],
+            [
+              "x² 6x",
+              0.7482973158437678
+            ],
+            [
+              "sides",
+              0.7341438938282745
+            ],
+            [
+              "x²",
+              0.7227523135115177
+            ],
+            [
+              "both sides",
+              0.719882247779471
+            ]
+          ]
+        },
+        "merged": {
+          "balanced_accuracy": 0.799916148761961,
+          "accuracy": 0.8338983050847457,
+          "majority_baseline": 0.6305084745762712,
+          "n_train": 521,
+          "n_test": 295,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "3a",
+              -1.7197497668021806
+            ],
+            [
+              "wrote",
+              -1.6248899279798965
+            ],
+            [
+              "correct",
+              -1.1571221138077323
+            ],
+            [
+              "is that",
+              -1.1342037923649957
+            ],
+            [
+              "this",
+              -0.9863665756442915
+            ],
+            [
+              "as",
+              -0.9858286845382993
+            ],
+            [
+              "40",
+              -0.9762136212014159
+            ],
+            [
+              "that",
+              -0.9739777261048569
+            ],
+            [
+              "does this",
+              -0.9685062033339137
+            ],
+            [
+              "2x",
+              -0.9684593949035295
+            ],
+            [
+              "is",
+              -0.9635062835754338
+            ],
+            [
+              "is this",
+              -0.9180318945297777
+            ],
+            [
+              "wrote down",
+              -0.9174162572675503
+            ],
+            [
+              "my",
+              -0.8621976765873027
+            ],
+            [
+              "2a",
+              -0.8404854728408034
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              2.0498333330101848
+            ],
+            [
+              "52",
+              1.2387227015585998
+            ],
+            [
+              "you",
+              1.0221643960179119
+            ],
+            [
+              "yields",
+              1.014420947898049
+            ],
+            [
+              "should",
+              0.9616262183386608
+            ],
+            [
+              "into",
+              0.8420356701336037
+            ],
+            [
+              "be",
+              0.8163640420101866
+            ],
+            [
+              "12x",
+              0.8012111911183244
+            ],
+            [
+              "it",
+              0.754577590642499
+            ],
+            [
+              "discriminant",
+              0.7485567681400384
+            ],
+            [
+              "into the",
+              0.7089945910789919
+            ],
+            [
+              "if",
+              0.6891348504479393
+            ],
+            [
+              "form",
+              0.6659924733931566
+            ],
+            [
+              "no",
+              0.6653409021064027
+            ],
+            [
+              "or is",
+              0.6584223919035465
+            ]
+          ]
+        }
+      },
+      "tfidf_reference_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.7409429888135997,
+          "accuracy": 0.7894611555034933,
+          "majority_baseline": 0.6107035379101647,
+          "n_folds": 5
+        },
+        "merged": {
+          "balanced_accuracy": 0.76715334966878,
+          "accuracy": 0.8029606168590655,
+          "majority_baseline": 0.6104540172872758,
+          "n_folds": 5
+        }
+      }
+    },
+    "A": {
+      "file": "contrast_v1_ablA.jsonl",
+      "n_rows": 816,
+      "tfidf_specified_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.8230812800906259,
+          "accuracy": 0.8272058823529411,
+          "majority_baseline": 0.6066176470588235,
+          "n_train": 544,
+          "n_test": 272,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "3a",
+              -1.596460750266938
+            ],
+            [
+              "wrote",
+              -1.5313027942293425
+            ],
+            [
+              "ans is",
+              -1.4998327846946005
+            ],
+            [
+              "does this",
+              -1.3793499696884357
+            ],
+            [
+              "ans",
+              -1.3043907197793119
+            ],
+            [
+              "is that",
+              -1.079783049363741
+            ],
+            [
+              "this",
+              -1.0211485918043752
+            ],
+            [
+              "2x",
+              -0.9546697181737235
+            ],
+            [
+              "ans does",
+              -0.9310217850012593
+            ],
+            [
+              "as",
+              -0.9006459712440165
+            ],
+            [
+              "correct",
+              -0.8792348461777678
+            ],
+            [
+              "40",
+              -0.8617259415065291
+            ],
+            [
+              "that",
+              -0.8226887328641691
+            ],
+            [
+              "brackets",
+              -0.7475061796109135
+            ],
+            [
+              "right",
+              -0.7466781039418755
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.6912599899367013
+            ],
+            [
+              "52",
+              1.3071639206333554
+            ],
+            [
+              "yields",
+              1.0021109606636993
+            ],
+            [
+              "you",
+              0.982921650650659
+            ],
+            [
+              "49",
+              0.9561459261102458
+            ],
+            [
+              "into",
+              0.9440517136144911
+            ],
+            [
+              "12",
+              0.9336379110765953
+            ],
+            [
+              "into the",
+              0.7945125438515606
+            ],
+            [
+              "discriminant",
+              0.794224399160189
+            ],
+            [
+              "verification",
+              0.7608098555872876
+            ],
+            [
+              "should",
+              0.758060235956566
+            ],
+            [
+              "x² 6x",
+              0.7406973744588724
+            ],
+            [
+              "it",
+              0.7227116829939169
+            ],
+            [
+              "or is",
+              0.7003557729418592
+            ],
+            [
+              "x²",
+              0.6940919929171455
+            ]
+          ]
+        },
+        "merged": {
+          "balanced_accuracy": 0.7988063529643878,
+          "accuracy": 0.8372881355932204,
+          "majority_baseline": 0.6305084745762712,
+          "n_train": 521,
+          "n_test": 295,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "3a",
+              -1.617790147222578
+            ],
+            [
+              "wrote",
+              -1.5746570728675326
+            ],
+            [
+              "ans is",
+              -1.3719085913979006
+            ],
+            [
+              "ans as",
+              -1.206611181739043
+            ],
+            [
+              "is that",
+              -1.1034063893760677
+            ],
+            [
+              "correct",
+              -1.0646278097857216
+            ],
+            [
+              "this",
+              -0.9910088812955378
+            ],
+            [
+              "does this",
+              -0.9684162056704317
+            ],
+            [
+              "that",
+              -0.953304606872241
+            ],
+            [
+              "40",
+              -0.9358582575067655
+            ],
+            [
+              "as",
+              -0.9295739572016755
+            ],
+            [
+              "is",
+              -0.8826568925456602
+            ],
+            [
+              "is this",
+              -0.8809722735903575
+            ],
+            [
+              "wrote down",
+              -0.8783196823107813
+            ],
+            [
+              "2x",
+              -0.8744801495926087
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.9233255411660826
+            ],
+            [
+              "52",
+              1.2419577712703227
+            ],
+            [
+              "49",
+              1.101508082586233
+            ],
+            [
+              "you",
+              0.9893011367230824
+            ],
+            [
+              "yields",
+              0.9591104581747016
+            ],
+            [
+              "should",
+              0.9309677730678063
+            ],
+            [
+              "or ans",
+              0.8185563898272639
+            ],
+            [
+              "into",
+              0.8152397455832859
+            ],
+            [
+              "ans or",
+              0.8088879404481658
+            ],
+            [
+              "12x",
+              0.808152881073027
+            ],
+            [
+              "be",
+              0.7866973821725664
+            ],
+            [
+              "or is",
+              0.7684673233947804
+            ],
+            [
+              "it",
+              0.7366591204536709
+            ],
+            [
+              "discriminant",
+              0.7273169309496216
+            ],
+            [
+              "ans ans",
+              0.7268933544121438
+            ]
+          ]
+        }
+      },
+      "tfidf_reference_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.7407357694536252,
+          "accuracy": 0.7894228060633951,
+          "majority_baseline": 0.6107035379101647,
+          "n_folds": 5
+        },
+        "merged": {
+          "balanced_accuracy": 0.7815061159742411,
+          "accuracy": 0.8140036540106369,
+          "majority_baseline": 0.6104540172872758,
+          "n_folds": 5
+        }
+      }
+    },
+    "B": {
+      "file": "contrast_v1_ablB.jsonl",
+      "n_rows": 816,
+      "tfidf_specified_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.8330501274426507,
+          "accuracy": 0.8492647058823529,
+          "majority_baseline": 0.6066176470588235,
+          "n_train": 544,
+          "n_test": 272,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "3a",
+              -1.6881817437362303
+            ],
+            [
+              "is that",
+              -1.6146779216777862
+            ],
+            [
+              "3x",
+              -1.449300689866435
+            ],
+            [
+              "does this",
+              -1.3539713742563086
+            ],
+            [
+              "that",
+              -1.2512794505136828
+            ],
+            [
+              "this",
+              -1.2107217197533984
+            ],
+            [
+              "40",
+              -1.1761804822764794
+            ],
+            [
+              "right",
+              -1.1045367632313434
+            ],
+            [
+              "is",
+              -1.0955864033796172
+            ],
+            [
+              "that like",
+              -1.0412014644641372
+            ],
+            [
+              "25",
+              -0.9659070923435477
+            ],
+            [
+              "2x",
+              -0.940702991213424
+            ],
+            [
+              "10x 25",
+              -0.9154981183018882
+            ],
+            [
+              "x² 10x",
+              -0.9154981183018882
+            ],
+            [
+              "correct",
+              -0.8753920500641368
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.6199888420912785
+            ],
+            [
+              "therefore",
+              1.227995728325387
+            ],
+            [
+              "52",
+              1.2009171102246217
+            ],
+            [
+              "you",
+              0.9231340382206428
+            ],
+            [
+              "one",
+              0.8419090719621519
+            ],
+            [
+              "be",
+              0.7653376692610541
+            ],
+            [
+              "should",
+              0.7378566747559064
+            ],
+            [
+              "or is",
+              0.7330708195548589
+            ],
+            [
+              "empty",
+              0.7077669441300587
+            ],
+            [
+              "it",
+              0.7057294967286843
+            ],
+            [
+              "two",
+              0.681503955248606
+            ],
+            [
+              "the first",
+              0.6633364925750794
+            ],
+            [
+              "5v",
+              0.618176944362976
+            ],
+            [
+              "6d",
+              0.612206740964887
+            ],
+            [
+              "katie",
+              0.5867446839533853
+            ]
+          ]
+        },
+        "merged": {
+          "balanced_accuracy": 0.7553270198283516,
+          "accuracy": 0.7728813559322034,
+          "majority_baseline": 0.6305084745762712,
+          "n_train": 521,
+          "n_test": 295,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "is that",
+              -1.6311412670224987
+            ],
+            [
+              "3a",
+              -1.5263036978925932
+            ],
+            [
+              "is",
+              -1.2900742416074713
+            ],
+            [
+              "is this",
+              -1.241468714561035
+            ],
+            [
+              "correct",
+              -1.1292840491760114
+            ],
+            [
+              "this",
+              -1.1210579982041466
+            ],
+            [
+              "that",
+              -1.0852767661638953
+            ],
+            [
+              "40",
+              -1.0747765572402144
+            ],
+            [
+              "that like",
+              -1.0229790976641007
+            ],
+            [
+              "right",
+              -0.9789379492636199
+            ],
+            [
+              "3x",
+              -0.8757497070720965
+            ],
+            [
+              "value",
+              -0.8588863381920853
+            ],
+            [
+              "this correct",
+              -0.836946110790308
+            ],
+            [
+              "does this",
+              -0.8271042911477959
+            ],
+            [
+              "that right",
+              -0.8252141993952032
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              2.181839713779882
+            ],
+            [
+              "52",
+              1.1729196798298949
+            ],
+            [
+              "you",
+              0.9870113684363456
+            ],
+            [
+              "should",
+              0.9579920379511421
+            ],
+            [
+              "be",
+              0.8883384128662382
+            ],
+            [
+              "two",
+              0.8388675288356784
+            ],
+            [
+              "one",
+              0.7937483552120187
+            ],
+            [
+              "if",
+              0.7398182445528758
+            ],
+            [
+              "final",
+              0.7211149974580593
+            ],
+            [
+              "no",
+              0.6668295652483557
+            ],
+            [
+              "can",
+              0.6300265524821217
+            ],
+            [
+              "solution",
+              0.6278775137274917
+            ],
+            [
+              "no solution",
+              0.6276252893303288
+            ],
+            [
+              "gives",
+              0.6244508413517131
+            ],
+            [
+              "trapezium",
+              0.6026283530165355
+            ]
+          ]
+        }
+      },
+      "tfidf_reference_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.6728826870695118,
+          "accuracy": 0.7283265698866251,
+          "majority_baseline": 0.6107035379101647,
+          "n_folds": 5
+        },
+        "merged": {
+          "balanced_accuracy": 0.6869428098162342,
+          "accuracy": 0.7331632869839264,
+          "majority_baseline": 0.6104540172872758,
+          "n_folds": 5
+        }
+      }
+    },
+    "AB": {
+      "file": "contrast_v1_ablAB.jsonl",
+      "n_rows": 816,
+      "tfidf_specified_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.7836873406966864,
+          "accuracy": 0.7794117647058824,
+          "majority_baseline": 0.6066176470588235,
+          "n_train": 544,
+          "n_test": 272,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "is that",
+              -1.6120938436823502
+            ],
+            [
+              "3a",
+              -1.5695265407457422
+            ],
+            [
+              "ans is",
+              -1.5490320737703516
+            ],
+            [
+              "ans",
+              -1.4659154007525457
+            ],
+            [
+              "does this",
+              -1.3975827065304836
+            ],
+            [
+              "that",
+              -1.2626563123056975
+            ],
+            [
+              "this",
+              -1.2503975789413264
+            ],
+            [
+              "right",
+              -1.119367881128805
+            ],
+            [
+              "40",
+              -1.0604796367031517
+            ],
+            [
+              "that like",
+              -1.0367455658722675
+            ],
+            [
+              "is",
+              -1.020650911789772
+            ],
+            [
+              "25",
+              -0.9998340807969973
+            ],
+            [
+              "10x 25",
+              -0.9269272913304991
+            ],
+            [
+              "x² 10x",
+              -0.9269272913304991
+            ],
+            [
+              "3x",
+              -0.8725731720479786
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.602361345028163
+            ],
+            [
+              "52",
+              1.201715235920467
+            ],
+            [
+              "therefore",
+              1.0459615912002562
+            ],
+            [
+              "therefore ans",
+              0.9932926220080771
+            ],
+            [
+              "you",
+              0.8810094362879807
+            ],
+            [
+              "one",
+              0.781615718250105
+            ],
+            [
+              "be",
+              0.7559383814724678
+            ],
+            [
+              "or is",
+              0.742674767302055
+            ],
+            [
+              "should",
+              0.7344549728689603
+            ],
+            [
+              "it",
+              0.6902928079730752
+            ],
+            [
+              "empty",
+              0.6873892519268315
+            ],
+            [
+              "two",
+              0.6615406642007507
+            ],
+            [
+              "6d",
+              0.6567777730925745
+            ],
+            [
+              "49",
+              0.6511272117974415
+            ],
+            [
+              "the first",
+              0.6461408035825845
+            ]
+          ]
+        },
+        "merged": {
+          "balanced_accuracy": 0.7496300680674757,
+          "accuracy": 0.7728813559322034,
+          "majority_baseline": 0.6305084745762712,
+          "n_train": 521,
+          "n_test": 295,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "ans is",
+              -1.6504589841299715
+            ],
+            [
+              "is that",
+              -1.6061147863925815
+            ],
+            [
+              "3a",
+              -1.4310091444759079
+            ],
+            [
+              "is",
+              -1.2332523788844296
+            ],
+            [
+              "is this",
+              -1.174486070512208
+            ],
+            [
+              "this",
+              -1.111846040633793
+            ],
+            [
+              "that",
+              -1.0857244388806535
+            ],
+            [
+              "40",
+              -1.0574748154687734
+            ],
+            [
+              "correct",
+              -1.011706709612297
+            ],
+            [
+              "that like",
+              -1.0091952794395833
+            ],
+            [
+              "right",
+              -1.0012748191546166
+            ],
+            [
+              "does this",
+              -0.8399437100035919
+            ],
+            [
+              "ans does",
+              -0.8170581259092671
+            ],
+            [
+              "that right",
+              -0.8127939403581644
+            ],
+            [
+              "value",
+              -0.7987378296482672
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.9667617493972447
+            ],
+            [
+              "52",
+              1.1637571212129585
+            ],
+            [
+              "you",
+              0.9739198609556617
+            ],
+            [
+              "or ans",
+              0.9355991625152608
+            ],
+            [
+              "should",
+              0.920486434885965
+            ],
+            [
+              "ans or",
+              0.8987687997596234
+            ],
+            [
+              "be",
+              0.8508534022477705
+            ],
+            [
+              "ans ans",
+              0.8162118403055373
+            ],
+            [
+              "two",
+              0.8054401796575782
+            ],
+            [
+              "one",
+              0.7908965243915845
+            ],
+            [
+              "49",
+              0.7678824586476958
+            ],
+            [
+              "or is",
+              0.7304556764244021
+            ],
+            [
+              "final",
+              0.7139719305255217
+            ],
+            [
+              "if",
+              0.6689236844936098
+            ],
+            [
+              "solution",
+              0.660544086180679
+            ]
+          ]
+        }
+      },
+      "tfidf_reference_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.6927208419101474,
+          "accuracy": 0.7442569273034069,
+          "majority_baseline": 0.6107035379101647,
+          "n_folds": 5
+        },
+        "merged": {
+          "balanced_accuracy": 0.7117635348569136,
+          "accuracy": 0.7528028552269163,
+          "majority_baseline": 0.6104540172872758,
+          "n_folds": 5
+        }
+      }
+    },
+    "CTRL": {
+      "file": "contrast_v1_ablCTRL.jsonl",
+      "n_rows": 816,
+      "tfidf_specified_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.8344378363069952,
+          "accuracy": 0.8529411764705882,
+          "majority_baseline": 0.6066176470588235,
+          "n_train": 544,
+          "n_test": 272,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "wrote",
+              -1.7380368784400613
+            ],
+            [
+              "3a",
+              -1.5426189734494904
+            ],
+            [
+              "does this",
+              -1.2200832837733102
+            ],
+            [
+              "2x",
+              -1.077713659233123
+            ],
+            [
+              "correct",
+              -1.0449707242958832
+            ],
+            [
+              "as",
+              -0.9998298327114374
+            ],
+            [
+              "this",
+              -0.8762198363625109
+            ],
+            [
+              "circled",
+              -0.8739834857274141
+            ],
+            [
+              "wrote down",
+              -0.8595124627672002
+            ],
+            [
+              "so wrote",
+              -0.7914678540400657
+            ],
+            [
+              "satisfy the",
+              -0.7820941293214019
+            ],
+            [
+              "satisfy",
+              -0.7820941293214019
+            ],
+            [
+              "3x",
+              -0.7590895190242097
+            ],
+            [
+              "on",
+              -0.7529581365720684
+            ],
+            [
+              "square",
+              -0.7173210279962362
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.6799922631062711
+            ],
+            [
+              "yields",
+              1.2502983592408297
+            ],
+            [
+              "you",
+              1.1646886942071155
+            ],
+            [
+              "into",
+              1.133630743789998
+            ],
+            [
+              "52",
+              1.1302396138914026
+            ],
+            [
+              "x²",
+              1.121395174999379
+            ],
+            [
+              "verification",
+              1.087160304800935
+            ],
+            [
+              "into the",
+              0.9775858737527625
+            ],
+            [
+              "discriminant",
+              0.9437381222190536
+            ],
+            [
+              "it",
+              0.8009718971079084
+            ],
+            [
+              "by yields",
+              0.7830901595598594
+            ],
+            [
+              "quadratic",
+              0.7397005763964026
+            ],
+            [
+              "factoring",
+              0.71516086518327
+            ],
+            [
+              "x² 6x",
+              0.7109980180408049
+            ],
+            [
+              "4v",
+              0.7055295976762871
+            ]
+          ]
+        },
+        "merged": {
+          "balanced_accuracy": 0.7723932129821446,
+          "accuracy": 0.8135593220338984,
+          "majority_baseline": 0.6305084745762712,
+          "n_train": 521,
+          "n_test": 295,
+          "n_features": 5000,
+          "top_coef_gap": [
+            [
+              "wrote",
+              -1.8629292594325253
+            ],
+            [
+              "3a",
+              -1.4787719275050222
+            ],
+            [
+              "correct",
+              -1.1617114822789292
+            ],
+            [
+              "as",
+              -1.1529782325728306
+            ],
+            [
+              "wrote down",
+              -1.0600190925437651
+            ],
+            [
+              "2x",
+              -1.0330957450845593
+            ],
+            [
+              "down",
+              -0.9590114203524959
+            ],
+            [
+              "does this",
+              -0.9344447133341078
+            ],
+            [
+              "my",
+              -0.9232020887770899
+            ],
+            [
+              "so wrote",
+              -0.8825797553870028
+            ],
+            [
+              "this",
+              -0.851711720601082
+            ],
+            [
+              "2a",
+              -0.8473706549637239
+            ],
+            [
+              "on",
+              -0.796620066817799
+            ],
+            [
+              "and",
+              -0.7571849322378364
+            ],
+            [
+              "is this",
+              -0.7015831195149942
+            ]
+          ],
+          "top_coef_knows": [
+            [
+              "or",
+              1.9047646608977404
+            ],
+            [
+              "yields",
+              1.192968023370275
+            ],
+            [
+              "52",
+              1.0710376672781279
+            ],
+            [
+              "you",
+              1.069313674833073
+            ],
+            [
+              "it",
+              1.0013589531298797
+            ],
+            [
+              "into",
+              0.9168184502936907
+            ],
+            [
+              "like",
+              0.8965251784977668
+            ],
+            [
+              "discriminant",
+              0.8942768130568827
+            ],
+            [
+              "into the",
+              0.8107168551853562
+            ],
+            [
+              "12x",
+              0.8026259720364722
+            ],
+            [
+              "by yields",
+              0.692938526070187
+            ],
+            [
+              "4ac 40",
+              0.6925510560241946
+            ],
+            [
+              "verification",
+              0.6486067092206628
+            ],
+            [
+              "equation",
+              0.6232607808677583
+            ],
+            [
+              "be",
+              0.6158262459543068
+            ]
+          ]
+        }
+      },
+      "tfidf_reference_pipeline": {
+        "qid": {
+          "balanced_accuracy": 0.7414417660090207,
+          "accuracy": 0.7860918434227223,
+          "majority_baseline": 0.6107035379101647,
+          "n_folds": 5
+        },
+        "merged": {
+          "balanced_accuracy": 0.7445254773660126,
+          "accuracy": 0.783343493625802,
+          "majority_baseline": 0.6104540172872758,
+          "n_folds": 5
+        }
+      }
+    }
+  }
+}

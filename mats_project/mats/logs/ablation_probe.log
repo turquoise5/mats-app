@@ -1,0 +1,55 @@
+
+==============================================================================
+ACT 1 ABLATIONS — PER-LAYER PROBES, CONTROL TASKS, REFERENCE CHECK
+==============================================================================
+[probe] labels: gap=318 knows=498  groups: 35 unique eedi_question_id
+[probe] split: n_train=637 n_test=179 (groups grouped by eedi_question_id, test_size=0.2, seed=0)
+
+[probe] === position=natural ===
+  [probe] variant=orig acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+    [reference check] Act-1 pipeline best_acc=0.899 @L19 vs expected ~0.899 (diff +0.000) -> PASS
+    balanced_acc=0.910@L21 majority=0.587 tfidf=0.885 ctrl_max=0.582 thresh=0.697 CLEAN
+  [probe] variant=A acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+    balanced_acc=0.904@L29 majority=0.587 tfidf=0.823 ctrl_max=0.577 thresh=0.697 CLEAN
+  [probe] variant=B acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+  [control_task] 32 of 816 samples share an input with another sample — the control task will expose it if it leaks.
+    balanced_acc=0.852@L28 majority=0.587 tfidf=0.833 ctrl_max=0.562 thresh=0.697 CLEAN
+  [probe] variant=AB acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+  [control_task] 32 of 816 samples share an input with another sample — the control task will expose it if it leaks.
+    balanced_acc=0.866@L24 majority=0.587 tfidf=0.784 ctrl_max=0.551 thresh=0.697 CLEAN
+  [probe] variant=CTRL acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+  [control_task] 19 of 816 samples share an input with another sample — the control task will expose it if it leaks.
+    balanced_acc=0.848@L25 majority=0.587 tfidf=0.834 ctrl_max=0.547 thresh=0.697 CLEAN
+
+[probe] === position=elicited ===
+  [probe] variant=orig acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+    [reference check] Act-1 pipeline best_acc=0.888 @L22 vs expected ~0.888 (diff +0.000) -> PASS
+    balanced_acc=0.897@L24 majority=0.587 tfidf=0.885 ctrl_max=0.577 thresh=0.697 CLEAN
+  [probe] variant=A acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+    balanced_acc=0.871@L25 majority=0.587 tfidf=0.823 ctrl_max=0.577 thresh=0.697 CLEAN
+  [probe] variant=B acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+  [control_task] 32 of 816 samples share an input with another sample — the control task will expose it if it leaks.
+    balanced_acc=0.847@L24 majority=0.587 tfidf=0.833 ctrl_max=0.534 thresh=0.697 CLEAN
+  [probe] variant=AB acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+  [control_task] 32 of 816 samples share an input with another sample — the control task will expose it if it leaks.
+    balanced_acc=0.835@L29 majority=0.587 tfidf=0.784 ctrl_max=0.528 thresh=0.697 CLEAN
+  [probe] variant=CTRL acts=(816, 37, 4096) labels gap=318 knows=498 n_train=637 n_test=179
+  [control_task] 19 of 816 samples share an input with another sample — the control task will expose it if it leaks.
+    balanced_acc=0.861@L17 majority=0.587 tfidf=0.834 ctrl_max=0.620 thresh=0.697 CLEAN
+
+==============================================================================
+SUMMARY: variant | natural | elicited | TF-IDF | delta vs orig | delta vs CTRL
+==============================================================================
+variant  natural  elicited  tfidf(qid)  d_nat_orig  d_eli_orig  d_nat_ctrl  d_eli_ctrl
+orig      0.910     0.897       0.885      +0.000      +0.000      +0.062      +0.035
+A         0.904     0.871       0.823      -0.007      -0.026      +0.055      +0.010
+B         0.852     0.847       0.833      -0.058      -0.050      +0.004      -0.015
+AB        0.866     0.835       0.784      -0.045      -0.062      +0.018      -0.026
+CTRL      0.848     0.861       0.834      -0.062      -0.035      +0.000      +0.000
+
+[probe] wrote /workspace/mats_project/mats/results/ablation_probe_results.json
+[log_run] 1/ablation_probe/orig -> /workspace/mats_project/mats/results/runs.jsonl (2c64e3f768a0)
+[log_run] 1/ablation_probe/A -> /workspace/mats_project/mats/results/runs.jsonl (334c6e0d6028)
+[log_run] 1/ablation_probe/B -> /workspace/mats_project/mats/results/runs.jsonl (8b8f9b21fc4e)
+[log_run] 1/ablation_probe/AB -> /workspace/mats_project/mats/results/runs.jsonl (cd71af48057b)
+[log_run] 1/ablation_probe/CTRL -> /workspace/mats_project/mats/results/runs.jsonl (665a5de926d5)
