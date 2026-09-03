@@ -53,6 +53,19 @@ ALPHA_FRACS = [-2.0, -1.0, -0.5, -0.25, -0.1, 0.0, 0.1, 0.25, 0.5, 1.0, 2.0]
 # there too would be a real specificity failure, not a magnitude artifact.
 CONTROL_FRACS = [0.1, 0.2]
 
+# -- correction_items: qualitative check, real generations not just the just-ask readout
+# Three real "gap" (misconception) demonstrated rows, one per concept, each already in
+# Act 2's "correction" shape by construction: the user asserts a specific wrong step and
+# asks for confirmation. Expert register (cleaner phrasing to read), all from the
+# merged-split test set (te), one per concept including quad_formula as named.
+CORRECTION_ITEM_IDS = [
+    "quad_formula__demonstrated__gap__46__expert",     # sign error substituting -b
+    "quad_factor_ab__demonstrated__gap__40__expert",   # (t-3)(t-3) instead of (t-3)(t+3)
+    "linear_both_int__demonstrated__gap__9__expert",   # 5/15 "simplified" to 1/5, not 1/3
+]
+CORRECTION_ALPHA_FRACS = [0.0, 0.15, 0.25]
+CORRECTION_VECTORS = ["probe", "random", "dom"]
+
 
 def step_steer_d0(batch_size: int = 8, max_new_tokens: int = 12):
     import torch
@@ -212,6 +225,108 @@ def step_steer_d0(batch_size: int = 8, max_new_tokens: int = 12):
     return out
 
 
+def step_correction_items(max_new_tokens: int = 200):
+    """3 real correction items x {alpha 0, +0.15, +0.25} x {probe, random, dom} = 27
+    greedy generations, saved verbatim. Each item is a real gap-labelled demonstrated
+    row -- the user already asserts a specific wrong step and asks for confirmation, so
+    this is Act 2's "correction" readout shape without inventing new items. Direct
+    continuation of the real conversation (no just-ask suffix) -- read the model's
+    actual reply for whether it corrects the error or affirms it."""
+    import torch  # noqa: F401
+
+    from run_ablation_probes import fit_layer_probes_balanced
+    from src import model as M
+    from src import steering as S
+
+    C.banner("CORRECTION ITEMS -- 3 items x 3 alphas x 3 vectors, greedy, saved verbatim")
+
+    orig_rows = load_variant_rows("orig")
+    labels = np.array([1 if r["knowledge_state"] == "knows" else 0 for r in orig_rows])
+    tr, te = merged_split(orig_rows, labels)
+
+    id_to_row = {r["id"]: r for r in orig_rows}
+    items = [id_to_row[i] for i in CORRECTION_ITEM_IDS]
+    for it in items:
+        assert it["knowledge_state"] == "gap", f"{it['id']} is not a gap row"
+    print("[correction_items] items:")
+    for it in items:
+        print(f"  {it['id']}  ({it['eedi_misconception']})")
+        print(f"    {it['turns'][-1]['content']!r}")
+
+    acts = np.load(C.CACHE / f"{CACHE_PREFIX}_orig_natural.npy")
+    d0_sweep = fit_layer_probes_balanced(acts, labels, tr, te, seed=C.SEED)
+    layer = d0_sweep["best_layer"]
+    mean_norm = float(np.linalg.norm(acts[:, layer, :], axis=1).mean())
+    print(f"[correction_items] layer={layer} (D0 best layer, matches persist/orig_merged) "
+          f"mean_norm={mean_norm:.2f}")
+
+    X = acts[:, layer, :]
+    frozen_probe = _balanced_probe(C.SEED)
+    frozen_probe.fit(X[tr], labels[tr])
+    probe_vec = S.probe_direction(frozen_probe)
+    dom_vec = S.diff_of_means_direction(X[tr], labels[tr])
+    rand_vec = S.random_direction(X.shape[1], seed=C.SEED)
+    vectors = {"probe": probe_vec, "random": rand_vec, "dom": dom_vec}
+
+    mdl, tok = M.load()
+    M.assert_template_sane(tok)
+    texts = [M.render_chat(tok, it["turns"]) for it in items]
+
+    out = {
+        "layer": layer, "mean_layer_norm": mean_norm,
+        "items": [{"id": it["id"], "concept": it["concept_slug"],
+                   "misconception": it["eedi_misconception"],
+                   "prompt_tail": it["turns"][-1]["content"]} for it in items],
+        "grid": {},
+    }
+    lines = []
+
+    for frac in CORRECTION_ALPHA_FRACS:
+        alpha = frac * mean_norm
+        for vname in CORRECTION_VECTORS:
+            h = S.register_steering(mdl, layer, vectors[vname], alpha=alpha) if frac != 0.0 else None
+            try:
+                gens = M.greedy_generate(mdl, tok, texts, max_new_tokens=max_new_tokens,
+                                          batch_size=len(texts))
+            finally:
+                if h is not None:
+                    h.remove()
+            key = f"alpha={frac:+.2f}/vector={vname}"
+            out["grid"][key] = {
+                "alpha_frac": frac, "alpha": alpha, "vector": vname,
+                "generations": {it["id"]: g for it, g in zip(items, gens)},
+            }
+            print(f"\n=== {key} (alpha={alpha:+.2f}) ===")
+            lines.append(f"=== {key} (alpha={alpha:+.2f}) ===")
+            for it, g in zip(items, gens):
+                print(f"  [{it['id']}] {g!r}")
+                lines.append(f"--- {it['id']} ---\n{g}\n")
+            C.log_run(
+                act="2", experiment="correction_items",
+                config={"alpha_frac": frac, "alpha": alpha, "vector": vname, "layer": layer,
+                        "item_ids": CORRECTION_ITEM_IDS, "seed": C.SEED},
+                metrics={"n_items": len(items)},
+            )
+
+    # sanity: alpha=0 must not depend on which vector label was passed (v * 0 == 0)
+    C.banner("SANITY: alpha=0 identical across vector labels")
+    for it in items:
+        g0 = [out["grid"][f"alpha=+0.00/vector={v}"]["generations"][it["id"]]
+              for v in CORRECTION_VECTORS]
+        identical = len(set(g0)) == 1
+        print(f"  {it['id']}: {'OK' if identical else '*** MISMATCH -- hook is not a true no-op ***'}")
+
+    path = C.RESULTS / "correction_items_results.json"
+    with open(path, "w") as f:
+        json.dump(out, f, indent=2)
+    samples_path = C.RESULTS / "correction_items_samples.txt"
+    with open(samples_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print(f"\n[correction_items] wrote {path}")
+    print(f"[correction_items] wrote {samples_path}")
+    return out
+
+
 def step_plot():
     import matplotlib
     matplotlib.use("Agg")
@@ -261,7 +376,8 @@ def step_plot():
     print(f"[plot] wrote {FIG_PATH}")
 
 
-STEPS = {"steer_d0": step_steer_d0, "plot": step_plot}
+STEPS = {"steer_d0": step_steer_d0, "plot": step_plot,
+         "correction_items": step_correction_items}
 
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "steer_d0"

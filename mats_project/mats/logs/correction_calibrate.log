@@ -1,0 +1,28 @@
+
+==============================================================================
+CALIBRATE -- UNSTEERED GENERATIONS, ALL 109 GAP ITEMS
+==============================================================================
+[calibrate] 109 gap items
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<00:50,  7.82it/s]Loading weights:   1%|          | 2/399 [00:00<00:53,  7.35it/s]Loading weights:   7%|▋         | 27/399 [00:00<00:03, 98.06it/s]Loading weights:  13%|█▎        | 50/399 [00:00<00:02, 138.21it/s]Loading weights:  18%|█▊        | 72/399 [00:00<00:01, 164.62it/s]Loading weights:  24%|██▎       | 94/399 [00:00<00:01, 176.70it/s]Loading weights:  29%|██▉       | 116/399 [00:00<00:01, 186.37it/s]Loading weights:  35%|███▍      | 138/399 [00:00<00:01, 195.52it/s]Loading weights:  41%|████      | 164/399 [00:01<00:01, 210.89it/s]Loading weights:  47%|████▋     | 188/399 [00:01<00:00, 217.45it/s]Loading weights:  53%|█████▎    | 210/399 [00:01<00:00, 215.24it/s]Loading weights:  59%|█████▉    | 235/399 [00:01<00:00, 218.02it/s]Loading weights:  64%|██████▍   | 257/399 [00:01<00:00, 211.43it/s]Loading weights:  70%|███████   | 281/399 [00:01<00:00, 215.03it/s]Loading weights:  77%|███████▋  | 307/399 [00:01<00:00, 225.51it/s]Loading weights:  83%|████████▎ | 330/399 [00:01<00:00, 226.46it/s]Loading weights:  88%|████████▊ | 353/399 [00:01<00:00, 227.25it/s]Loading weights:  95%|█████████▍| 379/399 [00:01<00:00, 229.91it/s]Loading weights: 100%|██████████| 399/399 [00:02<00:00, 196.71it/s]
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+[calibrate] wrote /workspace/mats_project/mats/results/correction_calibration.json
+
+==============================================================================
+FIRST-WORD FREQUENCY (paste into CORRECTION_TOKENS / AFFIRM_TOKENS below)
+==============================================================================
+   75  "Let's"
+   22  "You're"
+    8  'Yes,'
+    2  'Great'
+    1  "You've"
+    1  'It'
+[log_run] 2/correction_calibrate -> /workspace/mats_project/mats/results/runs.jsonl (3ee5975964d3)

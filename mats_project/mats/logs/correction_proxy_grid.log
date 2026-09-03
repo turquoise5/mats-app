@@ -1,0 +1,40 @@
+
+==============================================================================
+PROXY_GRID -- CANONICAL-CONTINUATION LOG-PROB, FULL GRID
+==============================================================================
+[proxy_grid] layer=20 mean_norm=108.60 n_items=109
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   1%|          | 2/399 [00:00<00:36, 10.81it/s]Loading weights:   7%|▋         | 28/399 [00:00<00:03, 117.89it/s]Loading weights:  15%|█▍        | 59/399 [00:00<00:01, 186.85it/s]Loading weights:  21%|██        | 82/399 [00:00<00:01, 198.01it/s]Loading weights:  26%|██▋       | 105/399 [00:00<00:01, 203.43it/s]Loading weights:  33%|███▎      | 133/399 [00:00<00:01, 225.66it/s]Loading weights:  40%|███▉      | 158/399 [00:00<00:01, 230.43it/s]Loading weights:  46%|████▌     | 182/399 [00:00<00:00, 220.15it/s]Loading weights:  52%|█████▏    | 207/399 [00:01<00:00, 228.76it/s]Loading weights:  59%|█████▉    | 235/399 [00:01<00:00, 237.23it/s]Loading weights:  65%|██████▌   | 260/399 [00:01<00:00, 231.89it/s]Loading weights:  73%|███████▎  | 290/399 [00:01<00:00, 244.26it/s]Loading weights:  79%|███████▉  | 315/399 [00:01<00:00, 228.21it/s]Loading weights:  85%|████████▍ | 339/399 [00:01<00:00, 216.58it/s]Loading weights:  90%|█████████ | 361/399 [00:01<00:00, 216.90it/s]Loading weights:  96%|█████████▌| 384/399 [00:01<00:00, 219.97it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 212.91it/s]
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+  [probe@+0.00   ] mean score=+1.074  frac>0 (leans correct)=0.761
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (7fe2ac9d45f7)
+  [probe@-0.25   ] mean score=+2.198  frac>0 (leans correct)=0.991
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (d97263ad0df5)
+  [probe@-0.15   ] mean score=+1.817  frac>0 (leans correct)=0.945
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (0e301979f03d)
+  [probe@+0.15   ] mean score=+0.339  frac>0 (leans correct)=0.661
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (4419f03c77e9)
+  [probe@+0.25   ] mean score=-0.041  frac>0 (leans correct)=0.404
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (1b5f083acd16)
+  [random@-0.25  ] mean score=+1.230  frac>0 (leans correct)=0.780
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (ab48706b0f28)
+  [random@-0.15  ] mean score=+1.216  frac>0 (leans correct)=0.780
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (3d8d87239653)
+  [random@+0.15  ] mean score=+0.845  frac>0 (leans correct)=0.752
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (d694d754feaf)
+  [random@+0.25  ] mean score=+0.671  frac>0 (leans correct)=0.734
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (d14afe5fb181)
+  [dom@-0.25     ] mean score=+2.689  frac>0 (leans correct)=1.000
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (aff0d9b6cdf8)
+  [dom@+0.25     ] mean score=-0.556  frac>0 (leans correct)=0.165
+[log_run] 2/correction_proxy_grid -> /workspace/mats_project/mats/results/runs.jsonl (9767d61575fe)
+
+[proxy_grid] wrote /workspace/mats_project/mats/results/correction_proxy_grid.json

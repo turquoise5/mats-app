@@ -1,0 +1,29 @@
+
+==============================================================================
+ANALYZE -- PROXY VALIDATION + CORRECTION-RATE DOSE-RESPONSE
+==============================================================================
+[analyze] validation: 75 labelled pairs, 53 binary (corrects/affirms), agreement=0.9433962264150944, confused_rate=0.013333333333333334
+
+[analyze] orig correction rate (proxy): 0.761
+  [probe@-0.25   ] rate=0.991  vs orig: diff=+0.229 CI=[+0.156,+0.312] McNemar p=0.0000
+  [probe@-0.15   ] rate=0.945  vs orig: diff=+0.183 CI=[+0.110,+0.257] McNemar p=0.0000
+  [probe@+0.15   ] rate=0.661  vs orig: diff=-0.101 CI=[-0.165,-0.046] McNemar p=0.0010
+  [probe@+0.25   ] rate=0.404  vs orig: diff=-0.359 CI=[-0.450,-0.266] McNemar p=0.0000
+  [random@-0.25  ] rate=0.780  vs orig: diff=+0.018 CI=[-0.018,+0.055] McNemar p=0.6250
+  [random@-0.15  ] rate=0.780  vs orig: diff=+0.018 CI=[-0.018,+0.055] McNemar p=0.6250
+  [random@+0.15  ] rate=0.752  vs orig: diff=-0.009 CI=[-0.028,+0.000] McNemar p=1.0000
+  [random@+0.25  ] rate=0.734  vs orig: diff=-0.028 CI=[-0.064,+0.000] McNemar p=0.2500
+  [dom@-0.25     ] rate=1.000  vs orig: diff=+0.238 CI=[+0.165,+0.321] McNemar p=0.0000
+  [dom@+0.25     ] rate=0.165  vs orig: diff=-0.597 CI=[-0.688,-0.505] McNemar p=0.0000
+
+[analyze] probe vs random at matched alpha:
+  alpha=-0.25  probe=0.991  random=0.780  diff=+0.211 CI=[+0.138,+0.294] McNemar p=0.0000
+[log_run] 2/correction_rate_probe_vs_random/-0.25 -> /workspace/mats_project/mats/results/runs.jsonl (37ffc1a4d302)
+  alpha=-0.15  probe=0.945  random=0.780  diff=+0.165 CI=[+0.101,+0.239] McNemar p=0.0000
+[log_run] 2/correction_rate_probe_vs_random/-0.15 -> /workspace/mats_project/mats/results/runs.jsonl (12e1724b566d)
+  alpha=+0.15  probe=0.661  random=0.752  diff=-0.092 CI=[-0.147,-0.046] McNemar p=0.0020
+[log_run] 2/correction_rate_probe_vs_random/+0.15 -> /workspace/mats_project/mats/results/runs.jsonl (0fe7a61dfbd0)
+  alpha=+0.25  probe=0.404  random=0.734  diff=-0.331 CI=[-0.422,-0.248] McNemar p=0.0000
+[log_run] 2/correction_rate_probe_vs_random/+0.25 -> /workspace/mats_project/mats/results/runs.jsonl (522e81c595f4)
+
+[analyze] wrote /workspace/mats_project/mats/results/correction_rate_analysis.json
