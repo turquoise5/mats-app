@@ -1,0 +1,72 @@
+
+==============================================================================
+STEER_D0 -- STEERING THE D0 DIRECTION ON D0'S OWN CONVERSATIONS
+==============================================================================
+[steer_d0] split: n_train=521 n_test=295 (merged groups, same as orig_merged / ablation_merged / persist)
+[steer_d0] D0 best layer (natural) = L20, balanced_acc=0.9298 -- matches persist_results.json
+[steer_d0] probe_vec norm=6.008  dom_vec norm=8.103  cos(probe, dom)=0.4177
+[steer_d0] layer 20 residual-stream norm: mean=108.60 std=1.74 -- alpha calibrated as (fraction) x this mean
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<00:44,  8.98it/s]Loading weights:   1%|          | 2/399 [00:00<00:43,  9.20it/s]Loading weights:   7%|▋         | 28/399 [00:00<00:03, 115.19it/s]Loading weights:  14%|█▍        | 56/399 [00:00<00:01, 176.57it/s]Loading weights:  20%|██        | 81/399 [00:00<00:01, 197.95it/s]Loading weights:  26%|██▌       | 104/399 [00:00<00:01, 203.74it/s]Loading weights:  32%|███▏      | 127/399 [00:00<00:01, 209.33it/s]Loading weights:  38%|███▊      | 153/399 [00:00<00:01, 224.19it/s]Loading weights:  45%|████▍     | 178/399 [00:00<00:00, 231.91it/s]Loading weights:  51%|█████     | 202/399 [00:01<00:00, 227.47it/s]Loading weights:  56%|█████▋    | 225/399 [00:01<00:00, 222.88it/s]Loading weights:  62%|██████▏   | 248/399 [00:01<00:00, 219.94it/s]Loading weights:  69%|██████▊   | 274/399 [00:01<00:00, 228.59it/s]Loading weights:  75%|███████▌  | 300/399 [00:01<00:00, 231.70it/s]Loading weights:  81%|████████  | 324/399 [00:01<00:00, 227.87it/s]Loading weights:  87%|████████▋ | 347/399 [00:01<00:00, 223.64it/s]Loading weights:  93%|█████████▎| 373/399 [00:01<00:00, 232.60it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 210.02it/s]
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+[steer_d0] 295 just-ask prompts (test split only, held out from the probe's training fold)
+
+==============================================================================
+VERIFY HOOK
+==============================================================================
+[verify] alpha=0 bit-identical to unhooked: True
+[verify] alpha=2172 (20x mean norm) sample outputs (expect garbage):
+    ' kra腻腻腻腻腻腻腻腻腻腻腻'
+    ' kra kra kra kra kra kra腻腻腻腻腻腻'
+    ' kra kra kra kra kra kra kra腻腻腻腻腻'
+    ' kra kra kra kra kra kra kra腻腻 kra kra kra'
+    ' kra kra kra kra kra kra kra kra kra kra kra kra'
+
+==============================================================================
+DOSE-RESPONSE -- PROBE DIRECTION
+==============================================================================
+  [probe frac=-2.0] alpha= -217.21  P(yes|knows)=None  P(yes|gap)=None  n_ambiguous=295/295 *** >10% unparseable -- likely outside usable range ***
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (9432f79c5375)
+  [probe frac=-1.0] alpha= -108.60  P(yes|knows)=0.0  P(yes|gap)=0.0  n_ambiguous=1/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (843e9c1f5876)
+  [probe frac=-0.5] alpha=  -54.30  P(yes|knows)=0.0  P(yes|gap)=0.0  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (3c09b37cd7a4)
+  [probe frac=-0.2] alpha=  -27.15  P(yes|knows)=0.026881720430107527  P(yes|gap)=0.009174311926605505  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (0092672a84d0)
+  [probe frac=-0.1] alpha=  -10.86  P(yes|knows)=0.6182795698924731  P(yes|gap)=0.1559633027522936  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (ba3a9009b907)
+  [probe frac=+0.0] alpha=   +0.00  P(yes|knows)=0.8440860215053764  P(yes|gap)=0.3211009174311927  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (41e737c17c86)
+  [probe frac=+0.1] alpha=  +10.86  P(yes|knows)=0.9408602150537635  P(yes|gap)=0.4954128440366973  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (65a3d484f993)
+  [probe frac=+0.2] alpha=  +27.15  P(yes|knows)=0.989247311827957  P(yes|gap)=0.8073394495412844  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (13aecd4bc89f)
+  [probe frac=+0.5] alpha=  +54.30  P(yes|knows)=1.0  P(yes|gap)=1.0  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (3691074e2250)
+  [probe frac=+1.0] alpha= +108.60  P(yes|knows)=1.0  P(yes|gap)=1.0  n_ambiguous=0/295 
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (8ade6c164b86)
+  [probe frac=+2.0] alpha= +217.21  P(yes|knows)=None  P(yes|gap)=None  n_ambiguous=295/295 *** >10% unparseable -- likely outside usable range ***
+[log_run] 2/steer_d0/probe_direction -> /workspace/mats_project/mats/results/runs.jsonl (34feb3308e5c)
+
+==============================================================================
+CONTROLS -- RANDOM DIRECTION AND DIFF-OF-MEANS, MATCHED TO PROBE'S NON-SATURATED RANGE
+==============================================================================
+  [random_direction@+0.1] alpha=  +10.86  P(yes|knows)=0.8924731182795699  P(yes|gap)=0.3944954128440367  n_ambiguous=0/295 
+[log_run] 2/steer_d0/random_direction -> /workspace/mats_project/mats/results/runs.jsonl (9227b4cd8771)
+  [diff_of_means@+0.1] alpha=  +10.86  P(yes|knows)=0.9946236559139785  P(yes|gap)=0.8165137614678899  n_ambiguous=0/295 
+[log_run] 2/steer_d0/diff_of_means -> /workspace/mats_project/mats/results/runs.jsonl (66fb46859002)
+  [random_direction@+0.2] alpha=  +21.72  P(yes|knows)=0.9301075268817204  P(yes|gap)=0.48623853211009177  n_ambiguous=0/295 
+[log_run] 2/steer_d0/random_direction -> /workspace/mats_project/mats/results/runs.jsonl (b04dac05dfaa)
+  [diff_of_means@+0.2] alpha=  +21.72  P(yes|knows)=1.0  P(yes|gap)=0.981651376146789  n_ambiguous=0/295 
+[log_run] 2/steer_d0/diff_of_means -> /workspace/mats_project/mats/results/runs.jsonl (b6737e7594ea)
+
+[steer_d0] wrote /workspace/mats_project/mats/results/steering_d0_samples.txt
+[steer_d0] wrote /workspace/mats_project/mats/results/steering_d0_results.json

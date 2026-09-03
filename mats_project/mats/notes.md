@@ -531,3 +531,122 @@ content-vs-neutral McNemar comparison, all per position); `results/
 persist_content_samples.txt`; `runs.jsonl` entries `persist_content/{natural,elicited}`
 and `persist_content_vs_persist/{natural,elicited}`, plus 4 `extract_persist_content`
 entries; logs: `logs/extract_persist_content.log`, `logs/persist_content.log`.
+
+---
+
+## Act 2 (preliminary): steering the D0 direction on D0
+
+**First causal check, not the full act2_causal.md protocol.** No omission proxy, no
+MMLU/perplexity suite, no LLM judge, one seed for the random-direction control. What it
+does have, per Task 2.2's mandatory gate: a verified hook (alpha=0 bit-identical to
+unhooked; huge alpha produces garbage) and the one control Act 2 calls essential (a
+norm-matched random direction) — run at the magnitudes where it actually matters, after
+an early miscalibration (below).
+
+**Setup.** Vector: the same merged-split D0 probe used throughout `persist`
+(`StandardScaler` + `LogisticRegression(class_weight="balanced")`), natural position,
+layer 20 (D0's own best layer, reproduces `balanced_acc=0.9298` from `orig_merged`/
+`persist`), unscaled back to raw activation space and unit-normalised. Hook: `model.
+model.layers[20]`, adds `alpha * unit_vector` to every position, every forward call
+(fires per generated token automatically). Readout: Act 1's already-validated "just ask"
+template (`run_act1.JUST_ASK_TEMPLATE`), appended after each row's real turns, greedy-
+generated under the hook, parsed yes/no. Rows: the 295-item merged-split test set (held
+out from the direction's own training fold). `alpha` calibrated as a fraction of the
+layer's measured mean activation norm (108.6) — see the note below on why raw units
+don't transfer across layers/models.
+
+**Baseline (alpha=0):** P(yes | knows-labelled) = 0.844, P(yes | gap-labelled) = 0.321 —
+a 52.3-point gap, sensible and consistent with Act 1's just-ask numbers.
+
+### Dose-response, probe direction
+
+| alpha (× mean norm) | P(yes\|knows) | P(yes\|gap) | gap | fluent? |
+|---|---|---|---|---|
+| −2.0 | — | — | — | **no — garbage tokens** |
+| −1.0 | 0.000 | 0.000 | 0.000 | yes |
+| −0.5 | 0.000 | 0.000 | 0.000 | yes |
+| −0.25 | 0.027 | 0.009 | 0.018 | yes |
+| −0.10 | 0.618 | 0.156 | 0.462 | yes |
+| **0.00 (baseline)** | 0.844 | 0.321 | 0.523 | yes |
+| +0.10 | 0.941 | 0.495 | 0.446 | yes |
+| +0.25 | 0.989 | 0.807 | 0.182 | yes |
+| +0.50 | 1.000 | 1.000 | 0.000 | yes |
+| +1.00 | 1.000 | 1.000 | 0.000 | yes |
+| +2.0 | — | — | — | **no — garbage tokens** |
+
+A real, strong, monotone, dose-dependent effect, fully fluent everywhere between −1 and
++1 (only the ±2 endpoints break into gibberish — first surfaced by an initial coarse
+sweep at [−2,−1,0,1,2], which is also why the grid above is denser near zero). It is
+**asymmetric**: the negative direction saturates almost immediately (already 0/0 by
+−0.5), while the positive direction is still short of ceiling at +0.25 and only fully
+saturates by +0.5 — a wider usable range on the positive side.
+
+### The essential control changes the story
+
+A first pass put the random-direction control at alpha = +1.0× mean norm — and found
+**random_direction also saturates there** (P(yes|knows)=1.0, P(yes|gap)=1.0, fully
+fluent). That is exactly the RMU failure mode act2_causal.md Task 2.4 names: at large
+enough magnitude, *any* direction breaks the readout, so a control run only at the
+extreme tells you nothing about specificity. Rerun at the two magnitudes where the probe
+direction itself is still informative, not saturated:
+
+| alpha (× mean norm) | vector | P(yes\|knows) | P(yes\|gap) |
+|---|---|---|---|
+| +0.10 | probe direction | 0.941 | 0.495 |
+| +0.10 | random direction | 0.892 | 0.394 |
+| +0.10 | diff-of-means | 0.995 | 0.817 |
+| +0.25 | probe direction | 0.989 | 0.807 |
+| +0.25 | random direction | 0.930 | 0.486 |
+| +0.25 | diff-of-means | 1.000 | 0.982 |
+
+(cos(probe direction, diff-of-means) = 0.418 — related but clearly not the same
+direction)
+
+**Random is not inert.** At both magnitudes it pushes gap-row P(yes) up from the 0.321
+baseline (+7.3pp at +0.10, +16.5pp at +0.25) — a real, non-trivial generic-perturbation
+effect, not noise. So part of what a naive single-alpha run would attribute to "the
+probe direction" is actually "any large-enough nudge nudges the model toward
+affirming." **But the probe direction's effect is clearly bigger than random's, and the
+gap grows with alpha**: probe exceeds random on gap-row P(yes) by +10.1pp at alpha=+0.10
+and by +32.1pp at alpha=+0.25 — a genuine, growing specificity advantage in this range,
+before both directions eventually saturate together at higher alpha (≥0.5) the same way
+the RMU lesson predicts. The honest reading: **there is a real direction-specific
+component here, entangled with a real magnitude confound** — this is not clean evidence
+either way on its own, and a single random seed is not enough to call it settled (Act
+2's Task 2.3 calls for several).
+
+**Diff-of-means is a stronger "say yes" lever than the fitted probe direction.** At
+alpha=+0.10 it pushes gap-row P(yes) to 0.817 (probe: 0.495); at +0.25 it's essentially
+saturated the whole test set (0.982) while the probe direction still preserves visible
+class separation (0.807 vs 0.989, an 18-point gap). This matches TalkTuner's own
+finding, flagged in advance in act2_causal.md — **do not assume the best reading
+direction is the best steering direction** — and here it holds in the specific sense
+that diff-of-means steers *harder*, not necessarily *better*: it collapses the knows/gap
+distinction almost entirely at magnitudes where the probe direction still tracks it.
+Whether that makes diff-of-means the more "causally real" direction or just a blunter
+one that erases the very distinction being tested is not resolved by this data.
+
+### What this does and doesn't show
+
+**Does show:** activation steering at this one layer, along a direction derived
+entirely from D0, causally and substantially moves what the model says about a user's
+understanding of the same D0 conversations — a real, graded, mostly-fluent
+dose-response, not a step function or an artifact of breaking the model (hook verified;
+hand-checked samples at every usable alpha are coherent, on-topic English, e.g. `"No.
+The user might have made a mistake in the..."` at alpha=−1.0 on a knows-labelled row).
+
+**Does not show:** clean, fully direction-specific causal control. The random-direction
+control moves the readout too, just less; only one random seed was run (Act 2's own
+protocol calls for several, and a `random_layer` and `prompt_baseline` condition, none
+of which are here yet); no omission/correction readout, no perplexity/MMLU sanity check,
+no off-target-concept check. Treat this as a promising first pass that clears the
+minimum bar (hook verified, beats one random-direction control at the informative
+magnitudes) — not as the Act 2 headline. The full protocol in `act2_causal.md` is the
+next step if this is worth pursuing further.
+
+Artifacts: `src/steering.py` (hook + direction-extraction helpers), `run_steering.py`;
+`results/steering_d0_results.json` (full sweep, controls, hook-verification, sample
+degenerate outputs); `results/steering_d0_samples.txt` (6 sample generations per
+condition); `results/figs/steering_d0_doseresponse.png`; `runs.jsonl` entries
+`steer_d0/{probe_direction,random_direction,diff_of_means}` (15 total); `logs/
+steer_d0.log`.

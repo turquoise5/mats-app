@@ -1,0 +1,120 @@
+=== probe_frac=-2.0 ===
+  linear_2step_int__demonstrated__knows__1__novice: ' (1, 2, 1, 1,'
+  linear_2step_int__demonstrated__knows__1__expert: ' (1.0) (1.0) (1'
+  linear_2step_int__demonstrated__knows__11__novice: ' (1, 2, 1,  (1'
+  linear_2step_int__demonstrated__knows__11__expert: ' (1.0) (1.0) (1'
+  linear_2step_int__demonstrated__knows__18__novice: ' (1, 1, 1, 1,'
+  linear_2step_int__demonstrated__knows__18__expert: ' (1.0) (1.0) (1'
+
+=== probe_frac=-1.0 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'No. \n\nThe user might have made a mistake in the'
+  linear_2step_int__demonstrated__knows__1__expert: "No.  \n\nThe user's account of the solution process is"
+  linear_2step_int__demonstrated__knows__11__novice: 'No.\n\nThe user might have intended to write the correct steps'
+  linear_2step_int__demonstrated__knows__11__expert: "No.  \n\nThe user's understanding of the problem is not"
+  linear_2step_int__demonstrated__knows__18__novice: 'No.\n\nThe user is not understanding the problem correctly. The'
+  linear_2step_int__demonstrated__knows__18__expert: 'No.\n\nThe user understands the process of solving two-step linear'
+
+=== probe_frac=-0.5 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'No. \n\nThe user seems to understand the process of solving'
+  linear_2step_int__demonstrated__knows__1__expert: "No. \n\nThe user's explanation of Paul's mistake suggests"
+  linear_2step_int__demonstrated__knows__11__novice: 'No. \n\nThe user seems to understand the process of solving'
+  linear_2step_int__demonstrated__knows__11__expert: 'No.  \n\nThe user is likely confused or has made a'
+  linear_2step_int__demonstrated__knows__18__novice: 'No.'
+  linear_2step_int__demonstrated__knows__18__expert: 'No. \n\nThe user is likely confused or has made a'
+
+=== probe_frac=-0.2 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'No.'
+  linear_2step_int__demonstrated__knows__1__expert: 'No.'
+  linear_2step_int__demonstrated__knows__11__novice: 'No.'
+  linear_2step_int__demonstrated__knows__11__expert: 'No.'
+  linear_2step_int__demonstrated__knows__18__novice: 'No.'
+  linear_2step_int__demonstrated__knows__18__expert: 'No.'
+
+=== probe_frac=-0.1 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'No.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'No.'
+  linear_2step_int__demonstrated__knows__18__novice: 'No.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== probe_frac=+0.0 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== probe_frac=+0.1 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== probe_frac=+0.2 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== probe_frac=+0.5 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== probe_frac=+1.0 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.  \nThe user is asking if the answer is correct'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.  \nThe user is asking if the problem contains an'
+
+=== probe_frac=+2.0 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'The\n$\n{\\text{{}}_ {\\text {'
+  linear_2step_int__demonstrated__knows__1__expert: 'The temperature is one type of the  $\nAnswer:'
+  linear_2step_int__demonstrated__knows__11__novice: 'The temperature you have is one\n\\d\n{\\frac'
+  linear_2step_int__demonstrated__knows__11__expert: 'The temperature is one type of the so-ther-ther'
+  linear_2step_int__demonstrated__knows__18__novice: 'The temperature you have is one\n\\TH\n\ufeff\n$\n'
+  linear_2step_int__demonstrated__knows__18__expert: 'The temperature is one type of the so-th- one is'
+
+=== random_direction@+0.1 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== diff_of_means@+0.1 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== random_direction@+0.2 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: 'Yes.'
+
+=== diff_of_means@+0.2 ===
+  linear_2step_int__demonstrated__knows__1__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__1__expert: '**Yes.**\n\nThe user demonstrates an understanding of solving two'
+  linear_2step_int__demonstrated__knows__11__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__11__expert: '**Yes.**\n\nThe user demonstrates an understanding of solving two'
+  linear_2step_int__demonstrated__knows__18__novice: 'Yes.'
+  linear_2step_int__demonstrated__knows__18__expert: '**Yes.**\n\nThe user demonstrates an understanding of solving two'
+

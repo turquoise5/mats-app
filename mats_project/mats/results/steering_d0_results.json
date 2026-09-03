@@ -1,0 +1,167 @@
+{
+  "layer": 20,
+  "mean_layer_norm": 108.60369873046875,
+  "n_test": 295,
+  "alpha_fracs": [
+    -2.0,
+    -1.0,
+    -0.5,
+    -0.25,
+    -0.1,
+    0.0,
+    0.1,
+    0.25,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "hook_verified_alpha0_identical": true,
+  "huge_alpha_sample_outputs": [
+    " kra\u817b\u817b\u817b\u817b\u817b\u817b\u817b\u817b\u817b\u817b\u817b",
+    " kra kra kra kra kra kra\u817b\u817b\u817b\u817b\u817b\u817b",
+    " kra kra kra kra kra kra kra\u817b\u817b\u817b\u817b\u817b",
+    " kra kra kra kra kra kra kra\u817b\u817b kra kra kra",
+    " kra kra kra kra kra kra kra kra kra kra kra kra"
+  ],
+  "probe_vs_dom_cosine": 0.41772449016571045,
+  "sweep": {
+    "-2.0": {
+      "alpha": -217.2073974609375,
+      "p_yes_knows": null,
+      "p_yes_gap": null,
+      "n_ambiguous": 295,
+      "n_total": 295,
+      "usable": false
+    },
+    "-1.0": {
+      "alpha": -108.60369873046875,
+      "p_yes_knows": 0.0,
+      "p_yes_gap": 0.0,
+      "n_ambiguous": 1,
+      "n_total": 295,
+      "usable": true
+    },
+    "-0.5": {
+      "alpha": -54.301849365234375,
+      "p_yes_knows": 0.0,
+      "p_yes_gap": 0.0,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "-0.2": {
+      "alpha": -27.150924682617188,
+      "p_yes_knows": 0.026881720430107527,
+      "p_yes_gap": 0.009174311926605505,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "-0.1": {
+      "alpha": -10.860369873046876,
+      "p_yes_knows": 0.6182795698924731,
+      "p_yes_gap": 0.1559633027522936,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "+0.0": {
+      "alpha": 0.0,
+      "p_yes_knows": 0.8440860215053764,
+      "p_yes_gap": 0.3211009174311927,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "+0.1": {
+      "alpha": 10.860369873046876,
+      "p_yes_knows": 0.9408602150537635,
+      "p_yes_gap": 0.4954128440366973,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "+0.2": {
+      "alpha": 27.150924682617188,
+      "p_yes_knows": 0.989247311827957,
+      "p_yes_gap": 0.8073394495412844,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "+0.5": {
+      "alpha": 54.301849365234375,
+      "p_yes_knows": 1.0,
+      "p_yes_gap": 1.0,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "+1.0": {
+      "alpha": 108.60369873046875,
+      "p_yes_knows": 1.0,
+      "p_yes_gap": 1.0,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "+2.0": {
+      "alpha": 217.2073974609375,
+      "p_yes_knows": null,
+      "p_yes_gap": null,
+      "n_ambiguous": 295,
+      "n_total": 295,
+      "usable": false
+    }
+  },
+  "controls": {
+    "random_direction@+0.1": {
+      "alpha": 10.860369873046876,
+      "p_yes_knows": 0.8924731182795699,
+      "p_yes_gap": 0.3944954128440367,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "diff_of_means@+0.1": {
+      "alpha": 10.860369873046876,
+      "p_yes_knows": 0.9946236559139785,
+      "p_yes_gap": 0.8165137614678899,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "probe_direction@+0.1": {
+      "alpha": 10.860369873046876,
+      "p_yes_knows": 0.9408602150537635,
+      "p_yes_gap": 0.4954128440366973,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "random_direction@+0.2": {
+      "alpha": 21.720739746093752,
+      "p_yes_knows": 0.9301075268817204,
+      "p_yes_gap": 0.48623853211009177,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "diff_of_means@+0.2": {
+      "alpha": 21.720739746093752,
+      "p_yes_knows": 1.0,
+      "p_yes_gap": 0.981651376146789,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    },
+    "probe_direction@+0.2": {
+      "alpha": 27.150924682617188,
+      "p_yes_knows": 0.989247311827957,
+      "p_yes_gap": 0.8073394495412844,
+      "n_ambiguous": 0,
+      "n_total": 295,
+      "usable": true
+    }
+  }
+}
