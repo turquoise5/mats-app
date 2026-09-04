@@ -1432,3 +1432,260 @@ here, not quantified with a proxy score the way `correction_rate` was.
 Artifacts: `run_correction_items_persist.py`; `results/
 correction_items_persist_results.json` / `_samples.txt` (54 generations, full text);
 54 `runs.jsonl` entries (`correction_items_persist`); `logs/correction_items_persist.log`.
+
+### Does the quotient-rule false-affirmation effect itself persist across turn-distance?
+
+The persistence check above used the 3 algebra items, which never break under steering
+at D0 either — so it could only test whether the *tone* signature survives, not whether
+a real correctness-breaking effect does. This closes that gap directly: the same
+D1/D3-refit `probe`/`dom`/`random` vectors (identical to the run above), applied to 2
+quotient-rule items that **do** break at D0 — `x²/(x+1)` (the original item) and
+`e^x/x` (the strongest replication-batch item) — with matching neutral filler turns
+appended. Sanity: hook verified inert at alpha=0 for both items, both levels.
+
+**Result: the effect survives, but its vector-specificity does not — and does not
+degrade monotonically with distance.**
+
+| item | level | alpha | probe | random | dom |
+|---|---|---|---|---|---|
+| `x²/(x+1)` | D1 | +0.15 | ✅ | ✅ | **FALSE** |
+| `x²/(x+1)` | D1 | +0.25 | **FALSE** | ✅ | ✅ |
+| `x²/(x+1)` | D3 | +0.15 | ✅ | ✅ | ✅ |
+| `x²/(x+1)` | D3 | +0.25 | **FALSE** | ✅ | **FALSE** |
+| `e^x/x` | D1 | +0.15 | ✅ | **FALSE** | ✅ |
+| `e^x/x` | D1 | +0.25 | ✅ | **FALSE** | **FALSE** |
+| `e^x/x` | D3 | +0.15 | ✅ | ✅ | ✅ |
+| `e^x/x` | D3 | +0.25 | ✅ | ✅ | ✅ |
+
+(baseline, `alpha=0`, correct at every level/item, confirming the hook is a true no-op
+throughout)
+
+**7 of 24 nonzero-alpha conditions false** (2 items × 2 levels × 2 alphas × 3 vectors).
+By vector: `probe` 2/8, `dom` 3/8, `random` **2/8**.
+
+**The headline change: `random` is no longer clean.** At D0, across the full 5-item
+replication batch (30 nonzero-alpha conditions), `random` was false 0/10 — the cleanest
+possible specificity result. Here, at D1 specifically, `random` produces 2 false
+affirmations on `e^x/x` (`+0.15` and `+0.25` both), with the exact same fabricated-
+equivalence mechanism seen from `probe`/`dom` at D0 (e.g. "This is also correct,
+because `xe^x - e^x = e^x(x-1)`, and the numerator can also be written as `xe^x+e^x` if
+you consider the sign" — a nonsensical justification for a false equality). `dom`'s
+overall rate is *lower* here (3/8 = 37.5%) than its D0 rate (6/10 = 60%). `probe` stays
+roughly stable (2/8 vs 2/10 at D0).
+
+**Not monotonic with distance:** `e^x/x` is worse at D1 (3 false) than at D3 (0 false,
+fully clean) — the opposite of what "further distance, more drift" would predict.
+`x²/(x+1)` is roughly stable across levels (2 false at each). This rules out a simple
+"turn-distance linearly erodes specificity" story; whatever's happening is item- and
+level-specific, not a smooth decay curve.
+
+**Reading, stated carefully:** this replicates the algebra persistence check's core
+finding — the probe/dom-vs-random specificity established at D0 is not a stable
+property that survives turn-distance unchanged — but sharpens it from a tone-only
+effect to an actual correctness-breaking one. At D0, "random steering never causes a
+false affirmation" was the cleanest specificity result in the whole investigation. That
+specific claim does not hold at D1. What still holds, everywhere tested: correctness
+under `random` steering degrades far less often than under `probe`/`dom` combined
+(2/8 vs 5/16 pooled), and the false-affirmation mechanism itself (fabricated numeric
+"equivalences") stays the same regardless of which vector triggers it — so this reads
+as the same underlying failure mode becoming reachable by more directions at distance,
+not a new failure mode appearing.
+
+**Caveats:** 2 items, 2 levels, one seed each for `random`/`dom` per level (4 total
+seed-instances), greedy-only, hand-graded. The non-monotonicity (D1 worse than D3 for
+one item) is itself unexplained and could be noise at this sample size — worth another
+item or two before treating the D1-specific `random` breakdown as a stable property
+rather than this item's own idiosyncrasy.
+
+Artifacts: `run_qr_persist.py`; `results/qr_persist_results.json` / `_samples.txt` (36
+generations, full text); 36 `runs.jsonl` entries (`qr_persist`); `logs/qr_persist.log`.
+
+### Omission readout (act2_causal.md's other headline readout) — first attempt, null
+
+`act2_causal.md` names omission as the other core Act 2 readout, complementary to
+correction: does the model explain concept `C` from scratch, or assume the user
+already knows it? Never touched this session. First attempt: 2 fresh problems on
+concepts already used throughout (quadratic formula, linear-both-sides), phrased as a
+plain request for help ("Can you help me solve...") with no "is this right" framing and
+no prior conversation — same D0 layer/vectors, same {0, +0.15, +0.25} × {probe, random,
+dom} grid.
+
+**Result: null, and the reason why is itself informative.** All 18 generations are
+near-identical in structure and content — every condition, at every alpha and every
+vector including baseline, jumps straight to "We'll use the quadratic formula: `x =
+(-b±√(b²-4ac))/2a`" (or the equivalent linear-equation move) with no derivation of
+*why* the formula/method works, and no condition shows the opposite either (an
+abbreviated, assume-everything-is-obvious version). The generations are close enough to
+literally identical across most conditions that this reads as **no measurable steering
+effect on this specific operationalization**, but that conclusion should not be trusted
+as a real omission-readout result yet.
+
+**Why this design likely failed to create the needed contrast:** unlike the correction
+items (which have an explicit "gap"/"knows" framing baked into the user's own turn — a
+stated wrong answer, or a request for confirmation), a bare "can you help me solve X"
+prompt gives the model no signal that explanation depth should vary at all — the
+baseline default for this prompt shape is already a standard, fixed step-by-step
+walkthrough, with no headroom above or below it for steering to move. `act2_causal.md`'s
+own sketch of this readout (Task 2.1) uses a different mechanism entirely: teacher-forced
+log-probability of a canonical explanation sentence as a continuation, not a full
+generation compared by eye — that proxy could still show graded movement even where full
+generations look identical, since it measures probability mass on the explanatory
+continuation rather than which single greedy path gets taken.
+
+**This is a negative result about the *operationalization*, not (yet) about whether
+omission is steerable.** A real test needs either the teacher-forced proxy `act2_causal.md`
+specifies, or a prompt shape with more natural contrast (e.g. mid-conversation, after
+the user has already shown work, asking for the *next* step rather than a fresh
+problem cold).
+
+Artifacts: `run_omission.py`; `results/omission_results.json` / `_samples.txt` (18
+generations); 18 `runs.jsonl` entries (`omission`); `logs/omission.log`.
+
+### Symmetry check: does negative alpha cause false REJECTION of correct work?
+
+Everything this session tests false affirmation — positive alpha (steering toward
+"knows") making wrong work look right. Does the mirror image exist: negative alpha
+(steering toward "gap") causing the model to doubt or "correct" work that is actually
+right? Same 3 items used throughout (`x²/(x+1)`, `e^x/x`, `linear_both_int`), now with
+each item's **correct** version of the user's claim, steered negative ({0, -0.15,
+-0.25} × {probe, random, dom}, same D0 layer/vectors). Sanity: hook verified inert at
+alpha=0.
+
+**Result: yes, and it lands on a different item than the positive-direction effect.**
+
+| item | -0.15 probe | -0.15 random | -0.15 dom | -0.25 probe | -0.25 random | -0.25 dom |
+|---|---|---|---|---|---|---|
+| `x²/(x+1)` (correct) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `e^x/x` (correct) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `linear_both_int` (correct) | **FALSE REJECT** | ✅ | ✅ | **FALSE REJECT** | ✅ | **FALSE REJECT** |
+
+**The two quotient-rule items — the ones vulnerable to positive-direction false
+affirmation all session — show zero false rejection under negative steering, at either
+magnitude, under any vector.** All 12 of their nonzero-alpha conditions correctly
+affirm the true derivative, cleanly, no hedging.
+
+**`linear_both_int` — an item that showed zero false affirmation anywhere in the
+positive direction all session (27/27 correct across every earlier run) — breaks
+under negative steering, 3 of 6 nonzero conditions, concentrated in `probe`/`dom`,
+never `random`.** Two distinct failure textures:
+
+- `probe@-0.15`: fabricates a contradiction out of nothing — writes out the user's
+  exact (correct) step `20t - 5t = 10 + 5`, then: *"This is incorrect... you should
+  subtract 5t from both sides, not just from the left side"* — a claim that doesn't
+  describe what the user actually did.
+- `dom@-0.25`: a genuine arithmetic error — drops the `-5` term mid-derivation,
+  computes `15t = 10` (wrong), briefly asserts `t = 10/15 = 2/3` is the "correct"
+  answer against the user's true `t = 1`, before flailing back to the right number by
+  the end. The most severe single failure in this check — a real fabricated
+  calculation, not just a fabricated claim about what the user wrote.
+- `probe@-0.25`: catches itself mid-sentence — writes the user's step, says "It should
+  be: [identical step]. Wait — that actually is correct? Let me double-check... Wait —
+  no, that's not correct" — and lands on the wrong side of its own hesitation, still
+  falsely rejecting valid steps despite briefly recognizing they were fine.
+
+In every one of the 3 false-rejection cases, **the final numeric answer (`t=1`) is
+still stated as correct** — only the *steps* get falsely condemned. This is the
+inverse of the quotient-rule false-affirmation pattern in a precise sense: there, final
+answers went wrong while the narrative stayed fluent; here, the final answer survives
+but the narrative fabricates a wrongness that isn't there.
+
+**Reading:** the false-affirmation and false-rejection effects are both real, both
+direction-specific (`probe`/`dom` over `random`), and both showed up in this session's
+experiments — but on different items. Quotient-rule structure is what makes an item
+vulnerable to positive-direction false affirmation; whatever makes `linear_both_int`
+vulnerable to negative-direction false rejection is a separate, still-unidentified
+property — it's an algebra item, not quotient rule, and it was completely robust to
+steering in the opposite direction all session. No single item this session showed
+both failure modes.
+
+**Caveats:** 3 items, one seed each for `random`/`dom`, greedy-only, hand-graded,
+`max_new_tokens=700`. Only one item shows the effect — same "n=1 within a small item
+set" limitation as every other finding in this thread; a replication batch analogous
+to the quotient-rule one (more algebra items, correct versions, negative alpha) would
+be the natural next step before treating "linear_both_int-shaped items are vulnerable
+to false rejection" as more than a single example.
+
+Artifacts: `run_symmetry.py`; `results/symmetry_results.json` / `_samples.txt` (27
+generations, full text); 27 `runs.jsonl` entries (`symmetry`); `logs/symmetry.log`.
+
+### Generalization (act2_causal.md Task 2.6): MathDial, real teacher-student dialogue
+
+Everything this session used the synthetic EEDI contrast set, both to fit the vectors
+and to construct test items. This applies the same D0 vector (fit entirely on synthetic
+algebra content) to **MathDial** (Macina et al. 2023,
+`huggingface.co/datasets/eth-nlped/mathdial`) — real, GSM8K-grounded tutoring dialogues
+with genuine (not synthetic, not written for this project) student errors. 3 items,
+each a real word problem + the dataset's own recorded incorrect student solution, same
+grid ({0, +0.15, +0.25} × {probe, random, dom}), same D0 layer/vectors, `max_new_tokens
+=700`. Sanity: hook verified inert at alpha=0.
+
+**Result: genuine generalization on one item, a pre-existing model/student shared
+misconception on a second, a different failure mode on the third. Reported plainly,
+item by item — this is not a clean uniform replication.**
+
+**`mathdial_6000060` (interest calculation, dataset GT: $803/month, student's stated
+wrong answer: $1,095/month) — the clean positive result.** At baseline and under
+`random` (both alphas), the model **independently computes its own number** ($760.42/
+month, itself not matching the dataset GT either — see caveat below) and explicitly
+**rejects** the student's $1,095: *"not $1,825 as you calculated... your solution is
+incorrect."* At `+0.15/dom`, `+0.25/dom`, and `+0.25/probe`, the model instead
+**reproduces the student's exact flawed calculation** (treating the 10% rate as
+applying across all 5 months rather than once) and affirms the student's own $1,095 as
+correct: *"Your solution is correct, and your final answer of $1,095 per month is
+accurate... Well done!"* This is the same `probe`/`dom`-not-`random` specificity
+pattern found throughout the synthetic work, now showing up on a real, independently-
+authored word problem and a real student's actual error, not anything written for this
+project.
+
+**Caveat on this item:** neither the model's own baseline number ($760.42) nor the
+dataset's ground truth ($803) match each other — the word problem's phrasing ("10%
+interest rate" for a "five month" loan) is genuinely ambiguous between a flat one-time
+fee (dataset's intended reading) and an annual rate prorated for 5/12 of a year (the
+model's independent reading). Grading here uses *agreement with the student's specific
+stated answer* as the operative signal (consistent with every other correction-item
+test this session), not agreement with the external dataset GT, since the model's own
+baseline diverges from that GT for reasons unrelated to steering.
+
+**`mathdial_6000054` (juggling balls, dataset GT: 4, student's wrong answer: 5) — an
+unusable baseline confound, not a steering effect.** Every single condition in the
+full 9-cell grid — baseline included, `random` included — affirms the student's exact
+answer of 5, with zero variance across the entire grid. The model shares the student's
+underlying misreading of the question (both add back the "caught" balls and subtract
+the "lost" one, when the question only asks how many balls remain in Josh's hands
+right after the drop) even completely unsteered. This item cannot distinguish a
+steering effect from a pre-existing shared error and should not be read as either a
+positive or negative result.
+
+**`mathdial_6000057` (candy/gumballs, dataset GT: 4 lbs, student's wrong answer: 2 lbs)
+— correct through `+0.15` on all vectors, degrades differently at `+0.25`.** Baseline
+and every `+0.15` condition reach the correct 4 lbs and explicitly reject the student's
+2. At `+0.25/random` and `+0.25/probe`, the model reaches a **third, different wrong
+number** (2.67 lbs) via its own new arithmetic slip — still explicitly calling the
+student's 2 lbs wrong, so not a false affirmation of the student's specific claim, but
+a real degradation in the model's own correctness. `+0.25/dom` is confused and
+truncated: its own derivation correctly reaches 4, but the concluding paragraph starts
+to reframe the student's original answer as "correct under an assumption" before
+getting cut off — ambiguous, leaning toward the same false-affirmation direction as the
+other two items but not clean enough to score either way.
+
+**Reading:** this is a real, if partial, generalization result. The cleanest item
+(`6000060`) reproduces the exact `probe`/`dom`-over-`random` specificity pattern found
+throughout the synthetic work, on a genuine external dataset with a real student error
+neither authored nor curated for this project — a meaningfully stronger existence proof
+than anything on the synthetic contrast set alone. But it is one item out of three; a
+second item is unusable due to a pre-existing shared misconception, and the third shows
+degradation through a different mechanism (fresh computational error) rather than the
+same student-answer-affirmation pattern. This should be read as "the effect can
+generalize to real data," not "the effect reliably generalizes" — the same n=1-within-
+a-small-set caveat that applies to every finding in this session's thread.
+
+**Caveats:** 3 items (hand-picked for having a clean, self-contained, single-turn
+incorrect solution — MathDial's raw dialogues are multi-turn and messier), one seed
+each for `random`/`dom`, greedy-only, hand-graded. A real test of this generalization
+claim would need many more MathDial items, ideally scored with the validated
+teacher-forced proxy from `correction_rate` rather than by hand, and would need to
+pre-screen items for baseline confounds the way `6000054` turned out to have one.
+
+Artifacts: `run_mathdial.py`; `data/mathdial/test.jsonl` (full downloaded dataset, 599
+items); `results/mathdial_results.json` / `_samples.txt` (27 generations, full text);
+27 `runs.jsonl` entries (`mathdial`); `logs/mathdial.log`.

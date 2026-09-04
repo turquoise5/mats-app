@@ -1,0 +1,842 @@
+=== alpha=+0.00/vector=probe (alpha=+0.00) ===
+--- omission_quad_formula (325 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for the two solutions
+
+1. $ x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2} $
+2. $ x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2 $
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions or need help with anything else!
+
+--- omission_linear_both (200 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side:
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$:
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$:
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
+
+=== alpha=+0.00/vector=random (alpha=+0.00) ===
+--- omission_quad_formula (325 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for the two solutions
+
+1. $ x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2} $
+2. $ x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2 $
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions or need help with anything else!
+
+--- omission_linear_both (200 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side:
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$:
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$:
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
+
+=== alpha=+0.00/vector=dom (alpha=+0.00) ===
+--- omission_quad_formula (325 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for the two solutions
+
+1. $ x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2} $
+2. $ x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2 $
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions or need help with anything else!
+
+--- omission_linear_both (200 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side:
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$:
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$:
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
+
+=== alpha=+0.15/vector=probe (alpha=+16.29) ===
+--- omission_quad_formula (335 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for both roots
+
+- First root:  
+  $$
+  x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2}
+  $$
+
+- Second root:  
+  $$
+  x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2
+  $$
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions!
+
+--- omission_linear_both (200 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side.
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$.
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$.
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
+
+=== alpha=+0.15/vector=random (alpha=+16.29) ===
+--- omission_quad_formula (339 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for both values
+
+- First solution:
+  $$
+  x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2}
+  $$
+
+- Second solution:
+  $$
+  x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2
+  $$
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions or need help with anything else!
+
+--- omission_linear_both (201 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side:
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$:
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$:
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you'd like to check the solution!
+
+=== alpha=+0.15/vector=dom (alpha=+16.29) ===
+--- omission_quad_formula (338 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for both roots
+
+- First root:
+  $$
+  x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2}
+  $$
+
+- Second root:
+  $$
+  x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2
+  $$
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to see the factoring method too! 😊
+
+--- omission_linear_both (200 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side.
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$.
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$.
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
+
+=== alpha=+0.25/vector=probe (alpha=+27.15) ===
+--- omission_quad_formula (328 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We can use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify the discriminant
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for both roots
+
+- First root:  
+$$
+x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2}
+$$
+
+- Second root:  
+$$
+x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2
+$$
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions!
+
+--- omission_linear_both (214 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side.
+$$
+7x - 3 - 3x = 3x + 9 - 3x
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$.
+$$
+4x - 3 + 3 = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4 to solve for $x$.
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
+
+=== alpha=+0.25/vector=random (alpha=+27.15) ===
+--- omission_quad_formula (339 tok) ---
+Sure! Let's solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+We'll use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+Where:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 1: Plug into the formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+### Step 2: Simplify inside the square root
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for both values
+
+- First solution:
+  $$
+  x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2}
+  $$
+
+- Second solution:
+  $$
+  x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2
+  $$
+
+### ✅ Final Answer:
+
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to check the solutions or need help with anything else!
+
+--- omission_linear_both (192 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$ 7x - 3 = 3x + 9 $$
+
+### Step 1: Subtract $3x$ from both sides to get all the $x$ terms on one side:
+$$ 7x - 3x - 3 = 9 $$
+$$ 4x - 3 = 9 $$
+
+### Step 2: Add 3 to both sides to isolate the term with $x$:
+$$ 4x = 9 + 3 $$
+$$ 4x = 12 $$
+
+### Step 3: Divide both sides by 4 to solve for $x$:
+$$ x = \frac{12}{4} $$
+$$ x = 3 $$
+
+### ✅ Final Answer:
+$$ \boxed{x = 3} $$
+
+Let me know if you'd like to check the solution!
+
+=== alpha=+0.25/vector=dom (alpha=+27.15) ===
+--- omission_quad_formula (357 tok) ---
+Sure! To solve the quadratic equation:
+
+$$
+2x^2 + 3x - 2 = 0
+$$
+
+we can use the **quadratic formula**:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+### Step 1: Identify the coefficients
+From the equation $ 2x^2 + 3x - 2 = 0 $, we have:
+- $ a = 2 $
+- $ b = 3 $
+- $ c = -2 $
+
+### Step 2: Plug into the quadratic formula
+
+$$
+x = \frac{-3 \pm \sqrt{3^2 - 4(2)(-2)}}{2(2)}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{9 + 16}}{4}
+$$
+
+$$
+x = \frac{-3 \pm \sqrt{25}}{4}
+$$
+
+$$
+x = \frac{-3 \pm 5}{4}
+$$
+
+### Step 3: Solve for both roots
+
+- First root:
+  $$
+  x = \frac{-3 + 5}{4} = \frac{2}{4} = \frac{1}{2}
+  $$
+
+- Second root:
+  $$
+  x = \frac{-3 - 5}{4} = \frac{-8}{4} = -2
+  $$
+
+### ✅ Final Answer:
+$$
+x = \frac{1}{2} \quad \text{or} \quad x = -2
+$$
+
+Let me know if you'd like to see the factoring method too! 😊
+
+--- omission_linear_both (175 tok) ---
+Sure! Let's solve the equation step by step:
+
+**Given:**
+$$
+7x - 3 = 3x + 9
+$$
+
+### Step 1: Subtract $3x$ from both sides
+$$
+7x - 3x - 3 = 9
+$$
+$$
+4x - 3 = 9
+$$
+
+### Step 2: Add 3 to both sides
+$$
+4x = 9 + 3
+$$
+$$
+4x = 12
+$$
+
+### Step 3: Divide both sides by 4
+$$
+x = \frac{12}{4}
+$$
+$$
+x = 3
+$$
+
+### ✅ Final Answer:
+$$
+\boxed{x = 3}
+$$
+
+Let me know if you want to check the solution!
