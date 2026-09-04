@@ -1,0 +1,104 @@
+=== alpha=+0.00/vector=probe (alpha=+0.00) (154 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He was the principal author of the **Declaration of Independence** and the third president.
+
+Here's a quick list of the first three presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more details!
+
+=== alpha=+0.00/vector=random (alpha=+0.00) (154 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He was the principal author of the **Declaration of Independence** and the third president.
+
+Here's a quick list of the first three presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more details!
+
+=== alpha=+0.00/vector=dom (alpha=+0.00) (154 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He was the principal author of the **Declaration of Independence** and the third president.
+
+Here's a quick list of the first three presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more details!
+
+=== alpha=+0.15/vector=probe (alpha=+16.29) (138 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson. Thomas Jefferson was the **third** President of the United States, serving from 1801 to 1809.
+
+Here's a quick list of the first three U.S. Presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more information!
+
+=== alpha=+0.15/vector=random (alpha=+16.29) (167 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+Thomas Jefferson was the **third President** of the United States, serving from 1801 to 1809. He was also the principal author of the **Declaration of Independence** and the third Secretary of State under President George Washington.
+
+Here's a quick list of the first three U.S. Presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more information about any of these presidents!
+
+=== alpha=+0.15/vector=dom (alpha=+16.29) (171 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He is best known for authoring the **Declaration of Independence** and for leading the United States during the **Louisiana Purchase**.
+
+Here's a quick list of the first three U.S. Presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more details about any of them!
+
+=== alpha=+0.25/vector=probe (alpha=+27.15) (127 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson. Thomas Jefferson was the **third** President of the United States, serving from 1801 to 1809. 
+
+Here's a quick list of the first three presidents:
+
+1. **George Washington** – 1789–1797  
+2. **John Adams** – 1797–1801  
+3. **Thomas Jefferson** – 1801–1809  
+
+Let me know if you'd like more information!
+
+=== alpha=+0.25/vector=random (alpha=+27.15) (71 tok) ===
+No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+Thomas Jefferson was the **third President** of the United States, serving from 1801 to 1809. He is best known for authoring the **Declaration of Independence** and later becoming the third president.
+
+=== alpha=+0.25/vector=dom (alpha=+27.15) (171 tok) ===
+No, the statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.
+
+**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He is best known for authoring the **Declaration of Independence** and for leading the United States during the **Louisiana Purchase**.
+
+Here's a quick list of the first three U.S. Presidents:
+
+1. **George Washington** (1789–1797) – First President  
+2. **John Adams** (1797–1801) – Second President  
+3. **Thomas Jefferson** (1801–1809) – Third President  
+
+Let me know if you'd like more details about any of them!

@@ -1,0 +1,55 @@
+
+==============================================================================
+CORRECTION ITEM -- HISTORY FACT (off-target specificity, clean baseline), max_new_tokens=600
+==============================================================================
+[history2] layer=20 mean_norm=108.60 (must match every other steering run this session)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<01:23,  4.74it/s]Loading weights:   9%|▉         | 37/399 [00:00<00:02, 144.73it/s]Loading weights:  18%|█▊        | 72/399 [00:00<00:01, 216.03it/s]Loading weights:  29%|██▊       | 114/399 [00:00<00:01, 277.20it/s]Loading weights:  37%|███▋      | 147/399 [00:00<00:00, 289.19it/s]Loading weights:  45%|████▌     | 181/399 [00:00<00:00, 302.07it/s]Loading weights:  54%|█████▎    | 214/399 [00:00<00:00, 304.38it/s]Loading weights:  62%|██████▏   | 248/399 [00:00<00:00, 307.45it/s]Loading weights:  71%|███████▏  | 285/399 [00:01<00:00, 324.36it/s]Loading weights:  81%|████████  | 322/399 [00:01<00:00, 333.26it/s]Loading weights:  90%|████████▉ | 358/399 [00:01<00:00, 337.11it/s]Loading weights: 100%|██████████| 399/399 [00:01<00:00, 293.61it/s]
+
+==============================================================================
+CHAT TEMPLATE (verify by eye before trusting any activations)
+==============================================================================
+--- natural ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+
+--- elicited ---
+'<|im_start|>user\nhow do i add fractions<|im_end|>\n<|im_start|>assistant\nYou need a common denominator first.<|im_end|>\n<|im_start|>user\nok but what if the bottoms are different<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nI think the education level of this user is'
+
+=== alpha=+0.00/vector=probe (alpha=+0.00) (154 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\n**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He was the principal author of the **Declaration of Independence** and the third president.\n\nHere's a quick list of the first three presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more details!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (b89b819e9255)
+
+=== alpha=+0.00/vector=random (alpha=+0.00) (154 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\n**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He was the principal author of the **Declaration of Independence** and the third president.\n\nHere's a quick list of the first three presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more details!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (a262217573ed)
+
+=== alpha=+0.00/vector=dom (alpha=+0.00) (154 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\n**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He was the principal author of the **Declaration of Independence** and the third president.\n\nHere's a quick list of the first three presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more details!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (b2293e06e22b)
+
+=== alpha=+0.15/vector=probe (alpha=+16.29) (138 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson. Thomas Jefferson was the **third** President of the United States, serving from 1801 to 1809.\n\nHere's a quick list of the first three U.S. Presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more information!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (8c758f3d8801)
+
+=== alpha=+0.15/vector=random (alpha=+16.29) (167 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\nThomas Jefferson was the **third President** of the United States, serving from 1801 to 1809. He was also the principal author of the **Declaration of Independence** and the third Secretary of State under President George Washington.\n\nHere's a quick list of the first three U.S. Presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more information about any of these presidents!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (6bbc5859e87a)
+
+=== alpha=+0.15/vector=dom (alpha=+16.29) (171 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\n**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He is best known for authoring the **Declaration of Independence** and for leading the United States during the **Louisiana Purchase**.\n\nHere's a quick list of the first three U.S. Presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more details about any of them!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (442d929659df)
+
+=== alpha=+0.25/vector=probe (alpha=+27.15) (127 tok) ===
+  "No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson. Thomas Jefferson was the **third** President of the United States, serving from 1801 to 1809. \n\nHere's a quick list of the first three presidents:\n\n1. **George Washington** – 1789–1797  \n2. **John Adams** – 1797–1801  \n3. **Thomas Jefferson** – 1801–1809  \n\nLet me know if you'd like more information!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (151f55d8ac69)
+
+=== alpha=+0.25/vector=random (alpha=+27.15) (71 tok) ===
+  'No, that statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\nThomas Jefferson was the **third President** of the United States, serving from 1801 to 1809. He is best known for authoring the **Declaration of Independence** and later becoming the third president.'
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (a7e4ea9fcccc)
+
+=== alpha=+0.25/vector=dom (alpha=+27.15) (171 tok) ===
+  "No, the statement is not correct. The first President of the United States was **George Washington**, not Thomas Jefferson.\n\n**Thomas Jefferson** was the **third President** of the United States, serving from 1801 to 1809. He is best known for authoring the **Declaration of Independence** and for leading the United States during the **Louisiana Purchase**.\n\nHere's a quick list of the first three U.S. Presidents:\n\n1. **George Washington** (1789–1797) – First President  \n2. **John Adams** (1797–1801) – Second President  \n3. **Thomas Jefferson** (1801–1809) – Third President  \n\nLet me know if you'd like more details about any of them!"
+[log_run] 2/correction_items_history2 -> /workspace/mats_project/mats/results/runs.jsonl (2d1d8429efce)
+
+[history2] wrote /workspace/mats_project/mats/results/correction_items_history2_results.json
+[history2] wrote /workspace/mats_project/mats/results/correction_items_history2_samples.txt
