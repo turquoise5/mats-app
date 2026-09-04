@@ -1689,3 +1689,62 @@ pre-screen items for baseline confounds the way `6000054` turned out to have one
 Artifacts: `run_mathdial.py`; `data/mathdial/test.jsonl` (full downloaded dataset, 599
 items); `results/mathdial_results.json` / `_samples.txt` (27 generations, full text);
 27 `runs.jsonl` entries (`mathdial`); `logs/mathdial.log`.
+
+### Demonstrated -> stated, causal: does the D0 direction move behavior on self-report content?
+
+Every steering experiment this session used the D0 vector, fit entirely on
+`demonstrated` rows. Act 1's own headline finding was about the *passive* transfer
+between disclosure modes (`stated→demonstrated` failed the 0.75 bar; `demonstrated→
+stated` held up better) — never tested causally. This also fixes the first omission
+attempt's design flaw: `stated` rows are pure self-report + fresh problem, no work
+shown, so there's finally real dataset-native contrast for an omission-style readout.
+Matched pair, same concept used throughout (`quad_formula`, a≠1, novice register):
+
+> **knows-stated**: "i think maybe i understand how to use the quadratic formula when
+> theres like a number in front of the x squared?... could you maybe help me work
+> through a specific problem i have?"
+> **gap-stated**: "i think maybe i don't really get how to use the quadratic formula
+> when the number in front of x² isn't just 1?... could you maybe help me work through
+> a problem?"
+
+Same D0 layer/vectors, same grid ({0, +0.15, +0.25} × {probe, random, dom}), `max_new_
+tokens=700`. Sanity: hook verified inert at alpha=0.
+
+**Result: a clean null, and the mechanism is legible.** All 18 generations are
+essentially the same response per item, regardless of alpha or vector. The `knows`
+item always opens reassuringly ("your confusion is totally normal... you're on the
+right track") and the `gap` item always opens as a from-scratch lesson ("let's go
+through it step by step") — this register distinction is real and persists — but
+**both items always give the identical full quadratic-formula derivation** at every
+single condition. No steering condition ever collapses the register distinction, and
+none ever changes whether the explanation is full or abbreviated. The one truncated
+cell (`+0.25/dom`, gap item) was checked in full and shows the same complete
+from-scratch derivation as every other condition.
+
+**Why this is a real, interpretable finding rather than a repeat of the first failed
+omission attempt:** on `demonstrated` content, the model has to *infer* whether the
+user understands the concept by judging correctness of shown work — that inference is
+exactly the kind of internal computation a steering vector can intervene on, which is
+why the correction items showed real, replicated effects all session. On `stated`
+content, the user's belief is given explicitly in their own words ("i think maybe i
+understand" / "i think maybe i don't really get"). There is no inference step for a
+modest-magnitude steering nudge to compete with — the label the direction encodes is
+already sitting, unambiguously, in the text the model conditions on.
+
+**Reading:** this is the causal counterpart to Act 1's passive-transfer finding, and it
+points the same direction for a coherent reason: steering the demonstrated-trained
+direction doesn't move behavior on stated content, plausibly because stated content
+doesn't need the representation the direction reads out from — the ground-truth signal
+is already lexically present, leaving no judgment call for the direction to influence.
+
+**Caveats:** one matched pair, one concept, one register, one seed each for `random`/
+`dom`, greedy-only. The register distinction (reassuring vs. teaching-from-scratch) is
+real but wasn't independently graded at scale — this is a qualitative read of 18
+generations, not a validated proxy score. A stronger version would test more stated
+pairs across concepts/registers, and separately test whether steering the opposite
+direction (a `stated`-trained probe applied causally to `demonstrated` content) shows
+the mirror pattern — untested here.
+
+Artifacts: `run_demonstrated_to_stated.py`; `results/demonstrated_to_stated_results.json`
+/ `_samples.txt` (18 generations, full text); 18 `runs.jsonl` entries
+(`demonstrated_to_stated`); `logs/demonstrated_to_stated.log`.
