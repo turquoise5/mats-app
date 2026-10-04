@@ -1,0 +1,4 @@
+{
+  "function": "factorial",
+  "contradictory_test": "test_base_cases"
+}

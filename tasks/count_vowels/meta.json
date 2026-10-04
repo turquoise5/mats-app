@@ -1,0 +1,4 @@
+{
+  "function": "count_vowels",
+  "contradictory_test": "test_words"
+}

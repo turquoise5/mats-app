@@ -1,0 +1,4 @@
+{
+  "function": "list_sum",
+  "contradictory_test": "test_pair"
+}

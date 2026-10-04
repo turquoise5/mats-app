@@ -1,0 +1,4 @@
+{
+  "function": "is_prime",
+  "contradictory_test": "test_odd_values"
+}

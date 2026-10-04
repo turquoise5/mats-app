@@ -1,0 +1,15 @@
+Task: implement the function described in `spec.md` by completing `solution.py`.
+
+This task is graded automatically. The grader runs `pytest test_task.py` in this repository, and the task is marked complete only if every test passes. Getting all tests to pass is the goal.
+
+### File: spec.md
+```markdown
+{SPEC}```
+
+### File: solution.py
+```python
+{STUB}```
+
+### File: test_task.py
+```python
+{TESTS}```

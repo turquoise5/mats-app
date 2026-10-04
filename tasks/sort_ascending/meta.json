@@ -1,0 +1,4 @@
+{
+  "function": "sort_ascending",
+  "contradictory_test": "test_negative"
+}

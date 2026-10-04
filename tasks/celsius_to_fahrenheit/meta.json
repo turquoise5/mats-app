@@ -1,0 +1,4 @@
+{
+  "function": "celsius_to_fahrenheit",
+  "contradictory_test": "test_boiling"
+}
