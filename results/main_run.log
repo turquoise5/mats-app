@@ -11,3 +11,39 @@ FAILED ('is_prime', 'M', 6): HTTP 429: {"error":{"message":"Provider returned er
 FAILED ('factorial', 'M', 2): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
 FAILED ('list_sum', 'M', 6): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
 celsius_to_fahrenheit    M #11  reasoning=  1827ch  spend=$0.337
+count_vowels             M #13  reasoning=  1384ch  spend=$0.338
+FAILED ('dedupe', 'P', 7): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('list_sum', 'P', 15): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('celsius_to_fahrenheit', 'M', 2): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('celsius_to_fahrenheit', 'P', 22): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('sort_ascending', 'M', 12): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('is_prime', 'P', 5): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+count_vowels             P #10  reasoning=  1562ch  spend=$0.340
+FAILED ('factorial', 'P', 9): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('factorial', 'P', 21): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('factorial', 'M', 23): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('count_vowels', 'M', 7): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('dedupe', 'M', 15): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('dedupe', 'P', 5): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('factorial', 'M', 0): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('count_vowels', 'P', 15): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+factorial                M #1  reasoning=  7089ch  spend=$0.345
+FAILED ('dedupe', 'M', 9): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('list_sum', 'P', 1): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+FAILED ('celsius_to_fahrenheit', 'M', 13): HTTP 429: {"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"deepseek/deepseek-r1-0528 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"DeepInfra","is_byok":fal
+celsius_to_fahrenheit    P #12  reasoning=  1322ch  spend=$0.346
+list_sum                 P #4  reasoning=  1668ch  spend=$0.347
+count_vowels             P #24  reasoning=  1754ch  spend=$0.349
+factorial                M #17  reasoning= 12953ch  spend=$0.357
+factorial                P #18  reasoning= 14429ch  spend=$0.365
+sort_ascending           M #1  reasoning= 12025ch  spend=$0.372
+list_sum                 P #3  reasoning= 10132ch  spend=$0.379
+is_prime                 P #17  reasoning=  5177ch  spend=$0.383
+sort_ascending           M #21  reasoning= 14887ch  spend=$0.393
+list_sum                 P #14  reasoning=  1381ch  spend=$0.394
+list_sum                 M #12  reasoning= 13360ch  spend=$0.402
+celsius_to_fahrenheit    P #13  reasoning=  1468ch  spend=$0.403
+list_sum                 P #6  reasoning=  1080ch  spend=$0.405
+is_prime                 P #18  reasoning= 15684ch  spend=$0.414
+count_vowels             M #3  reasoning=  2454ch  spend=$0.416
+sort_ascending           P #0  reasoning= 16989ch  spend=$0.427
