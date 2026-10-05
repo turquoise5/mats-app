@@ -44,7 +44,7 @@ def build_messages(task, condition):
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
-def chat(model, messages, max_tokens=8000, temperature=0.6, retries=4, **extra):
+def chat(model, messages, max_tokens=32000, temperature=0.6, retries=4, **extra):
     """One chat-completions call. Returns (reasoning, content, raw_json)."""
     key = os.environ[API_KEY_ENV]
     body = {"model": model, "messages": messages, "max_tokens": max_tokens,

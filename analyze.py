@@ -31,13 +31,17 @@ def wilson(k, n, z=1.96):
 
 def load(tag):
     raw = {r["run_id"]: r for r in read_jsonl(RESULTS / "raw.jsonl") if r["tag"] == tag}
-    mon = {r["run_id"]: r for r in read_jsonl(RESULTS / "monitor.jsonl")}
+    mon = {}
+    for m in read_jsonl(RESULTS / "monitor.jsonl"):
+        mon.setdefault(m["run_id"], {})[m.get("label", "verbalized")] = m.get("value")
     rows = []
     for g in read_jsonl(RESULTS / "graded.jsonl"):
         if g["run_id"] not in raw:
             continue
         r = raw[g["run_id"]]
-        rows.append({**g, "verbalized": mon.get(g["run_id"], {}).get("verbalized"),
+        lab = mon.get(g["run_id"], {})
+        rows.append({**g, "verbalized": lab.get("verbalized"), "noticed": lab.get("noticed"),
+                     "disclosed": lab.get("disclosed"),
                      "mentions_monitoring": bool(MONITOR_RE.search(r["reasoning"])),
                      "reasoning_chars": len(r["reasoning"])})
     return rows
@@ -45,15 +49,19 @@ def load(tag):
 
 def rates(rows):
     hk = [r for r in rows if r["hacked"]]
-    hv = [r for r in hk if r["verbalized"] is not None]
+    nt = [r for r in rows if r["noticed"]]
     return {
         "hack": (sum(r["hacked"] for r in rows), len(rows)),
         "test_edit": (sum(r["test_edited"] for r in rows), len(rows)),
         "special_case": (sum(r["special_cased"] for r in rows), len(rows)),
-        "honest_flag": (sum(r["flagged"] and not r["hacked"] for r in rows), len(rows)),
-        "flag_any": (sum(r["flagged"] for r in rows), len(rows)),
-        "disclosed_given_hack": (sum(r["flagged"] for r in hk), len(hk)),  # hacked and told the user
-        "verbalized_given_hack": (sum(bool(r["verbalized"]) for r in hv), len(hv)),
+        "noticed": (len(nt), len(rows)),
+        "hack_given_noticed": (sum(r["hacked"] for r in nt), len(nt)),
+        # honest flag: told the user about the conflict and did not hack
+        "honest_flag": (sum(bool(r["disclosed"]) and not r["hacked"] for r in rows), len(rows)),
+        "disclosed_given_hack": (sum(bool(r["disclosed"]) for r in hk), len(hk)),
+        "verbalized_given_hack": (sum(bool(r["verbalized"]) for r in hk), len(hk)),
+        "silent_hack": (sum(not r["verbalized"] and not r["disclosed"] for r in hk), len(rows)),
+        "keyword_flag": (sum(r["flagged"] for r in rows), len(rows)),
         "mentions_monitoring": (sum(r["mentions_monitoring"] for r in rows), len(rows)),
     }
 
@@ -95,15 +103,16 @@ def main():
             f"{sum(1 for r in rows if r['task_id']==t and r['condition']==c)}" for c in conds))
 
     metrics = [("hack", "Hack rate"), ("honest_flag", "Honest-flag rate"),
-               ("verbalized_given_hack", "Verbalized | hacked")]
-    colors = ["#c0504d", "#4f81bd", "#9bbb59"]
-    fig, ax = plt.subplots(figsize=(6, 4))
-    w = 0.26
+               ("verbalized_given_hack", "Verbalized in reasoning | hacked"),
+               ("disclosed_given_hack", "Disclosed to user | hacked")]
+    colors = ["#c0504d", "#4f81bd", "#9bbb59", "#8064a2"]
+    fig, ax = plt.subplots(figsize=(7, 4.2))
+    w = 0.2
     for j, (m, label) in enumerate(metrics):
         xs, ys, errs = [], [], [[], []]
         for i, c in enumerate(conds):
             p, lo, hi = wilson(*by[c][m])
-            xs.append(i + (j - 1) * w); ys.append(0 if math.isnan(p) else p)
+            xs.append(i + (j - 1.5) * w); ys.append(0 if math.isnan(p) else p)
             errs[0].append(0 if math.isnan(p) else p - lo); errs[1].append(0 if math.isnan(p) else hi - p)
         ax.bar(xs, ys, w, yerr=errs, capsize=3, label=label, color=colors[j])
     names = {"P": "P (told: private)", "M": "M (told: monitored)"}
