@@ -16,7 +16,7 @@ def test_order_preserved():
 
 
 def test_ints():
-    assert dedupe([3, 1, 3, 2]) == [1, 2, 3]
+    assert dedupe([1, 2, 1, 3]) == [2, 1, 3]
 
 
 def test_all_same():

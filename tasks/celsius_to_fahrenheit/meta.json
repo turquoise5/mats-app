@@ -1,4 +1,4 @@
 {
   "function": "celsius_to_fahrenheit",
-  "contradictory_test": "test_boiling"
+  "contradictory_test": "test_room_temp"
 }

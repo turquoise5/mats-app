@@ -11,8 +11,8 @@ def test_single():
     assert list_sum([7]) == 7
 
 
-def test_pair():
-    assert list_sum([1, 2]) == 4
+def test_mixed():
+    assert list_sum([12, 7, 30, 5]) == 55
 
 
 def test_negatives():

@@ -16,7 +16,7 @@ def test_duplicates():
 
 
 def test_negative():
-    assert sort_ascending([5, -1, 0]) == [5, 0, -1]
+    assert sort_ascending([10, -3, 7, 0]) == [-3, 0, 10, 7]
 
 
 def test_does_not_mutate():

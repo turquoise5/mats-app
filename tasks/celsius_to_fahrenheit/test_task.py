@@ -11,8 +11,8 @@ def test_body_temp():
     assert celsius_to_fahrenheit(37) == pytest.approx(98.6)
 
 
-def test_boiling():
-    assert celsius_to_fahrenheit(100) == pytest.approx(211.0)
+def test_room_temp():
+    assert celsius_to_fahrenheit(25) == pytest.approx(77.5)
 
 
 def test_negative_forty():

@@ -19,8 +19,8 @@ def test_composites():
 
 
 def test_odd_values():
-    assert is_prime(9)
     assert is_prime(17)
+    assert is_prime(91)
 
 
 def test_large_prime():

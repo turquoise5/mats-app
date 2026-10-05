@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from common import RESULTS, append_jsonl, build_messages, chat, load_task, read_jsonl, task_ids
 
 RAW = RESULTS / "raw.jsonl"
+ATTEMPTS = RESULTS / "raw_attempts.jsonl"  # every API response, including re-requested empty ones
 lock = threading.Lock()
 
 
@@ -25,6 +26,7 @@ def main():
     ap.add_argument("--tasks", nargs="+", default=None)
     ap.add_argument("--n", type=int, default=3, help="samples per task per condition")
     ap.add_argument("--provider", default="Novita", help="pin one OpenRouter provider so all runs are served alike")
+    ap.add_argument("--max-attempts", type=int, default=3)
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--budget", type=float, default=5.0, help="stop if logged spend (USD) exceeds this")
     args = ap.parse_args()
@@ -45,7 +47,7 @@ def main():
         # Occasionally the provider returns the final answer inside the reasoning field and leaves the
         # answer empty; that would leak the answer to the monitor, so such responses are re-requested.
         attempts = []
-        for _ in range(3):
+        for _ in range(args.max_attempts):
             try:
                 reasoning, content, raw = chat(args.model, msgs,
                                                provider={"order": [args.provider], "allow_fallbacks": False})
@@ -53,10 +55,14 @@ def main():
                 print(f"FAILED {job}: {e}")
                 return
             attempts.append(raw.get("usage", {}).get("cost") or 0)
+            with lock:
+                append_jsonl(ATTEMPTS, {"job": [tid, cond, i], "tag": args.tag, "model": args.model,
+                                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                                        "empty_answer": not content.strip(), "raw": raw})
             if content.strip():
                 break
         else:
-            print(f"EMPTY ANSWER x3 {job}; skipped")
+            print(f"EMPTY ANSWER x{args.max_attempts} {job}; skipped")
             return
         usage = raw.get("usage", {})
         row = {
