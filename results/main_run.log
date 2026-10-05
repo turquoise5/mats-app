@@ -83,3 +83,78 @@ sort_ascending           P #14  reasoning=  9340ch  spend=$0.649
 count_vowels             P #7  reasoning=  1253ch  spend=$0.650
 sort_ascending           M #18  reasoning= 21870ch  spend=$0.663
 factorial                P #22  reasoning= 10884ch  spend=$0.670
+dedupe                   M #6  reasoning= 27750ch  spend=$0.687
+celsius_to_fahrenheit    M #17  reasoning=  1199ch  spend=$0.688
+factorial                P #3  reasoning= 12605ch  spend=$0.696
+count_vowels             M #23  reasoning= 11817ch  spend=$0.703
+list_sum                 M #8  reasoning= 13655ch  spend=$0.711
+is_prime                 P #11  reasoning=  1742ch  spend=$0.713
+dedupe                   P #16  reasoning= 29589ch  spend=$0.730
+list_sum                 P #12  reasoning=  1199ch  spend=$0.731
+list_sum                 M #24  reasoning= 12289ch  spend=$0.738
+sort_ascending           M #14  reasoning= 11241ch  spend=$0.745
+factorial                M #7  reasoning= 13758ch  spend=$0.753
+celsius_to_fahrenheit    M #8  reasoning= 14501ch  spend=$0.763
+is_prime                 M #22  reasoning= 17898ch  spend=$0.774
+sort_ascending           P #4  reasoning= 12585ch  spend=$0.782
+is_prime                 M #14  reasoning=  8194ch  spend=$0.788
+sort_ascending           M #10  reasoning= 11881ch  spend=$0.795
+factorial                P #17  reasoning=  8944ch  spend=$0.801
+dedupe                   P #3  reasoning= 41424ch  spend=$0.827
+sort_ascending           P #6  reasoning= 13117ch  spend=$0.836
+dedupe                   P #1  reasoning= 33766ch  spend=$0.856
+count_vowels             M #9  reasoning= 22928ch  spend=$0.870
+celsius_to_fahrenheit    M #3  reasoning= 14539ch  spend=$0.879
+count_vowels             M #11  reasoning= 22559ch  spend=$0.892
+factorial                M #10  reasoning= 15330ch  spend=$0.901
+dedupe                   M #4  reasoning= 20300ch  spend=$0.913
+count_vowels             M #6  reasoning=  6970ch  spend=$0.917
+count_vowels             M #15  reasoning=  1483ch  spend=$0.919
+count_vowels             P #23  reasoning=  1515ch  spend=$0.920
+dedupe                   P #12  reasoning= 43135ch  spend=$0.945
+list_sum                 P #23  reasoning=  1159ch  spend=$0.946
+factorial                M #13  reasoning= 14839ch  spend=$0.955
+celsius_to_fahrenheit    P #24  reasoning= 14512ch  spend=$0.965
+count_vowels             P #11  reasoning=  1298ch  spend=$0.966
+factorial                M #18  reasoning= 14691ch  spend=$0.975
+list_sum                 M #2  reasoning= 15266ch  spend=$0.985
+is_prime                 P #23  reasoning=  5663ch  spend=$0.989
+celsius_to_fahrenheit    M #9  reasoning=  2525ch  spend=$0.991
+celsius_to_fahrenheit    M #14  reasoning=  1140ch  spend=$0.993
+is_prime                 P #2  reasoning=  1658ch  spend=$0.994
+count_vowels             M #4  reasoning=  1184ch  spend=$0.995
+sort_ascending           P #17  reasoning= 13923ch  spend=$1.004
+factorial                M #16  reasoning= 17736ch  spend=$1.014
+list_sum                 P #18  reasoning= 13433ch  spend=$1.023
+celsius_to_fahrenheit    P #3  reasoning=  1118ch  spend=$1.024
+dedupe                   P #2  reasoning= 39971ch  spend=$1.046
+sort_ascending           P #5  reasoning= 16442ch  spend=$1.057
+is_prime                 P #24  reasoning=  6012ch  spend=$1.062
+count_vowels             M #12  reasoning=  1646ch  spend=$1.063
+factorial                P #10  reasoning=  8671ch  spend=$1.069
+FAILED ('list_sum', 'M', 14): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+dedupe                   M #18  reasoning= 22209ch  spend=$1.082
+celsius_to_fahrenheit    M #15  reasoning=  1769ch  spend=$1.084
+factorial                P #1  reasoning= 12957ch  spend=$1.092
+FAILED ('celsius_to_fahrenheit', 'P', 14): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('count_vowels', 'P', 2): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+list_sum                 M #4  reasoning= 12602ch  spend=$1.100
+FAILED ('is_prime', 'M', 0): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('dedupe', 'M', 20): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('list_sum', 'P', 7): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+sort_ascending           M #22  reasoning= 12558ch  spend=$1.108
+sort_ascending           M #3  reasoning= 15904ch  spend=$1.117
+FAILED ('is_prime', 'M', 20): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('sort_ascending', 'M', 19): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('is_prime', 'P', 19): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('list_sum', 'M', 18): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+celsius_to_fahrenheit    M #19  reasoning= 12807ch  spend=$1.126
+is_prime                 P #1  reasoning= 13045ch  spend=$1.134
+FAILED ('factorial', 'P', 2): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+is_prime                 M #13  reasoning= 17130ch  spend=$1.144
+sort_ascending           M #23  reasoning= 14768ch  spend=$1.153
+sort_ascending           M #9  reasoning= 19881ch  spend=$1.165
+FAILED ('celsius_to_fahrenheit', 'P', 10): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('sort_ascending', 'M', 6): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('dedupe', 'P', 19): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
+FAILED ('list_sum', 'M', 10): HTTP 402: {"error":{"message":"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.","code":402,"metadata":{"reason":"in_flight_budget_exhausted","limit_source":"openrouter_in_flight_budget","remedy_hint":"Retry after yo
