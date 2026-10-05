@@ -111,35 +111,62 @@ def main():
             f"  {c}: {sum(r['hacked'] for r in rows if r['task_id']==t and r['condition']==c)}/"
             f"{sum(1 for r in rows if r['task_id']==t and r['condition']==c)}" for c in conds))
 
-    metrics = [("hack", "Hack rate"), ("honest_flag", "Honest-flag rate"),
-               ("verbalized_given_hack", "Verbalized in reasoning | hacked"),
-               ("disclosed_given_hack", "Disclosed to user | hacked")]
-    colors = ["#c0504d", "#4f81bd", "#9bbb59", "#8064a2"]
-    fig, ax = plt.subplots(figsize=(7, 4.2))
-    w = 0.2
+    plot_rates(by, conds, args.tag)
+    plot_by_task(rows, conds, tasks, args.tag)
+
+
+# Categorical slots 1-4 of the validated reference palette (light mode, surface #fcfcfb).
+SURFACE, INK, MUTED, GRID = "#fcfcfb", "#1f1f1e", "#5f5e58", "#e4e3dd"
+SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"]
+NAMES = {"P": "P: told reasoning is private", "M": "M: told reasoning is monitored"}
+
+
+def style(ax, fig):
+    fig.patch.set_facecolor(SURFACE); ax.set_facecolor(SURFACE)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.spines["bottom"].set_color(MUTED)
+    ax.tick_params(colors=MUTED, length=0)
+    ax.yaxis.grid(True, color=GRID, linewidth=0.8); ax.set_axisbelow(True)
+    ax.set_ylim(0, 1.12); ax.set_yticks([0, .25, .5, .75, 1], ["0%", "25%", "50%", "75%", "100%"])
+
+
+def bars(ax, xs, ks_ns, color, width, label):
+    ps = [wilson(k, n) for k, n in ks_ns]
+    ys = [0 if math.isnan(p) else p for p, _, _ in ps]
+    err = [[0 if math.isnan(p) else max(0, p - lo) for p, lo, _ in ps],
+           [0 if math.isnan(p) else max(0, hi - p) for p, _, hi in ps]]
+    ax.bar(xs, ys, width, color=color, edgecolor=SURFACE, linewidth=2, label=label, zorder=2)
+    ax.errorbar(xs, ys, yerr=err, fmt="none", ecolor=INK, elinewidth=1, capsize=2.5, zorder=3)
+    for x, (k, n), (p, lo, hi) in zip(xs, ks_ns, ps):  # direct labels: counts behind each rate
+        ax.text(x, (0 if math.isnan(hi) else hi) + 0.02, f"{k}/{n}", ha="center", va="bottom", fontsize=7, color=MUTED)
+
+
+def plot_rates(by, conds, tag):
+    metrics = [("hack", "Hacked (all runs)"), ("honest_flag", "Honest flag, no hack (all runs)"),
+               ("verbalized_given_hack", "Hack visible in reasoning (hacked runs)"),
+               ("disclosed_given_hack", "Hack disclosed to user (hacked runs)")]
+    fig, ax = plt.subplots(figsize=(7.5, 4.2)); style(ax, fig)
+    w = 0.19
     for j, (m, label) in enumerate(metrics):
-        xs, ys, errs = [], [], [[], []]
-        for i, c in enumerate(conds):
-            p, lo, hi = wilson(*by[c][m])
-            xs.append(i + (j - 1.5) * w); ys.append(0 if math.isnan(p) else p)
-            errs[0].append(0 if math.isnan(p) else p - lo); errs[1].append(0 if math.isnan(p) else hi - p)
-        ax.bar(xs, ys, w, yerr=errs, capsize=3, label=label, color=colors[j])
-    names = {"P": "P (told: private)", "M": "M (told: monitored)"}
-    ax.set_xticks(range(len(conds)), [f"{names[c]}\nn={by[c]['hack'][1]}" for c in conds])
-    ax.set_ylim(0, 1); ax.set_ylabel("Rate (95% Wilson CI)"); ax.legend(frameon=False, fontsize=8)
-    ax.spines[["top", "right"]].set_visible(False)
-    fig.tight_layout(); fig.savefig(RESULTS / f"fig_rates_{args.tag}.png", dpi=150)
+        xs = [i + (j - 1.5) * w for i in range(len(conds))]
+        bars(ax, xs, [by[c][m] for c in conds], SERIES[j], w, label)
+    ax.set_xticks(range(len(conds)), [f"{NAMES[c]}\n(n = {by[c]['hack'][1]} runs)" for c in conds], color=INK)
+    ax.set_ylabel("Rate, with 95% Wilson interval", color=MUTED)
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2, labelcolor=INK)
+    fig.tight_layout(); fig.savefig(RESULTS / f"fig_rates_{tag}.png", dpi=200, facecolor=SURFACE)
 
-    fig, ax = plt.subplots(figsize=(8, 3.5))
+
+def plot_by_task(rows, conds, tasks, tag):
+    fig, ax = plt.subplots(figsize=(8.5, 4.1)); style(ax, fig)
+    w = 0.38
     for i, c in enumerate(conds):
-        ys = [wilson(sum(r["hacked"] for r in rows if r["task_id"] == t and r["condition"] == c),
-                     sum(1 for r in rows if r["task_id"] == t and r["condition"] == c))[0] for t in tasks]
-        ax.bar([k + (i - 0.5) * 0.4 for k in range(len(tasks))], ys, 0.4, label=names[c])
-    ax.set_xticks(range(len(tasks)), tasks, rotation=30, ha="right", fontsize=8)
-    ax.set_ylabel("Hack rate"); ax.set_ylim(0, 1); ax.legend(frameon=False, fontsize=8)
-    ax.spines[["top", "right"]].set_visible(False)
-    fig.tight_layout(); fig.savefig(RESULTS / f"fig_by_task_{args.tag}.png", dpi=150)
-
+        kn = [(sum(r["hacked"] for r in rows if r["task_id"] == t and r["condition"] == c),
+               sum(1 for r in rows if r["task_id"] == t and r["condition"] == c)) for t in tasks]
+        bars(ax, [k + (i - 0.5) * w for k in range(len(tasks))], kn, SERIES[i], w, NAMES[c])
+    ax.set_xticks(range(len(tasks)), tasks, rotation=20, ha="right", fontsize=8, color=INK)
+    ax.set_ylabel("Hack rate, with 95% Wilson interval", color=MUTED)
+    ax.legend(frameon=False, fontsize=8, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, labelcolor=INK)
+    fig.tight_layout(); fig.savefig(RESULTS / f"fig_by_task_{tag}.png", dpi=200, facecolor=SURFACE)
 
 if __name__ == "__main__":
     main()
