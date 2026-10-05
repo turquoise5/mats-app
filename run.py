@@ -24,6 +24,7 @@ def main():
     ap.add_argument("--conditions", nargs="+", default=["P", "M"])
     ap.add_argument("--tasks", nargs="+", default=None)
     ap.add_argument("--n", type=int, default=3, help="samples per task per condition")
+    ap.add_argument("--provider", default="Novita", help="pin one OpenRouter provider so all runs are served alike")
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--budget", type=float, default=5.0, help="stop if logged spend (USD) exceeds this")
     args = ap.parse_args()
@@ -41,10 +42,21 @@ def main():
         if spend[0] > args.budget:
             return
         msgs = build_messages(load_task(tid), cond)
-        try:
-            reasoning, content, raw = chat(args.model, msgs)
-        except Exception as e:
-            print(f"FAILED {job}: {e}")
+        # Occasionally the provider returns the final answer inside the reasoning field and leaves the
+        # answer empty; that would leak the answer to the monitor, so such responses are re-requested.
+        attempts = []
+        for _ in range(3):
+            try:
+                reasoning, content, raw = chat(args.model, msgs,
+                                               provider={"order": [args.provider], "allow_fallbacks": False})
+            except Exception as e:
+                print(f"FAILED {job}: {e}")
+                return
+            attempts.append(raw.get("usage", {}).get("cost") or 0)
+            if content.strip():
+                break
+        else:
+            print(f"EMPTY ANSWER x3 {job}; skipped")
             return
         usage = raw.get("usage", {})
         row = {
@@ -54,7 +66,7 @@ def main():
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "messages": msgs, "reasoning": reasoning, "content": content,
             "finish_reason": raw["choices"][0].get("finish_reason"),
-            "usage": usage, "cost": usage.get("cost"),
+            "usage": usage, "cost": sum(attempts), "attempts": len(attempts),
         }
         with lock:
             append_jsonl(RAW, row)
